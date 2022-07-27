@@ -1,7 +1,11 @@
 # SPDX-FileCopyrightText: 2022-present sohinimallick16 <sohini.mallick@maastrichtuniversity.nl>
 #
 # SPDX-License-Identifier: MIT
+<<<<<<< HEAD:tools/jyconvert/jyconvert/jyconvert.py
 __version__ = '0.0.4'
+=======
+__version__ = "0.0.3"
+>>>>>>> d186db8ea8a76f97be34f6585910f741ab100aa4:tools/jyconvert/jyconvert/__about__.py
 
 """
 # Convert JSON to YAML and back
@@ -9,7 +13,7 @@ __version__ = '0.0.4'
 
 import sys
 import json
-import yaml 
+import yaml
 
 
 HELP = """
@@ -50,9 +54,9 @@ def toYaml(fileIn, fileOut):
         fileIn = sys.argv[1]
         fileOut = sys.argv[2]
 
-        with open(fileIn, 'r') as json_in, open(fileOut, "w") as yaml_out:
+        with open(fileIn, "r") as json_in, open(fileOut, "w") as yaml_out:
             json_convert = json.load(json_in)
-            yaml.dump(json_convert,yaml_out,sort_keys=False)
+            yaml.dump(json_convert, yaml_out, sort_keys=False)
         pass
     except Exception as e:
         print(str(e))
@@ -83,9 +87,9 @@ def toJson(fileIn, fileOut):
         fileIn = sys.argv[1]
         fileOut = sys.argv[2]
 
-        with open(fileIn, 'r') as yaml_in, open(fileOut, "w") as json_out:
+        with open(fileIn, "r") as yaml_in, open(fileOut, "w") as json_out:
             yaml_convert = yaml.safe_load(yaml_in)
-            json.dump(yaml_convert,json_out,sort_keys=False)            
+            json.dump(yaml_convert, json_out, sort_keys=False)
         pass
     except Exception as e:
         print(str(e))
@@ -156,7 +160,10 @@ def main():
     print(HELP)
     print("An unexpected error has occurred")
     return -1
+<<<<<<< HEAD:tools/jyconvert/jyconvert/jyconvert.py
 
 
 if __name__ == "__main__":
     main()
+=======
+>>>>>>> d186db8ea8a76f97be34f6585910f741ab100aa4:tools/jyconvert/jyconvert/__about__.py
