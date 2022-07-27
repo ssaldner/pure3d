@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022-present sohinimallick16 <sohini.mallick@maastrichtuniversity.nl>
 #
 # SPDX-License-Identifier: MIT
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 """
 # Convert JSON to YAML and back
@@ -158,3 +158,5 @@ def main():
     return -1
 
 
+if __name__ == "__main__":
+    main()
