@@ -30,8 +30,12 @@ Documentation = "https://github.com/CLARIAH/pure3d/jyconvert#readme"
 Issues = "https://github.com/CLARIAH/pure3d/jyconvert/issues"
 Source = "https://github.com/CLARIAH/pure3d/jyconvert"
 
+[project.entry_points]
+console_scripts = 
+  jyconvert=jyconvert.jyconvert:main
+
 [tool.hatch.version]
-path = "jyconvert/__about__.py"
+path = "jyconvert/jyconvert.py"
 
 [tool.hatch.build.targets.sdist]
 [tool.hatch.build.targets.wheel]
@@ -52,7 +56,7 @@ python = ["37", "38", "39", "310"]
 branch = true
 parallel = true
 omit = [
-  "jyconvert/__about__.py",
+  "jyconvert/jyconvert.py",
 ]
 
 [tool.coverage.report]
