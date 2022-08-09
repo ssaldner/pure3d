@@ -30,9 +30,8 @@ Documentation = "https://github.com/CLARIAH/pure3d/jyconvert#readme"
 Issues = "https://github.com/CLARIAH/pure3d/jyconvert/issues"
 Source = "https://github.com/CLARIAH/pure3d/jyconvert"
 
-[project.entry_points]
-console_scripts = 
-  jyconvert=jyconvert.jyconvert:main
+[project.scripts]
+jyconvert = "jyconvert.jyconvert:main"
 
 [tool.hatch.version]
 path = "jyconvert/jyconvert.py"
