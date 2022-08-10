@@ -27,11 +27,18 @@ def select_edition():
     return data
 
 
+def wrapEditions():
+    html = []
+    for (n, e) in enumerate(select_edition()):
+        html.append(f"""<a href="/{n + 1}">{e}</a>""")
+    return "<br>".join(html)
+
+
 @app.route("/")
 @app.route("/home")
 # Display home page
 def home():
-    editions = select_edition()
+    editions = wrapEditions()
     return render_template("index.html", editions=editions)
 
 
