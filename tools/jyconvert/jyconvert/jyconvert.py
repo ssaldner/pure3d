@@ -67,7 +67,7 @@ def toJson(fileIn, fileOut):
     Returns
     -------
     int
-        0 if successfule, else 1
+        0 if successfull, else 1
     """
 
     good = True
