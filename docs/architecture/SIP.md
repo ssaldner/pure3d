@@ -119,7 +119,8 @@ Here is the file and folder layout of a workspace
 
 `meta` ==all metadata==
 * `dc.json`  ==Dublin Core==
-	* title
+	* title ==title of DSE as a whole==
+	   Will be shown as the name of the edition.
 	* creator ==with contact details==
 	   Will be shown on the *Contact* tab of the edition
 	* contributors
