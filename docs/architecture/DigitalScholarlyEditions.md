@@ -1,16 +1,33 @@
+# Meeting
+#2022-08-17 , 11:00-15:30
+Venue: Amsterdam, Spinhuis, k 2.18
+
+Agenda (provisional):
+11:00 - 11:30 Coffee, welcome, introduction of participants
+11:30 - 12:00 Current state of Pure3D, with a demo of the "sandboxes"
+12:00 - 12:30 Towards Pure3D as an infrastructure
+12:30 - 13:30 Lunch
+13:30 - 14:00 Agenda setting: which talking points do we have?
+14:00 - 14:30 Discussion of 3D viewers as annotation tools
+14:30 - 15:00 Discussion of reposystems? What can Dataverse do for us?
+15:00 - 15:30 Next steps for the DANS involvement in Pure3D
+
+We will take notes on the go and take breaks when we need them.
+
 # Abstract
 #2022-08-10
 We are entering a phase of heavy development, starting out with tech that we control now. But we must steer towards tech that is sustainable, and make sure that the products of Pure3D users are FAIR. How can we assure this in the specific context of 3D tech to represent and annotate data?
 
 Themes:  
 * The Digital Scholarly Edition according to Pure3D  
-* The role of the Smithsonian Voyager in the current setup  
+* The role of the [Smithsonian Voyager](https://smithsonian.github.io/dpo-voyager/document/overview/) in the current setup  
 * 3D and sustainability 
 * collaboratively editing annotations to 3D datasets
 * Smithsonian Voyager as an "editing" tool
-* Smithsonian Packrat versus Dataverse
+* [Smithsonian Packrat](https://smithsonian.github.io/dpo-packrat/) versus Dataverse
 
-Venue: Amsterdam, Spinhuis
+
+
 # Introduction
 The technique of presenting digital objects in 3D opens up new ways to represent the results of research. Art history, history, architecture, are among the disciplines that benefit the most of these new ways. However, including 3D data in conventional infrastructures for scholarly dissemination poses challenges. There is quite a bit of technology involved to turn 3D data into immersive experiences on a computer screen. How can these experiences be recreated after considerable time, when the technology has changed and the data is (hopefully) still the same? How can we annotate 3D models, add narratives to those models, and embed those models in bigger narratives?
 Pure3D is meant to be an infrastructure where researchers can create, archive and disseminate Digital Scholarly Editions in which 3D models play a central part.
@@ -56,20 +73,22 @@ These are all generic challenges. There are also some very specific challenges f
 The preliminary question is: *what does a DSE look like, once the concept has been made operational on the Pure3D infrastructure?* We do not know yet, but let's keep this question in mind when we review some of the more concrete challenges below.
 
 ## Data entangled with tools
-The fact that 3D Web Viewers play a crucial role in adding annotations means that research data becomes heavily entangled with the current technology of 3D viewers. The mixing up of data and tools is an anti-pattern in digital preservation. But at the moment we do not have an alternative. In fact, in developing Pure3D we must try to mitigate the entanglement and suggest ways in which the annotation of 3D resources can be more independent of the choice of 3D Viewer.
+The fact that 3D Web Viewers play a crucial role in adding annotations means that research data becomes heavily entangled with the current technology of 3D viewers. The mixing up of data and tools is an [anti-pattern](https://en.wikipedia.org/wiki/Anti-pattern) in digital preservation. But at the moment we do not have an alternative. In fact, in developing Pure3D we must try to mitigate the entanglement and suggest ways in which the annotation of 3D resources can be more independent of the choice of 3D Viewer.
 
-When all access to a DSE is channelled through a 3D viewer, which uses a heavy stack of hardware and software components, there is a real risk that in a few years it just does not work anymore that way. Either we must make sure that the current viewing experiences can be re-enacted later by emulation of existing viewers, or we must provide alternative ways to access annotated content. Note that the viewing of 3D models itself is the lesser problem: it is being standardized by the big players (the Khronos group) and coded into standard web technology. But the annotation mechanisms are currently volatile: all viewers are very much work-in-progress with regards to annotations.
+When all access to a DSE is channelled through a 3D viewer, which uses a long stack of hardware and software components, there is a real risk that in a few years it just does not work anymore that way. Either we must make sure that the current viewing experiences can be re-enacted later by emulation of existing viewers, or we must provide alternative ways to access annotated content. Note that the viewing of 3D models itself is the lesser problem: it is being standardized into the [glTF](https://www.khronos.org/gltf/) format by the big players (the [Khronos group](https://www.khronos.org)) and coded into standard web technology. But the annotation mechanisms are currently volatile: all viewers are very much work-in-progress with regards to annotations.
+
 ## Single versus multiple 3D datasets
-It is very likely that a subject of interest cannot be captured by a single 3D dataset. And if it could, it is likely that it is not practical. For example, if mine lamps are the subject of interest, it is possible to represent a collection of mine lamps in a single 3D set. But it is much more likely that a DSE on mine lamps contains 3D models of individual lamps, 3D models of spaces where they have been used, 3D models of locations where they have been collected, and so on. Such a DSE also needs a narrative that binds all these models together. It must be able to take a reader from narrative to model, from model to other model, and from model back to other points in the narrative.
+It is very likely that a subject of interest cannot be captured by a single 3D dataset. And if it could, it is likely that it is not practical. For example, if mine lamps are the subject of interest, it is possible to represent a collection of mine lamps in a single 3D set. But it is much more likely that a DSE on mine lamps contains multiple 3D models: of individual lamps, of spaces where they have been used, of locations where they have been collected, and so on. Such a DSE also needs a narrative that binds all these models together. It must be able to take a reader from narrative to model, from model to other model, and from model back to other points in the narrative.
+
 ## Inside the viewer or outside the viewer?
-An enriched 3D dataset capable viewer can provide an immersive experience, once it is loaded in a capable 3D viewer. So, can we define a DSE by means of the experience of 3D dataset(s) in a viewer?
+An enriched 3D dataset can provide an immersive experience, once it is loaded in a capable 3D viewer. So, can we define a DSE by means of the experience of 3D dataset(s) in a viewer?
 
 The first thing we bump into is: viewer dependence. If the immersive experience is the defining element of a DSE, then a DSE becomes heavily dependent on the choice of viewer. Different viewers give different experiences. Different versions of the same viewer give different experiences. If there is nothing else to a DSE, DSEs are very much in danger of getting obsolete in just a few years.
 
 There are other considerations as well:
 
 1. Reading: while the 3D viewers do offer immersive experiences, it remains to be seen what happens when the content of the annotations grows (note that annotations can contain whole rich-text articles). It may prove difficult to consume those annotations from within the viewer. Moreover, not all texts need to be read in the proximity of the 3D viewing experience. Interested readers will want to go back and forth between the world of hyperlinked text and the world of 3D scenes. Rather than locking readers up in a 3D scene, we should facilitate the jumping back and forth between the hyperlinked world of text and the immersive world of 3D scenes.
-1. Research practice: researchers do not exclusively want immersive experiences, although that *is* one of the selling points of 3D data in the first place. They also engage in systematic analysis of data, and for that reason they may want to access the annotated material in other ways, outside the viewer. For example, they might want to do text-mining on the annotations across several DSEs.
+1. Research practice: researchers do not exclusively want immersive experiences, although that *is* undoubtedly one of the selling points of 3D data. They also engage in systematic analysis of data, and for that reason they may want to access the annotated material in other ways, outside the viewer. For example, they might want to do text-mining on the annotations across several DSEs.
 1. Authoring: the collective annotations form a body of writing that may need review before publishing. Changes must be made to the material, some of which will be systematic, across all annotations (e.g. spelling mistakes, naming conventions, layout conventions). Some of them will mean a major rearrangement of the material, where texts of different annotations get merged, or annotations split in different texts. This is very hard to do from within the 3D viewers. 3D viewers are good in representing 3D models and providing anchor points, but they are very primitive in supporting the edit process of a family of texts.
 
 ## Provisional resolution
@@ -78,3 +97,62 @@ There are more challenges, but before we can even address them we need to make a
 **A 3D-Digital-Scholarly-Edition (DSE) is a set of models plus a scholarly narrative in which they are embedded, and which comes to live when viewing the models.**
 
 The narrative texts and annotated models are all interlinked. The texts in the narratives and annotations can refer to media content, and such media content can also be included in the DSE.
+
+# Facilitating DSEs
+Pure3D has to facilitate DSEs as research output. Its support ranges from creating the annotations, to storing all the data of the editions, to making the editions usable to the readers.
+This is not a specification document where we describe those processes in detail. Here we only give a broad sketch but we do get into some detail where we expect bumps in the road.
+
+## Creating DSEs
+Above we described the notion of workspaces, one for each SDE during its creation process. Here is a list of things that deserve special attention:
+
+### Collaboration
+Each workspace should be workable by a team of people without intervention of the management of Pure3D. CLARIAH users are allow to request workspaces that they then can administer. They can invite other CLARIAH users to the workspace, change their roles, and delete them.
+
+### Metadata
+The edition as a whole needs metadata. For now we take Dublin Core as our lead. But individual models also might need dedicated metadata: about their subject and about their technical qualities. For now our approach is: we add schemes and fields on a need-only basis.
+
+### Provenance
+A special case of metadata is provenance. The workspace must assist in keeping track of who contributed to models, annotations and texts. A light-weight way of doing that is to generate the list of admins of the workspace as creators and the the list of editors of a workspace as contributors.
+More involved is the annotation process: it would be nice that when annotations are saved, the writer of the annotation ends up in the annotation's provenance metadata.
+
+### Annotating
+When editors save annotations they have created in a 3D viewer, we have to intercept the saved annotation and do intelligent things with it. 
+
+1. **Format normalization**. Every viewer has a different data format for saved annotations and we would really like to be as viewer-independent as possible. This calls for a conversion of saved annotation data to a canonical format. We also must be able to be able to convert from the canonical format to every viewer specific format. That way we can show annotations made by one viewer (version) in another viewer (version). This becomes really important when viewers become obsolete. There will be cases when we need to open annotations in other another viewer (version) than the one in which they have been created.
+2. **Adding provenance metadata**. There are more things that have to happen: the author/editor of the annotation should be added to the annotation data. This is especially important if we choose to give the opportunity to annotate editions after they have been published, by later readers and users. Maybe the annotation is part of a group of related annotations, so it would be nice to be able to add that as well.
+3. **Make annotations searchable**. And we want to be able to search annotations, so we need to make the content of annotations available to search engines.
+
+Viewers tend to save rich text annotations in HTML, but we would rather like to use Markdown as an authoring format of rich text throughout Pure3D, not only for annotations, but also for articles, help texts, descriptions, etc.
+
+There is a technical stumbling block in intercepting saved annotations from viewers. The viewers that we know use the WebDav protocol to get data from the server to the client and back. That is good and handy for demo setups, but when the business-logic becomes more complex, we need to overrule that somehow.
+
+### Authoring
+A DSE is a complex piece of information. It is more like a website than a document. So how do we let editors author an edition?
+We could use familiar frameworks to author website content, known as content management systems, such as Wordpress. The disadvantage is that we have to support an instance of it for the very long term. There are more sustainable ways to do it: static page generators. Authors write their content in a set of markdown files, and the generator creates a set of static html pages out of it, that can be served indefinitely, without the burden of actively maintaining and securing additional software such as databases and content management systems. 
+
+Moreover, it is also possible to use a version control system for the markdown files, so that people can write collaboratively on the markdown files. This is what git/GitHub/GitHub Pages offers in the wild. We could offer such an environment by means of GitLab on premise. However, git is not the most intuitive way to facilitate collaborative text writing. So either we should streamline that experience greatly, or we should look for alternative systems in the [Jamstack](https://jamstack.org) that offer version control together with a good collaborative experience.
+
+## Storing DSEs
+We need a repository system to store the DSEs. The system must be able to ingest the contents of a finished workspace and store it as an archival package.
+That package will look like an exact copy of the workspace, with some minor differences:
+* a persistence identifier is added
+* a version number is added, and a link to the main landing page is added, and the main landing page will link to this version
+* all the markdown has undergone a fresh rendering into HTML
+
+Possibly some index material will be generated and stored with the DSE.
+The big question here is: what do we use as repository system? GitLab, Dataverse, Fedora, Archivematica, [PackRat]()?
+
+Do we need a separate system for ingest (the workspaces) and dissemination, or can we do that using the capabilities of the chosen repository system?
+
+## Disseminating DSEs
+When users browse the repository and have selected an edition to enter, they arrive at its home page (landing page). From there they will be linked to all the relevant material in the edition, including the 3D data models. 
+Readers must be able to open 3D models in a selection of viewers, including the original viewer version that was used to create the resource.
+The default should be the orginal viewer but in the latest version. If a user is not satisfied with that, (s)he should be able to select other options.
+
+If we want to make it possible to annotate models after an DSE has been published, here is the place where we have to make that possible. Authenticated users will then see annotation controls in their viewer, and when they save annotations, they should go to a dedicated place.
+There are several options from here:
+1. the archive stores such user-contributed annotations, and makes them available to subsequent users (only if users want to see them)
+2. the user is responsible to find a place to store his/her annotations. When (s)he saves them to a place that is accessible online (e.g. in a repository), it should be able to call them up later, and also by other users. In that case the DSE disseminator must offer controls to import such annotations on the fly.
+
+# FAIR
+So far we have not mentioned the [FAIR principles](https://fairaware.dans.knaw.nl) (findable, accessible, interoperable, reusable) explicitly. But they are all over the place. When Pure3D users contribute DSEs to the infrastructure, they should encounter various points at which they have to provide metadata and narrative texts by which their DSEs comply with the FA components. When they make annotations, the Pure3D system must take action that those annotations are IR, i.e. that other viewer software can work with them and that they can be used for other purposes as well, e.g. data mining.
