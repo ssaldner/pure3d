@@ -3,14 +3,14 @@
 Venue: Amsterdam, Spinhuis, k 2.18
 
 Agenda (provisional):
-11:00 - 11:30 Coffee, welcome, introduction of participants
-11:30 - 12:00 Current state of Pure3D, with a demo of the "sandboxes"
-12:00 - 12:30 Towards Pure3D as an infrastructure
-12:30 - 13:30 Lunch
-13:30 - 14:00 Agenda setting: which talking points do we have?
-14:00 - 14:30 Discussion of 3D viewers as annotation tools
-14:30 - 15:00 Discussion of reposystems? What can Dataverse do for us?
-15:00 - 15:30 Next steps for the DANS involvement in Pure3D
+* 11:00 - 11:30 Coffee, welcome, introduction of participants
+* 11:30 - 12:00 Current state of Pure3D, with a demo of the "sandboxes"
+* 12:00 - 12:30 Towards Pure3D as an infrastructure
+* 12:30 - 13:30 Lunch
+* 13:30 - 14:00 Agenda setting: which talking points do we have?
+* 14:00 - 14:30 Discussion of 3D viewers as annotation tools
+* 14:30 - 15:00 Discussion of reposystems? What can Dataverse do for us?
+* 15:00 - 15:30 Next steps for the DANS involvement in Pure3D
 
 We will take notes on the go and take breaks when we need them.
 
