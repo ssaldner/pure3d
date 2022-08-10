@@ -119,6 +119,15 @@ Here is the file and folder layout of a workspace
 
 `meta` ==all metadata==
 * `dc.json`  ==Dublin Core==
+	* title
+	* creator ==with contact details==
+	   Will be shown on the *Contact* tab of the edition
+	* contributors
+	   Will be shown on the *Acknowledgements* tab of the edition
+	* date created
+	* subject
+	* source
+    The fields `creator` and `contributor` will be shown on the  will be shown on the *Contact* tab of the edition.
 * `license.txt` ==text of license==
 * `license.json` ==properties of license==
 * *xxx*`.json` ==metadata according to schema *xxx*==
@@ -136,14 +145,14 @@ Here is the file and folder layout of a workspace
     * `virtualinteriors`
       * *modelA* - *x2*`.gltf`
       * *modelB* - *y2*`.gltf`
-  * `medium`==medium quality optimization==
+  * `medium` ==medium quality optimization==
     * `voyager`
       * *modelA* - *x3*`.gltf`
       * *modelB* - *y3*`.gltf`
     * `virtualinteriors`
       * *modelA* - *x4*`.gltf`
       * *modelB* - *y4*`.gltf`
-  * `low`==low quality optimization==
+  * `low` ==low quality optimization==
     * `voyager`
       * *modelA* - *x5*`.gltf`
       * *modelB* - *y5*`.gltf`
@@ -151,7 +160,7 @@ Here is the file and folder layout of a workspace
       * *modelA* - *x6*`.gltf`
       * *modelB* - *y6*`.gltf`
   
-* `fallback` ==impression of the data for when supporting software no longer works, arbitrary collection of images, movies, pdf documents, plain text documents==
+* `fallback`  ==impression of the data for when supporting software no longer works, arbitrary collection of images, movies, pdf documents, plain text documents==
   * *screenshot*`.png`
   * *movie*`.mp4`
   * *doc*`.pdf`
@@ -168,9 +177,14 @@ Here is the file and folder layout of a workspace
 
 `texts` ==markdown-formatted texts for various purposes==
 * `intro.md` ==short introduction to the edition==
-* `about.md` ==more details about the edition, colofon like==
-* `description.md` ==a longer narrative that describes the edition==
+   This will be shown on the *Home* tab of the edition.
 * `usage.md` ==ways in which readers can use the edition==
+   This will be shown on the *Home* tab of the edition, below the `intro` section.
+* `about.md` ==more details about the edition, colofon like==
+   This does not have to include sources and contact details.
+   This will be shown on the *About* tab of the edition.
+* `description.md` ==a longer narrative that describes the edition==
+   This will be shown on the *Project Background* tab of the edition.
 * `articles` ==texts that can be called up within the 3d viewers; arbitrary number with arbitrary names==
   * *a1*`.md`
   * *a2*`.md`
