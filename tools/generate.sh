@@ -26,4 +26,4 @@ do
     cd ..
 done
 
-mdhtml --tohtml --keep -o ~/$LOCAL_DIR .
+mdhtml --tohtml -o ~/$LOCAL_DIR .
