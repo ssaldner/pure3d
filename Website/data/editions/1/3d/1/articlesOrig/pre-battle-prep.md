@@ -1,0 +1,16 @@
+# Pre-Battle Preparation
+
+On Easter Monday, the building was occupied by George Reynolds (section
+commander), Daniel Byrne, William Ronan and James Doyle, the door having been
+opened for them by a maid.
+
+On Tuesday morning, Paddy Doyle, Richard Murphy and brothers Thomas and James
+Walsh were sent from Boland’s Bakery, headquarters of the 3rd Battalion under
+its commandant, Eamon de Valera, to reinforce the garrison in Clanwilliam House.
+Daniel Byrne was assigned to carry dispatches leaving seven men in possession of
+Clanwilliam House on Wednesday morning. By that time, furniture had been used to
+fortify windows but the glass had not been smashed and no other measures taken
+to prepare for an assault on the building. 
+
+(MAI, BMH WS 127; MAI, BMH WS 309; MAI, BMH WS 198)
+

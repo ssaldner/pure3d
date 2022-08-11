@@ -1,0 +1,20 @@
+# Michael Malone
+
+<img hspace="15px" src="../media/Michael_Malone.jpeg" style="float:right"
+width="185"/>
+
+Michael Malone (1888-1916) was the commanding officer in charge of C Company’s
+defence of Northumberland Road, and a lieutenant in the 3rd Battalion of the
+Irish Volunteers. Born in Dublin, Malone was a carpenter who had won prizes in
+art and drawing from the Technical Schools. A devout Catholic, he was a member
+of St Patrick’s Confraternity in Ringsend, Dublin (Catholic Bulletin, 1916).
+Described as ‘the crack shot of his Company’. 
+
+He was described by Seamus Grace, who occupied 25 Northumberland Road with him
+during the battle, to have been “a fine well-built young man with good features,
+serious minded but with an excellent sense of humour, but when the occasion
+arose could be a very strict disciplinarian”. He was one of the few Volunteers
+who had a handgun during the Battle.
+
+(MAI, BMH WS 310, 1949, p. 1)
+
