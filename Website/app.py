@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for  # for flask
+from flask import Flask, render_template  # for flask
 import os
 
 # create and configure app
@@ -6,20 +6,25 @@ app = Flask(__name__)
 title = "PURE3D: An Infrastructure for Publication and Preservation of 3D Scholarship"
 heading = "Pure 3D: Web Interface for Annotations"
 
+def render_md():
+    import markdown
 
-def redirect_url():
-    return (
-        request.args.get("next") or request.referrer or url_for("home")
-    )  # redirect to index page
+    for root, dirs, files in os.walk("./data/editions"):
+        for file in files:
+            if file == 'about.md':
+                filename = os.path.join(root, file)
 
+                with open(filename, 'r') as f:
+                    text = f.read()
+                    html = markdown.markdown(text)
+                    return html
 
 def select_edition():
     data = []
-    for root, dirs, files in os.walk("./editions"):
+    for root, dirs, files in os.walk("./data/editions"):
         for file in files:
             if file == "name.txt":
                 filename = os.path.join(root, file)
-                # print(filename)
 
                 with open(filename) as f:
                     data.append(f.readline())
@@ -51,7 +56,8 @@ def about():
 @app.route("/<n>")
 def edition_page(n):
     n = select_edition()
-    return render_template("edition.html", n=n)
+    a_md = render_md()
+    return render_template("edition.html", n=n, a_md=a_md)
 
 
 if __name__ == "__main__":

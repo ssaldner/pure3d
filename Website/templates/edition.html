@@ -1,11 +1,10 @@
 {% extends 'layout.html' %}
 
-{% block content %}
-    <h1>This is where the edition will appear</h1>
+{% block navigation %}
     <br>
 		<div class="warpper">
-			<input class="radio" id="about" name="group" type="about">
-            <input class="radio" id="project-background" name="group" type="project-background">
+			<a href="\<n>\about"><input class="radio" id="about" name="group" type="about"></a>
+            <a href="\<n>\project-background"><input class="radio" id="project-background" name="group" type="project-background"></a>
 			<input class="radio" id="sources" name="group" type="sources">
             <input class="radio" id="acknowledgments" name="group" type="acknowledgements">
 			<input class="radio" id="contact" name="group" type="contact">
@@ -14,8 +13,22 @@
 				<label class="tab" id="about-tab" for="about">About</label>
 				<label class="tab" id="pb-tab" for="project-background">Project Background</label>
 				<label class="tab" id="sources-tab" for="contact">Sources</label>
-				<label class="tab" id="advanced-search-tab" for="advanced-search">A</label>
-				<label class="tab" id="surprise-me" for="surprise-me">Surprise Me</label>
+				<label class="tab" id="acknowledgments-tab" for="acknowledgemnets">Acknowldgements</label>
+				<label class="tab" id="contact" for="surprise-me">Contact</label>
 		</div>
 
+		<br>
+		<div class="search-bar">
+			<input type="search" name="search" placeholder="search item">
+			<input type="submit" value="Search">
+		</div>
+
+{% endblock %}
+
+{% block content %}
+		<div class="edition-info">
+			{{a_md | safe}}
+		</div>
+
+		
 {% endblock %}
