@@ -46,7 +46,7 @@ It is important to have a mental model of how DSEs are developed, maintained, an
 
 ## SIP
 The hard work of digitizing something in the real world into a 3D model is out of scope here. We assume that researchers somehow have succeeded in doing this, and now they want to tell their research story about this piece of the real world by making use of this model.
-This is the part we want to facilitate. As we see it now, we give them a workspace, centered around a single DSE. In that workspace, a team of editors can produce tours and overlays in the models of the DSE, they can write annotations pointed at specific objects in the models, they can write articles and link those to the models. They can include addtional content such as images and videos.
+This is the part we want to facilitate. As we see it now, we give them a workspace, centered around a single DSE. In that workspace, a team of editors can produce tours and overlays in the models of the DSE, they can write annotations pointed at specific objects in the models, they can write articles and link those to the models. They can include additional content such as images and videos.
 When they are done, they can submit the contents of their workspace to the Pure3D repository, which will perform checks, offer previews, etc. When all is well, the fresh DSE is safely archived. The editors can then issue the *publish* command after which the repository publishes the DSE to the outside world and gives it a persistent identifier.
 
 ## AIP
@@ -131,6 +131,7 @@ A DSE is a complex piece of information. It is more like a website than a docume
 We could use familiar frameworks to author website content, known as content management systems, such as Wordpress. The disadvantage is that we have to support an instance of it for the very long term. There are more sustainable ways to do it: static page generators. Authors write their content in a set of markdown files, and the generator creates a set of static html pages out of it, that can be served indefinitely, without the burden of actively maintaining and securing additional software such as databases and content management systems. 
 
 Moreover, it is also possible to use a version control system for the markdown files, so that people can write collaboratively on the markdown files. This is what git/GitHub/GitHub Pages offers in the wild. We could offer such an environment by means of GitLab on premise. However, git is not the most intuitive way to facilitate collaborative text writing. So either we should streamline that experience greatly, or we should look for alternative systems in the [Jamstack](https://jamstack.org) that offer version control together with a good collaborative experience.
+A source of inspiration is [DARIAH-Campus](https://github.com/DARIAH-ERIC/dariah-campus/tree/main/src/pages). They tackle a problem that is very similar to this. Note also [MDX](https://github.com/micromark/mdx-state-machine#72-deviations-from-markdown), a combination of Markdown and JSX by which you can create components for special things (such as 3D models) to be included in Markdown documents.
 
 ## Storing DSEs
 We need a repository system to store the DSEs. The system must be able to ingest the contents of a finished workspace and store it as an archival package.
