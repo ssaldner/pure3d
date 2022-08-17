@@ -57,3 +57,6 @@ _temp/
 #########################################
 .jekyll-metadata
 .obsidian*
+
+# dotenv environment variables file
+.env
