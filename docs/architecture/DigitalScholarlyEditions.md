@@ -1,6 +1,6 @@
 # Meeting
 #2022-08-17 , 11:00-15:30
-Venue: Amsterdam, Spinhuis, k 2.18
+Venue: Amsterdam, Oost-Indiëhuis, k A0.03
 
 Agenda (provisional):
 * 11:00 - 11:30 Coffee, welcome, introduction of participants
