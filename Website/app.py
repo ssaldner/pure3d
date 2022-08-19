@@ -53,11 +53,13 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/<n>")
-def edition_page(n):
-    n = select_edition()
-    a_md = render_md()
-    return render_template("edition.html", n=n, a_md=a_md)
+@app.route("/<editionN>")
+def edition_page(editionN):
+    editionN = []
+    for (n, e) in enumerate(select_edition()):
+        editionN = n+1
+    intro = render_md()
+    return render_template("edition.html", editionN=editionN, intro=intro)
 
 
 if __name__ == "__main__":
