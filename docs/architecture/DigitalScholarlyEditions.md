@@ -14,6 +14,8 @@ Agenda (provisional):
 
 We will take notes on the go and take breaks when we need them.
 
+The notes are [here](https://github.com/CLARIAH/pure3d/blob/main/docs/architecture/TechMeetingDans.md).
+
 # Abstract
 #2022-08-10
 We are entering a phase of heavy development, starting out with tech that we control now. But we must steer towards tech that is sustainable, and make sure that the products of Pure3D users are FAIR. How can we assure this in the specific context of 3D tech to represent and annotate data?

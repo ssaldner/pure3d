@@ -15,12 +15,16 @@ editions = next(os.walk(dataDir))[1]
 # functions
 
 
-def editionsList():  # to get paths of edition (top level) directories
+def editionsList():  # to get paths/enumeration of edition (top level) directories
     editionDir = []
+    #editionN = []
     for local_folder in editions:
         editionDir.append(os.path.abspath(os.path.join(dataDir, local_folder)))
 
-    return editionDir   # edition directory path
+    #for (n, e) in enumerate(editionDir):
+        #editionN.append(n + 1)  # edition number
+
+    return editionDir  #, editionN  # edition directory path, edition number
 
 
 def render_md(mdPath, mdFile):  # to render markdown files
