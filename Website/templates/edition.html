@@ -3,8 +3,8 @@
 {% block navigation %}
     <br>
 		<div class="warpper">
-			<a href="\<n>\about"><input class="radio" id="about" name="group" type="about"></a>
-            <a href="\<n>\project-background"><input class="radio" id="project-background" name="group" type="project-background"></a>
+			<input class="radio" id="about" name="group" type="about"></a>
+            <input class="radio" id="project-background" name="group" type="project-background"></a>
 			<input class="radio" id="sources" name="group" type="sources">
             <input class="radio" id="acknowledgments" name="group" type="acknowledgements">
 			<input class="radio" id="contact" name="group" type="contact">
@@ -26,16 +26,16 @@
 {% endblock %}
 
 {% block content %}
-
-	<div class = "container">
-		<div class="edition-info">
-			{{intro | safe}}
-		</div>
-
-		<div class = "model-icons">
-			<h1><emp>Models</emp></h1>
-				
-		</div>
+<div class = "container">
+	<div class="edition-info">
+		<h1>Introduction</h1>
+		{{ intro|safe }}
 	</div>
-	
+
+	<div class = "model-icons">
+		<h1><emp>Models</emp></h1>
+				
+	</div>
+</div>
+
 {% endblock %}
