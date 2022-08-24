@@ -1,4 +1,4 @@
-from flask import Flask, render_template  # for flask
+from flask import Flask, render_template
 import os
 import json
 from markdown import markdown
@@ -49,7 +49,6 @@ def home():
 
     for i in editionNumbers:
         jsonFile = f"{editionDir}/{i}/meta/dc.json"
-        print(f"{jsonFile=}")
         with open(jsonFile, "r") as dcFile:
             dcJson = json.load(dcFile)
         title = dcJson["dc.title"]
@@ -67,7 +66,7 @@ def home():
         url = data["url"]
         editionLinks.append(
             f"""
-            <a href="/{url}">{title}</a><br>
+            <a href="{url}">{title}</a><br>
         """
         )
 
@@ -85,7 +84,7 @@ def about():
 @app.route("/<int:editionN>")
 # Display for editions page(s)
 def edition_page(editionN):
-    print("I am here {editionN=}")
+    print(f"I am here {editionN=}")
     introDir = f"{editionDir}/{editionN}"
     introFile = "intro.md"
     introHtml = render_md(introDir, introFile)
