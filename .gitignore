@@ -60,3 +60,7 @@ _temp/
 
 # dotenv environment variables file
 .env
+
+# Environments
+.venv
+venv/
