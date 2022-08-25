@@ -1,4 +1,10 @@
+<<<<<<< HEAD:Website/data/editions/1/about.md
+ABOUT
+=====
+
+=======
 ## MOUNT STREET BRIDGE
+>>>>>>> 295fe6aab1b139abc1bc645256730a1101f762c3:data/editionsBetter/1/texts/intro.md
 
 Contested Memories: The Battle of Mount Street Bridge is one of the PURE3D Infrastructure Pilot Projects 
  in which we experiment with different modalities for communicating rich interfaces for 3D models.

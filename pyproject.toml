@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -40,3 +41,47 @@ path = "tools/VERSION"
 
 [tool.hatch.build.targets.sdist]
 [tool.hatch.build.targets.wheel]
+=======
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pure3d"
+description = 'Pure3D and tools'
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "sohinimallick16", email = "sohini.mallick@maastrichtuniversity.nl" },
+  { name = "dirkroorda", email = "dirk.roorda@di.huc.knaw.nl" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = ["pyyaml", "markdownify", "markdown"]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/CLARIAH/pure3d/tools/README.md"
+Issues = "https://github.com/CLARIAH/pure3d/issues"
+Source = "https://github.com/CLARIAH/pure3d/tree/master/tools"
+
+[project.scripts]
+jyconvert = "tools.jyconvert:main"
+mdhtml = "tools.mdHtml:main"
+
+[tool.hatch.version]
+path = "src/tools/VERSION"
+
+[tool.hatch.build.targets.sdist]
+[tool.hatch.build.targets.wheel]
+>>>>>>> 295fe6aab1b139abc1bc645256730a1101f762c3
