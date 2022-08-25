@@ -17,7 +17,7 @@ editionDir = f"{dataDir}/editions"
 # functions
 
 
-def editionsList():  # to get paths/enumeration of edition (top level) directories
+def editionsList():  # to get enumeration of top level directories
     numbers = []
     with os.scandir(editionDir) as ed:
         for entry in ed:
