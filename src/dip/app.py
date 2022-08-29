@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 import os
 import json
 from markdown import markdown
@@ -32,7 +32,7 @@ def generateMessages():
     return "\n".join(html)
 
 
-def editionsList():  
+def editionsList():
     # to get enumeration of top level directories
     numbers = []
     with os.scandir(editionDir) as ed:
@@ -44,12 +44,12 @@ def editionsList():
     return sorted(numbers)
 
 
-def modelsList():  
+def modelsList():
     # to get enumeration of sub-directories under folder "3d"
     pass
 
 
-def render_md(mdPath, mdFile):  
+def render_md(mdPath, mdFile):
     # to render markdown files
     filename = f"{mdPath}/texts/{mdFile}"
     with open(filename, "r") as f:
@@ -58,7 +58,7 @@ def render_md(mdPath, mdFile):
         return html
 
 
-def dcReaderJSON():  
+def dcReaderJSON():
     # to read different values from the Dublin core file
     pass
 
@@ -129,7 +129,14 @@ def edition_page(editionN):
     introDir = f"{editionDir}/{editionN}"
     introFile = "intro.md"
     introHtml = render_md(introDir, introFile)
-    return render_template("edition.html", intro=introHtml, editioN=editionN, messages=generateMessages())
+    editionUrl = url_for("editionAbout", editionN=editionN)
+    return render_template(
+        "edition.html",
+        intro=introHtml,
+        editioN=editionN,
+        editionUrl=editionUrl,
+        messages=generateMessages(),
+    )
 
 
 @app.route("/<int:editionN>/<int:modelN>")

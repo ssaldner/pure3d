@@ -7,7 +7,7 @@
 {% block navigation %}
 <br>
 <div class="warpper">
-	<a href = "{{ url_for('editionAbout', editionN=editionN) }}"><input class="radio" id="about" name="group" type="about"></a>
+	<a href = "{{editionUrl}}"><input class="radio" id="about" name="group" type="about"></a>
 	<input class="radio" id="project-background" name="group" type="project-background"></a>
 	<input class="radio" id="sources" name="group" type="sources">
 	<input class="radio" id="acknowledgments" name="group" type="acknowledgements">
