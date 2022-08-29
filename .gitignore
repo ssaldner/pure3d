@@ -53,6 +53,10 @@ _temp/
 .tf/
 .ipynb_checkpoints/
 
+# Experiments
+_experiments/
+exp_*
+
 # Config files which get locally modified
 #########################################
 .jekyll-metadata
