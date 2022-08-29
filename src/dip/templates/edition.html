@@ -1,28 +1,31 @@
 {% extends 'layout.html' %}
 
+{% block logo %} 
+	<a href="/"><img src="{{ url_for('static',filename='media/Pure3D_logo.PNG')}}" alt="The Pure3D logo"></a>
+{%endblock%}
+
 {% block navigation %}
-    <br>
-		<div class="warpper">
-			<input class="radio" id="about" name="group" type="about"></a>
-            <input class="radio" id="project-background" name="group" type="project-background"></a>
-			<input class="radio" id="sources" name="group" type="sources">
-            <input class="radio" id="acknowledgments" name="group" type="acknowledgements">
-			<input class="radio" id="contact" name="group" type="contact">
-		  
-		<div class="tabs">
-				<label class="tab" id="about-tab" for="about">About</label>
-				<label class="tab" id="pb-tab" for="project-background">Project Background</label>
-				<label class="tab" id="sources-tab" for="contact">Sources</label>
-				<label class="tab" id="acknowledgments-tab" for="acknowledgemnets">Acknowldgements</label>
-				<label class="tab" id="contact" for="surprise-me">Contact</label>
-		</div>
+<br>
+<div class="warpper">
+	<a href = "{{ url_for('editionAbout', editionN=editionN) }}"><input class="radio" id="about" name="group" type="about"></a>
+	<input class="radio" id="project-background" name="group" type="project-background"></a>
+	<input class="radio" id="sources" name="group" type="sources">
+	<input class="radio" id="acknowledgments" name="group" type="acknowledgements">
+	<input class="radio" id="contact" name="group" type="contact">
+  
+<div class="tabs">
+		<label class="tab" id="about-tab" for="about">About</label>
+		<label class="tab" id="pb-tab" for="project-background">Project Background</label>
+		<label class="tab" id="sources-tab" for="contact">Sources</label>
+		<label class="tab" id="acknowledgments-tab" for="acknowledgemnets">Acknowldgements</label>
+		<label class="tab" id="contact" for="surprise-me">Contact</label>
+</div>
 
-		<br>
-		<div class="search-bar">
-			<input type="search" name="search" placeholder="search item">
-			<input type="submit" value="Search">
-		</div>
-
+<br>
+<div class="search-bar">
+	<input type="search" name="search" placeholder="search item">
+	<input type="submit" value="Search">
+</div>
 {% endblock %}
 
 {% block content %}

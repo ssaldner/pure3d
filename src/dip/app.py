@@ -12,12 +12,28 @@ heading = "Pure 3D website"
 BASE = os.path.expanduser("~/github/clariah/pure3d")
 dataDir = f"{BASE}/data"
 editionDir = f"{dataDir}/editions"
+MESSAGES = []
 
 
 # functions
+def clearMessages():
+    MESSAGES.clear()
 
 
-def editionsList():  # to get enumeration of top level directories
+def addMessage(type, message):
+    clearMessages()
+    MESSAGES.append((type, message))
+
+
+def generateMessages():
+    html = []
+    for (type, message) in MESSAGES:
+        html.append(f"""<p class="type">{message}</p>""")
+    return "\n".join(html)
+
+
+def editionsList():  
+    # to get enumeration of top level directories
     numbers = []
     with os.scandir(editionDir) as ed:
         for entry in ed:
@@ -28,11 +44,13 @@ def editionsList():  # to get enumeration of top level directories
     return sorted(numbers)
 
 
-def modelsList():  # to get enumeration of sub-directories under folder "3d"
+def modelsList():  
+    # to get enumeration of sub-directories under folder "3d"
     pass
 
 
-def render_md(mdPath, mdFile):  # to render markdown files
+def render_md(mdPath, mdFile):  
+    # to render markdown files
     filename = f"{mdPath}/texts/{mdFile}"
     with open(filename, "r") as f:
         text = f.read()
@@ -40,7 +58,8 @@ def render_md(mdPath, mdFile):  # to render markdown files
         return html
 
 
-def dcReaderJSON():  # to read different values from the Dublin core file
+def dcReaderJSON():  
+    # to read different values from the Dublin core file
     pass
 
 
@@ -86,7 +105,11 @@ def home():
 @app.route("/about")
 # Display the About page
 def about():
-    return render_template("about.html")
+    filename = f"{BASE}/src/dip/about.md"
+    with open(filename, "r") as f:
+        text = f.read()
+        html = markdown(text)
+    return render_template("about.html", about=html)
 
 
 @app.route("/supriseme")
@@ -102,11 +125,11 @@ def contact():
 @app.route("/<int:editionN>")
 # Display for editions page(s)
 def edition_page(editionN):
-    print(f"I am here {editionN=}")
+    addMessage("info", f"I am here {editionN=}")
     introDir = f"{editionDir}/{editionN}"
     introFile = "intro.md"
     introHtml = render_md(introDir, introFile)
-    return render_template("edition.html", intro=introHtml)
+    return render_template("edition.html", intro=introHtml, editioN=editionN, messages=generateMessages())
 
 
 @app.route("/<int:editionN>/<int:modelN>")
@@ -118,7 +141,10 @@ def model_page(editionN, modelN):
 @app.route("/<int:editionN>/about")
 # Display about page for specific edition
 def editionAbout(editionN):
-    pass
+    aboutDir = f"{editionDir}/{editionN}"
+    aboutFile = "about.md"
+    aboutHtml = render_md(aboutDir, aboutFile)
+    return render_template("about.html", about=aboutHtml, editionN=editionN)
 
 
 if __name__ == "__main__":
