@@ -28,12 +28,20 @@ def editionsList():  # to get enumeration of top level directories
     return sorted(numbers)
 
 
+def modelsList():  # to get enumeration of sub-directories under folder "3d"
+    pass
+
+
 def render_md(mdPath, mdFile):  # to render markdown files
     filename = f"{mdPath}/texts/{mdFile}"
     with open(filename, "r") as f:
         text = f.read()
         html = markdown(text)
         return html
+
+
+def dcReaderJSON():  # to read different values from the Dublin core file
+    pass
 
 
 # app url routes start here
@@ -81,6 +89,16 @@ def about():
     return render_template("about.html")
 
 
+@app.route("/supriseme")
+def supriseme():
+    pass
+
+
+@app.route("/contact")
+def contact():
+    pass
+
+
 @app.route("/<int:editionN>")
 # Display for editions page(s)
 def edition_page(editionN):
@@ -88,7 +106,13 @@ def edition_page(editionN):
     introDir = f"{editionDir}/{editionN}"
     introFile = "intro.md"
     introHtml = render_md(introDir, introFile)
-    return render_template("edition.html", intro=introHtml, editionN=editionN)
+    return render_template("edition.html", intro=introHtml)
+
+
+@app.route("/<int:editionN>/<int:modelN>")
+# Display page for individual models in an edition
+def model_page(editionN, modelN):
+    pass
 
 
 @app.route("/<int:editionN>/about")

@@ -32,6 +32,16 @@ img{
         width: 50%;
         text-align:center;
 }
+
+.edition-info{
+        width: 50%;
+        text-align:justify;
+}
+
+.model-icons{
+        width: 50%;
+        text-align:center;
+}
 .warpper {
         display: flex;
         flex-direction: column;
