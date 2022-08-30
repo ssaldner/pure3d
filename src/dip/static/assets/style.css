@@ -1,10 +1,11 @@
 html {
-        background-color: #d7dce0;
+        background-color: #ffffff;
         
       }
 
 
 img{
+        width: 50%;
         display: block;
         margin: 0 auto;
     }
@@ -20,9 +21,11 @@ img{
         position: relative;
         margin: auto;
    }
+
 .container{
         display: flex;
 }
+
 .basic-info{
         width: 50%;
         text-align:justify;

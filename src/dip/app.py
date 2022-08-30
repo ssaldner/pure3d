@@ -151,8 +151,13 @@ def editionAbout(editionN):
     aboutDir = f"{editionDir}/{editionN}"
     aboutFile = "about.md"
     aboutHtml = render_md(aboutDir, aboutFile)
-    return render_template("about.html", about=aboutHtml, editionN=editionN)
+    return render_template("editionTexts.html", text=aboutHtml)
 
+
+@app.route("/<int:editionN>/project_background")
+# Display about page for specific edition
+def editionBackground(editionN):
+    pass
 
 if __name__ == "__main__":
     app.run()
