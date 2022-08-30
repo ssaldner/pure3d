@@ -3,6 +3,10 @@ import os
 import json
 from markdown import markdown
 
+from helpers.messages import Messages
+from helpers.files import readFile, dirExists
+
+
 # create and configure app
 app = Flask(__name__)
 title = "PURE3D: An Infrastructure for Publication and Preservation of 3D Scholarship"
@@ -12,29 +16,16 @@ heading = "Pure 3D website"
 BASE = os.path.expanduser("~/github/clariah/pure3d")
 dataDir = f"{BASE}/data"
 editionDir = f"{dataDir}/editions"
-MESSAGES = []
 
 
-# functions
-def clearMessages():
-    MESSAGES.clear()
-
-
-def addMessage(type, message):
-    clearMessages()
-    MESSAGES.append((type, message))
-
-
-def generateMessages():
-    html = []
-    for (type, message) in MESSAGES:
-        html.append(f"""<p class="type">{message}</p>""")
-    return "\n".join(html)
-
-
-def editionsList():
+def editionsList(M):
     # to get enumeration of top level directories
     numbers = []
+
+    if not dirExists(editionDir):
+        M.addMessage("error", f"Edition directory {editionDir} does not exist")
+        return numbers
+
     with os.scandir(editionDir) as ed:
         for entry in ed:
             if entry.is_dir():
@@ -44,21 +35,25 @@ def editionsList():
     return sorted(numbers)
 
 
-def modelsList():
+def modelsList(M):
     # to get enumeration of sub-directories under folder "3d"
     pass
 
 
-def render_md(mdPath, mdFile):
+def render_md(M, mdPath, mdFile):
     # to render markdown files
-    filename = f"{mdPath}/texts/{mdFile}"
-    with open(filename, "r") as f:
-        text = f.read()
+    fileDir = f"{mdPath}/texts"
+    fh = readFile(fileDir, mdFile)
+    if type(fh) is str:
+        M.addMessage("error", fh)
+        html = ""
+    else:
+        text = fh.read()
         html = markdown(text)
-        return html
+    return html
 
 
-def dcReaderJSON():
+def dcReaderJSON(M):
     # to read different values from the Dublin core file
     pass
 
@@ -70,15 +65,34 @@ def dcReaderJSON():
 @app.route("/home")
 # Display home page
 def home():
-    editionNumbers = editionsList()
+    M = Messages(app)
+    aap = 3
+    # print(aap)
+
+    editionNumbers = editionsList(M)
 
     editionData = {}
 
+    # just for testing
+
+    for tp in ("debug", "info", "warning", "error"):
+        M.addMessage(tp, f"This is a {tp} message")
+
     for i in editionNumbers:
-        jsonFile = f"{editionDir}/{i}/meta/dc.json"
-        with open(jsonFile, "r") as dcFile:
-            dcJson = json.load(dcFile)
-        title = dcJson["dc.title"]
+        jsonDir = f"{editionDir}/{i}/meta"
+        jsonFile = "dc.json"
+        fh = readFile(jsonDir, jsonFile)
+        if type(fh) is str:
+            M.addMessage("error", fh)
+            dcJson = {}
+        else:
+            dcJson = json.load(fh)
+
+        if "dc.title" in dcJson:
+            title = dcJson["dc.title"]
+        else:
+            M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
+            title = "No title"
         url = f"""/{i}"""
 
         editionData[i] = dict(
@@ -99,43 +113,93 @@ def home():
 
     editionLinks = "\n".join(editionLinks)
 
-    return render_template("index.html", url=url, editionLinks=editionLinks)
+    return render_template(
+        "index.html",
+        url=url,
+        editionLinks=editionLinks,
+        messages=M.generateMessages(),
+    )
 
 
 @app.route("/about")
 # Display the About page
 def about():
-    filename = f"{BASE}/src/dip/about.md"
-    with open(filename, "r") as f:
-        text = f.read()
-        html = markdown(text)
-    return render_template("about.html", about=html)
+    M = Messages(app)
+
+    fileDir = f"{BASE}/src/dip"
+    fileName = "about.md"
+    fh = readFile(fileDir, fileName)
+    if type(fh) is str:
+        M.addMessage("error", fh)
+        text = ""
+    else:
+        text = fh.read()
+
+    html = markdown(text)
+
+    return render_template(
+        "about.html",
+        about=html,
+        messages=M.generateMessages(),
+    )
 
 
 @app.route("/supriseme")
 def supriseme():
+    # M = Messages(app)
+
     pass
 
 
 @app.route("/contact")
 def contact():
+    # M = Messages(app)
+
+    pass
+
+
+@app.route("/<int:editionN>/about")
+# Display about page for specific edition
+def editionAbout(editionN):
+    M = Messages(app)
+
+    aboutDir = f"{editionDir}/{editionN}"
+    aboutFile = "about.md"
+    aboutHtml = render_md(M, aboutDir, aboutFile)
+
+    return render_template(
+        "about.html",
+        about=aboutHtml,
+        editionN=editionN,
+        messages=M.generateMessages(),
+    )
+
+
+@app.route("/<int:editionN>/<int:modelN>")
+# Display page for individual models in an edition
+def model_page(editionN, modelN):
+    # M = Messages(app)
+
     pass
 
 
 @app.route("/<int:editionN>")
 # Display for editions page(s)
 def edition_page(editionN):
-    addMessage("info", f"I am here {editionN=}")
+    M = Messages(app)
+
+    M.addMessage("debug", f"I am here {editionN=}")
     introDir = f"{editionDir}/{editionN}"
     introFile = "intro.md"
-    introHtml = render_md(introDir, introFile)
+
+    introHtml = render_md(M, introDir, introFile)
     editionUrl = url_for("editionAbout", editionN=editionN)
     return render_template(
         "edition.html",
         intro=introHtml,
         editioN=editionN,
         editionUrl=editionUrl,
-        messages=generateMessages(),
+        messages=M.generateMessages(),
     )
 
 
@@ -158,6 +222,7 @@ def editionAbout(editionN):
 # Display about page for specific edition
 def editionBackground(editionN):
     pass
+
 
 if __name__ == "__main__":
     app.run()

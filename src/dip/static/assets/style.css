@@ -1,21 +1,59 @@
 html {
+<<<<<<< HEAD
         background-color: #ffffff;
         
       }
+=======
+  background-color: #d7dce0;
+}
 
+img {
+  display: block;
+  margin: 0 auto;
+}
 
+.foot {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.foot img {
+  display: table;
+  position: relative;
+  margin: auto;
+}
+.container {
+  display: flex;
+}
+>>>>>>> 33b46d40d0a48a5c05534b412a3b8db4f4ada809
+
+div.messages {
+  width: 100%;
+  border-radius: 0.3rem;
+  background-color: #ffffee;
+}
+
+<<<<<<< HEAD
 img{
         width: 50%;
         display: block;
         margin: 0 auto;
     }
+=======
+p.message {
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.5rem;
+  margin: 0.1rem;
+}
+>>>>>>> 33b46d40d0a48a5c05534b412a3b8db4f4ada809
 
-.foot{
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
+p.debug {
+  color: white;
+  background-color: #0000ff;
+}
 
+<<<<<<< HEAD
 .foot img{
         display: table;
         position: relative;
@@ -29,44 +67,63 @@ img{
 .basic-info{
         width: 50%;
         text-align:justify;
+=======
+p.info {
+  color: white;
+  background-color: #000000;
 }
 
-.edition-icons{
-        width: 50%;
-        text-align:center;
+p.warning {
+  color: black;
+  background-color: #ff8800;
+>>>>>>> 33b46d40d0a48a5c05534b412a3b8db4f4ada809
 }
 
-.edition-info{
-        width: 50%;
-        text-align:justify;
+p.error {
+  color: black;
+  background-color: #ff0000;
 }
 
-.model-icons{
-        width: 50%;
-        text-align:center;
+.basic-info {
+  width: 50%;
+  text-align: justify;
+}
+
+.edition-icons {
+  width: 50%;
+  text-align: center;
+}
+
+.edition-info {
+  width: 50%;
+  text-align: justify;
+}
+
+.model-icons {
+  width: 50%;
+  text-align: center;
 }
 .warpper {
-        display: flex;
-        flex-direction: column;
-        align-items: end;
-      }
-      
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
 .tab {
-        cursor: pointer;
-        padding: 10px 20px;
-        margin: 0px 2px;
-        background: #32557f;
-        display: inline-block;
-        color: #fff;
-        border-radius: 3px 3px 0px 0px;
-        box-shadow: 0 0.5rem 0.8rem #00000080;
-      }
-      
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 0px 2px;
+  background: #32557f;
+  display: inline-block;
+  color: #fff;
+  border-radius: 3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+
 .radio {
-        display: none;
-      }
+  display: none;
+}
 
-a.active {    
-        background-color: #4CAF50;    
-     }    
-
+a.active {
+  background-color: #4caf50;
+}
