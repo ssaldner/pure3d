@@ -1,69 +1,99 @@
 html {
-        background-color: #d7dce0;
-        
-      }
-
-
-img{
-        display: block;
-        margin: 0 auto;
-    }
-
-.foot{
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-
-.foot img{
-        display: table;
-        position: relative;
-        margin: auto;
-   }
-.container{
-        display: flex;
-}
-.basic-info{
-        width: 50%;
-        text-align:justify;
+  background-color: #d7dce0;
 }
 
-.edition-icons{
-        width: 50%;
-        text-align:center;
+img {
+  display: block;
+  margin: 0 auto;
 }
 
-.edition-info{
-        width: 50%;
-        text-align:justify;
+.foot {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
-.model-icons{
-        width: 50%;
-        text-align:center;
+.foot img {
+  display: table;
+  position: relative;
+  margin: auto;
+}
+.container {
+  display: flex;
+}
+
+div.messages {
+  width: 100%;
+  border-radius: 0.3rem;
+  background-color: #ffffee;
+}
+
+p.message {
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.5rem;
+  margin: 0.1rem;
+}
+
+p.debug {
+  color: white;
+  background-color: #0000ff;
+}
+
+p.info {
+  color: white;
+  background-color: #000000;
+}
+
+p.warning {
+  color: black;
+  background-color: #ff8800;
+}
+
+p.error {
+  color: black;
+  background-color: #ff0000;
+}
+
+.basic-info {
+  width: 50%;
+  text-align: justify;
+}
+
+.edition-icons {
+  width: 50%;
+  text-align: center;
+}
+
+.edition-info {
+  width: 50%;
+  text-align: justify;
+}
+
+.model-icons {
+  width: 50%;
+  text-align: center;
 }
 .warpper {
-        display: flex;
-        flex-direction: column;
-        align-items: end;
-      }
-      
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
 .tab {
-        cursor: pointer;
-        padding: 10px 20px;
-        margin: 0px 2px;
-        background: #32557f;
-        display: inline-block;
-        color: #fff;
-        border-radius: 3px 3px 0px 0px;
-        box-shadow: 0 0.5rem 0.8rem #00000080;
-      }
-      
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 0px 2px;
+  background: #32557f;
+  display: inline-block;
+  color: #fff;
+  border-radius: 3px 3px 0px 0px;
+  box-shadow: 0 0.5rem 0.8rem #00000080;
+}
+
 .radio {
-        display: none;
-      }
+  display: none;
+}
 
-a.active {    
-        background-color: #4CAF50;    
-     }    
-
+a.active {
+  background-color: #4caf50;
+}
