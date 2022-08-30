@@ -66,7 +66,6 @@ def dcReaderJSON(M):
 # Display home page
 def home():
     M = Messages(app)
-    # print(aap)
 
     editionNumbers = editionsList(M)
 
@@ -202,24 +201,10 @@ def edition_page(editionN):
     )
 
 
-@app.route("/<int:editionN>/<int:modelN>")
-# Display page for individual models in an edition
-def model(editionN, modelN):
-    pass
-
-
-@app.route("/<int:editionN>/about")
-# Display about page for specific edition
-def editionAbout(editionN):
-    aboutDir = f"{editionDir}/{editionN}"
-    aboutFile = "about.md"
-    aboutHtml = render_md(aboutDir, aboutFile)
-    return render_template("editionTexts.html", text=aboutHtml)
-
-
 @app.route("/<int:editionN>/project_background")
 # Display about page for specific edition
 def editionBackground(editionN):
+    # M = Messages(app)
     pass
 
 
