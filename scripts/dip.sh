@@ -14,6 +14,7 @@ Run it from the /scripts directory in the repo.
     Debug mode
 """
 
+scriptdir=`pwd`
 cd ../src/dip
 
 if [[ "$1" == "debug" ]]; then
