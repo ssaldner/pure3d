@@ -66,6 +66,8 @@ def dcReaderJSON(M):
 # Display home page
 def home():
     M = Messages(app)
+    aap = 3
+    # print(aap)
 
     editionNumbers = editionsList(M)
 
