@@ -1,8 +1,8 @@
 {
-    "filename": "data/editions/1",
-    "dc.title": "Battle of Mount Street Bridge",
-    "dc.creator": "xyz",
-    "dc.contributor": "abc",
+    "filename": "/github/clariah/pure3d/data/editions/1",
+    "dc.title": "Contested Memories: The Battle of Mount Street Bridge",
+    "dc.creator": "Susan Schriebman",
+    "dc.contributor": "Kelly Gillikin Schoueri, Costas Papadopoulos, Billy Donnelly, Luca Moines, John Kaulakis, Sandra Boheme Martinez",
     "dc.subject": [
        "3D model"
        ],
