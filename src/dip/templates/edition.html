@@ -7,8 +7,8 @@
 {% block navigation %}
 <br>
 <div class="warpper">
-	<a href = "{{editionUrl}}"><input class="radio" id="about" name="group" type="about"></a>
-	<input class="radio" id="project-background" name="group" type="project-background"></a>
+	<a href = "{{aboutUrl}}"><input class="radio" id="about" name="group" type="about"></a>
+	<a href = "{{bgUrl}}"><input class="radio" id="project-background" name="group" type="project-background"></a>
 	<input class="radio" id="sources" name="group" type="sources">
 	<input class="radio" id="acknowledgments" name="group" type="acknowledgements">
 	<input class="radio" id="contact" name="group" type="contact">
@@ -33,11 +33,14 @@
 	<div class="edition-info">
 		<h1>Introduction</h1>
 		{{ intro|safe }}
+
+		<h1>Usage</h1>
+		{{ usage|safe }}
 	</div>
 
 	<div class = "model-icons">
 		<h1><emp>Models</emp></h1>
-				
+				{{ modelLinks|safe }}
 	</div>
 </div>
 

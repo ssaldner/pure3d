@@ -35,9 +35,25 @@ def editionsList(M):
     return sorted(numbers)
 
 
-def modelsList(M):
+def modelDir():
+    M = Messages(app)
+    editions = editionsList(M)
+    for e in editions:
+        modelDir = f"{editionDir}/{e}/3d"
+        return modelDir
+
+
+def modelsList():
     # to get enumeration of sub-directories under folder "3d"
-    pass
+    modelns = []
+    dir = modelDir()
+    with os.scandir(dir) as md:
+            for model in md:
+                if model.is_dir():
+                    name = model.name
+                    if name.isdigit():
+                        modelns.append(int(name))
+    return sorted(modelns)
 
 
 def render_md(M, mdPath, mdFile):
@@ -166,9 +182,8 @@ def editionAbout(editionN):
     aboutHtml = render_md(M, aboutDir, aboutFile)
 
     return render_template(
-        "about.html",
-        about=aboutHtml,
-        editionN=editionN,
+        "editionTexts.html",
+        text=aboutHtml,
         messages=M.generateMessages(),
     )
 
@@ -177,7 +192,6 @@ def editionAbout(editionN):
 # Display page for individual models in an edition
 def model_page(editionN, modelN):
     # M = Messages(app)
-
     pass
 
 
@@ -185,18 +199,55 @@ def model_page(editionN, modelN):
 # Display for editions page(s)
 def edition_page(editionN):
     M = Messages(app)
-
     M.addMessage("debug", f"I am here {editionN=}")
-    introDir = f"{editionDir}/{editionN}"
-    introFile = "intro.md"
 
-    introHtml = render_md(M, introDir, introFile)
-    editionUrl = url_for("editionAbout", editionN=editionN)
+    Dir = f"{editionDir}/{editionN}"
+    introFile = "intro.md"
+    usageFile = "usage.md"
+
+    introHtml = render_md(M, Dir, introFile)
+    usageHtml = render_md(M, Dir, usageFile)
+
+    aboutUrl = url_for("editionAbout", editionN=editionN)
+    bgUrl = url_for("editionBackground", editionN=editionN)
+
+    modelNumbers = modelsList()
+    modelData = {}
+
+    for j in modelNumbers:
+        modelDir = f"{Dir}/3d/{j}"
+        modelFile = "title.txt"
+        nameFile = os.path.join(modelDir,modelFile)
+        with open(nameFile) as f:
+            title = f.read()
+
+        url = f"""/{j}"""
+        modelData[j] = dict(
+            title=title,
+            url=url,
+        )
+
+    modelLinks = []
+
+    for (i, data) in sorted(modelData.items()):
+        title = data["title"]
+        url = data["url"]
+        modelLinks.append(
+            f"""
+            <a href="{url}">{title}</a><br>
+        """
+        )
+
+    modelLinks = "\n".join(modelLinks)
+
     return render_template(
         "edition.html",
+        usage=usageHtml,
         intro=introHtml,
         editioN=editionN,
-        editionUrl=editionUrl,
+        aboutUrl=aboutUrl,
+        bgUrl=bgUrl,
+        modelLinks=modelLinks,
         messages=M.generateMessages(),
     )
 
@@ -204,9 +255,25 @@ def edition_page(editionN):
 @app.route("/<int:editionN>/project_background")
 # Display about page for specific edition
 def editionBackground(editionN):
-    # M = Messages(app)
+    M = Messages(app)
+    Dir = f"{editionDir}/{editionN}"
+    backgroundFile = "description.md"
+    backgroundHtml = render_md(M, Dir, backgroundFile)
+
+    return render_template(
+        "editionTexts.html",
+        text=backgroundHtml,
+        editionN=editionN,
+        messages=M.generateMessages()
+        )
+    
+
+@app.route("/<int:editionN>/sources")
+# Display about page for specific edition
+def editionSources(editionN):
+    M = Messages(app)
     pass
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run()
