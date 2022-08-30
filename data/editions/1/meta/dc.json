@@ -3,8 +3,16 @@
     "dc.title": "Contested Memories: The Battle of Mount Street Bridge",
     "dc.creator": "Susan Schriebman",
     "dc.contributor": "Kelly Gillikin Schoueri, Costas Papadopoulos, Billy Donnelly, Luca Moines, John Kaulakis, Sandra Boheme Martinez",
+    "dc.audience": "Digital Humanities, Early Modern History, Irish History",
     "dc.subject": [
-       "3D model"
-       ],
+      "Irish History", 
+      "Easter Rising", 
+      "British History", 
+      "World War I", 
+      "3D Storytelling", 
+      "3D annotation", 
+      "3D Digital Scholarly Edition"
+      ],
+    "dc.coverage.periodName": "1900-1950 CE",
     "dc.date": ""
   }
