@@ -1,5 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
+<div>
   <h1>Model</h1>
-  <div class="model">{{model|safe}}</div>
+  <p>root = {{root}}</p>
+  <p>model = {{model}}</p>
+  <p>scene = {{scene}}</p>
+</div>
+<div class="model">
+  <voyager-explorer
+          style="{{style}}"
+          root="{{root}}" model="{{model}}" document="{{scene}}">
+  </voyager-explorer>
+  <script src="/static/dist/js/voyager-explorer.min.js"></script>
+</div>
 {% endblock %}
