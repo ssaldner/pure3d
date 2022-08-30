@@ -65,7 +65,7 @@ def dcReaderJSON(M):
 @app.route("/home")
 # Display home page
 def home():
-    M = Messages()
+    M = Messages(app)
 
     editionNumbers = editionsList(M)
 
@@ -122,7 +122,7 @@ def home():
 @app.route("/about")
 # Display the About page
 def about():
-    M = Messages()
+    M = Messages(app)
 
     fileDir = f"{BASE}/src/dip"
     fileName = "about.md"
@@ -144,14 +144,14 @@ def about():
 
 @app.route("/supriseme")
 def supriseme():
-    # M = Messages()
+    # M = Messages(app)
 
     pass
 
 
 @app.route("/contact")
 def contact():
-    # M = Messages()
+    # M = Messages(app)
 
     pass
 
@@ -159,7 +159,7 @@ def contact():
 @app.route("/<int:editionN>/about")
 # Display about page for specific edition
 def editionAbout(editionN):
-    M = Messages()
+    M = Messages(app)
 
     aboutDir = f"{editionDir}/{editionN}"
     aboutFile = "about.md"
@@ -176,7 +176,7 @@ def editionAbout(editionN):
 @app.route("/<int:editionN>/<int:modelN>")
 # Display page for individual models in an edition
 def model_page(editionN, modelN):
-    # M = Messages()
+    # M = Messages(app)
 
     pass
 
@@ -184,7 +184,7 @@ def model_page(editionN, modelN):
 @app.route("/<int:editionN>")
 # Display for editions page(s)
 def edition_page(editionN):
-    M = Messages()
+    M = Messages(app)
 
     M.addMessage("debug", f"I am here {editionN=}")
     introDir = f"{editionDir}/{editionN}"
