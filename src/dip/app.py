@@ -205,7 +205,7 @@ def edition_page(editionN):
 
 @app.route("/<int:editionN>/<int:modelN>")
 # Display page for individual models in an edition
-def model_page(editionN, modelN):
+def model(editionN, modelN):
     pass
 
 
@@ -225,4 +225,4 @@ def editionBackground(editionN):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, use_reloader=False)
