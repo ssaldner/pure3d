@@ -1,9 +1,4 @@
 html {
-<<<<<<< HEAD
-        background-color: #ffffff;
-        
-      }
-=======
   background-color: #d7dce0;
 }
 
@@ -26,7 +21,6 @@ img {
 .container {
   display: flex;
 }
->>>>>>> 33b46d40d0a48a5c05534b412a3b8db4f4ada809
 
 div.messages {
   width: 100%;
@@ -34,40 +28,17 @@ div.messages {
   background-color: #ffffee;
 }
 
-<<<<<<< HEAD
-img{
-        width: 50%;
-        display: block;
-        margin: 0 auto;
-    }
-=======
 p.message {
   border-radius: 0.3rem;
   padding: 0.1rem 0.5rem;
   margin: 0.1rem;
 }
->>>>>>> 33b46d40d0a48a5c05534b412a3b8db4f4ada809
 
 p.debug {
   color: white;
   background-color: #0000ff;
 }
 
-<<<<<<< HEAD
-.foot img{
-        display: table;
-        position: relative;
-        margin: auto;
-   }
-
-.container{
-        display: flex;
-}
-
-.basic-info{
-        width: 50%;
-        text-align:justify;
-=======
 p.info {
   color: white;
   background-color: #000000;
@@ -76,7 +47,6 @@ p.info {
 p.warning {
   color: black;
   background-color: #ff8800;
->>>>>>> 33b46d40d0a48a5c05534b412a3b8db4f4ada809
 }
 
 p.error {
