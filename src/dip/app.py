@@ -36,9 +36,10 @@ def getEditionsList(M):
 
 
 def getModelDir(M):
+    modelDir = []
     editions = getEditionsList(M)
     for e in editions:
-        modelDir = f"{editionDir}/{e}/3d"
+        modelDir.append(f"{editionDir}/{e}/3d")
         return modelDir
 
 
@@ -207,23 +208,21 @@ def edition_page(editionN):
     aboutUrl = url_for("editionAbout", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
-    editionNumbers = getEditionsList(M)
     modelNumbers = getModelsList(M)
-    
     modelData = {}
-    for i in editionNumbers:
-        for j in modelNumbers:
-            modelDir =  f"{editionDir}/{i}/3d/{j}"
-            modelFile = "title.txt"
-            nameFile = os.path.join(modelDir, modelFile)
-            with open(nameFile) as f:
-                title = f.read()
 
-            url = f"""/{j}"""
-            modelData[j] = dict(
-                title=title,
-                url=url,
-            )
+    for j in modelNumbers:
+        modelDir = f"{Dir}/3d/{j}"
+        modelFile = "title.txt"
+        nameFile = os.path.join(modelDir, modelFile)
+        with open(nameFile) as f:
+            title = f.read()
+
+        url = f"""/{j}"""
+        modelData[j] = dict(
+            title=title,
+            url=url,
+        )
 
     modelLinks = []
 
