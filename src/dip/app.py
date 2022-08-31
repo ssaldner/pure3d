@@ -48,11 +48,11 @@ def modelsList():
     modelns = []
     dir = modelDir()
     with os.scandir(dir) as md:
-            for model in md:
-                if model.is_dir():
-                    name = model.name
-                    if name.isdigit():
-                        modelns.append(int(name))
+        for model in md:
+            if model.is_dir():
+                name = model.name
+                if name.isdigit():
+                    modelns.append(int(name))
     return sorted(modelns)
 
 
@@ -217,7 +217,7 @@ def edition_page(editionN):
     for j in modelNumbers:
         modelDir = f"{Dir}/3d/{j}"
         modelFile = "title.txt"
-        nameFile = os.path.join(modelDir,modelFile)
+        nameFile = os.path.join(modelDir, modelFile)
         with open(nameFile) as f:
             title = f.read()
 
@@ -264,9 +264,9 @@ def editionBackground(editionN):
         "editionTexts.html",
         text=backgroundHtml,
         editionN=editionN,
-        messages=M.generateMessages()
-        )
-    
+        messages=M.generateMessages(),
+    )
+
 
 @app.route("/<int:editionN>/sources")
 # Display about page for specific edition
