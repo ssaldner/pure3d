@@ -18,7 +18,7 @@ dataDir = f"{BASE}/data"
 editionDir = f"{dataDir}/editions"
 
 
-def editionsList(M):
+def getEditionsList(M):
     # to get enumeration of top level directories
     numbers = []
 
@@ -35,18 +35,17 @@ def editionsList(M):
     return sorted(numbers)
 
 
-def modelDir():
-    M = Messages(app)
-    editions = editionsList(M)
+def getModelDir(M):
+    editions = getEditionsList(M)
     for e in editions:
         modelDir = f"{editionDir}/{e}/3d"
         return modelDir
 
 
-def modelsList():
+def getModelsList(M):
     # to get enumeration of sub-directories under folder "3d"
     modelns = []
-    dir = modelDir()
+    dir = getModelDir(M)
     with os.scandir(dir) as md:
         for model in md:
             if model.is_dir():
@@ -83,7 +82,7 @@ def dcReaderJSON(M):
 def home():
     M = Messages(app)
 
-    editionNumbers = editionsList(M)
+    editionNumbers = getEditionsList(M)
 
     editionData = {}
 
@@ -211,7 +210,7 @@ def edition_page(editionN):
     aboutUrl = url_for("editionAbout", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
-    modelNumbers = modelsList()
+    modelNumbers = getModelsList(M)
     modelData = {}
 
     for j in modelNumbers:
@@ -271,7 +270,7 @@ def editionBackground(editionN):
 @app.route("/<int:editionN>/sources")
 # Display about page for specific edition
 def editionSources(editionN):
-    M = Messages(app)
+    # M = Messages(app)
     pass
 
 
