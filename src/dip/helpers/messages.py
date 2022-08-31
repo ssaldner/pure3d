@@ -1,3 +1,6 @@
+from helpers.generic import htmlEsc
+
+
 class Messages:
     def __init__(self, app):
         self.app = app
@@ -16,7 +19,7 @@ class Messages:
         html = []
 
         for (tp, msg) in self.messages:
-            html.append(f"""<p class="message {tp}">{msg}</p>""")
+            html.append(f"""<p class="message {tp}">{htmlEsc(msg)}</p>""")
         self.clearMessages()
 
         return "\n".join(html)

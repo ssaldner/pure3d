@@ -14,19 +14,19 @@ heading = "Pure 3D website"
 
 # variables
 BASE = os.path.expanduser("~/github/clariah/pure3d")
-dataDir = f"{BASE}/data"
-editionDir = f"{dataDir}/editions"
+DATA_DIR = f"{BASE}/data"
+EDITION_DIR = f"{DATA_DIR}/editions"
 
 
 def getEditionsList(M):
     # to get enumeration of top level directories
     numbers = []
 
-    if not dirExists(editionDir):
-        M.addMessage("error", f"Edition directory {editionDir} does not exist")
+    if not dirExists(EDITION_DIR):
+        M.addMessage("error", f"Edition directory {EDITION_DIR} does not exist")
         return numbers
 
-    with os.scandir(editionDir) as ed:
+    with os.scandir(EDITION_DIR) as ed:
         for entry in ed:
             if entry.is_dir():
                 name = entry.name
@@ -35,19 +35,11 @@ def getEditionsList(M):
     return sorted(numbers)
 
 
-def getModelDir(M):
-    modelDir = []
-    editions = getEditionsList(M)
-    for e in editions:
-        modelDir.append(f"{editionDir}/{e}/3d")
-        return modelDir
-
-
-def getModelsList(M):
+def getModelsList(M, editionN):
     # to get enumeration of sub-directories under folder "3d"
     modelns = []
-    dir = getModelDir(M)
-    with os.scandir(dir) as md:
+    modelDir = f"{EDITION_DIR}/{editionN}/3d"
+    with os.scandir(modelDir) as md:
         for model in md:
             if model.is_dir():
                 name = model.name
@@ -88,7 +80,7 @@ def home():
     editionData = {}
 
     for i in editionNumbers:
-        jsonDir = f"{editionDir}/{i}/meta"
+        jsonDir = f"{EDITION_DIR}/{i}/meta"
         jsonFile = "dc.json"
         fh = readFile(jsonDir, jsonFile)
         if type(fh) is str:
@@ -172,7 +164,7 @@ def contact():
 def editionAbout(editionN):
     M = Messages(app)
 
-    aboutDir = f"{editionDir}/{editionN}"
+    aboutDir = f"{EDITION_DIR}/{editionN}"
     aboutFile = "about.md"
     aboutHtml = render_md(M, aboutDir, aboutFile)
 
@@ -190,7 +182,9 @@ def editionAbout(editionN):
 # Display page for individual models in an edition
 def model_page(editionN, modelN):
     M = Messages(app)
-    return render_template("model.html")
+    return render_template(
+        "model.html", editionN=editionN, modelN=modelN, messages=M.generateMessages()
+    )
 
 
 @app.route("/<int:editionN>")
@@ -198,27 +192,27 @@ def model_page(editionN, modelN):
 def edition_page(editionN):
     M = Messages(app)
 
-    Dir = f"{editionDir}/{editionN}"
+    ed = f"{EDITION_DIR}/{editionN}"
     introFile = "intro.md"
     usageFile = "usage.md"
 
-    introHtml = render_md(M, Dir, introFile)
-    usageHtml = render_md(M, Dir, usageFile)
+    introHtml = render_md(M, ed, introFile)
+    usageHtml = render_md(M, ed, usageFile)
 
     aboutUrl = url_for("editionAbout", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
-    modelNumbers = getModelsList(M)
+    modelNumbers = getModelsList(M, editionN)
     modelData = {}
 
     for j in modelNumbers:
-        modelDir = f"{Dir}/3d/{j}"
+        modelDir = f"{ed}/3d/{j}"
         modelFile = "title.txt"
         nameFile = os.path.join(modelDir, modelFile)
         with open(nameFile) as f:
             title = f.read()
 
-        url = f"""/{j}"""
+        url = f"""/{editionN}/{j}"""
         modelData[j] = dict(
             title=title,
             url=url,
@@ -253,9 +247,9 @@ def edition_page(editionN):
 # Display about page for specific edition
 def editionBackground(editionN):
     M = Messages(app)
-    Dir = f"{editionDir}/{editionN}"
+    ed = f"{EDITION_DIR}/{editionN}"
     backgroundFile = "description.md"
-    backgroundHtml = render_md(M, Dir, backgroundFile)
+    backgroundHtml = render_md(M, ed, backgroundFile)
 
     aboutUrl = url_for("editionAbout", editionN=editionN)
 
