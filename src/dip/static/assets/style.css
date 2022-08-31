@@ -1,8 +1,9 @@
 html {
-  background-color: #d7dce0;
+  background-color: #fdfeff;
 }
 
 img {
+  width: 45%;
   display: block;
   margin: 0 auto;
 }
@@ -18,6 +19,7 @@ img {
   position: relative;
   margin: auto;
 }
+
 .container {
   display: flex;
 }
@@ -73,6 +75,7 @@ p.error {
   width: 50%;
   text-align: center;
 }
+
 .warpper {
   display: flex;
   flex-direction: column;
@@ -92,8 +95,4 @@ p.error {
 
 .radio {
   display: none;
-}
-
-a.active {
-  background-color: #4caf50;
 }

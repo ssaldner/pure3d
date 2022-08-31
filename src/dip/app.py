@@ -36,9 +36,10 @@ def getEditionsList(M):
 
 
 def getModelDir(M):
+    modelDir = []
     editions = getEditionsList(M)
     for e in editions:
-        modelDir = f"{editionDir}/{e}/3d"
+        modelDir.append(f"{editionDir}/{e}/3d")
         return modelDir
 
 
@@ -85,11 +86,6 @@ def home():
     editionNumbers = getEditionsList(M)
 
     editionData = {}
-
-    # just for testing
-
-    for tp in ("debug", "info", "warning", "error"):
-        M.addMessage(tp, f"This is a {tp} message")
 
     for i in editionNumbers:
         jsonDir = f"{editionDir}/{i}/meta"
@@ -180,9 +176,12 @@ def editionAbout(editionN):
     aboutFile = "about.md"
     aboutHtml = render_md(M, aboutDir, aboutFile)
 
+    bgUrl = url_for("editionBackground", editionN=editionN)
+
     return render_template(
         "editionTexts.html",
         text=aboutHtml,
+        bgUrl=bgUrl,
         messages=M.generateMessages(),
     )
 
@@ -190,15 +189,14 @@ def editionAbout(editionN):
 @app.route("/<int:editionN>/<int:modelN>")
 # Display page for individual models in an edition
 def model_page(editionN, modelN):
-    # M = Messages(app)
-    pass
+    M = Messages(app)
+    return render_template("model.html")
 
 
 @app.route("/<int:editionN>")
 # Display for editions page(s)
 def edition_page(editionN):
     M = Messages(app)
-    M.addMessage("debug", f"I am here {editionN=}")
 
     Dir = f"{editionDir}/{editionN}"
     introFile = "intro.md"
@@ -259,10 +257,12 @@ def editionBackground(editionN):
     backgroundFile = "description.md"
     backgroundHtml = render_md(M, Dir, backgroundFile)
 
+    aboutUrl = url_for("editionAbout", editionN=editionN)
+
     return render_template(
         "editionTexts.html",
         text=backgroundHtml,
-        editionN=editionN,
+        aboutUrl=aboutUrl,
         messages=M.generateMessages(),
     )
 
