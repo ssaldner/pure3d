@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
-<div>
-  <h1>Model</h1>
-  <p>root = {{root}}</p>
-  <p>model = {{model}}</p>
-  <p>scene = {{scene}}</p>
-</div>
-<div class="model">
-  <voyager-explorer
-          style="{{style}}"
-          root="{{root}}" model="{{model}}" document="{{scene}}">
-  </voyager-explorer>
-  <script src="/static/dist/js/voyager-explorer.min.js"></script>
-</div>
+<h1>DIP</h1>
+<p>View a model and its annotations</p>
+<p>
+    <a href="/dip/prod" target="_blank">prod</a>
+    <a href="/dip/dev" target="_blank">dev</a>
+</p>
+
+<h1>SIP</h1>
+<p>Annotate a model and save the annotations</p>
+<p>
+    <a href="/sip/prod" target="_blank">prod</a>
+    <a href="/sip/dev" target="_blank">dev</a>
+</p>
 {% endblock %}
