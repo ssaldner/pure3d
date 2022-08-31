@@ -86,11 +86,6 @@ def home():
 
     editionData = {}
 
-    # just for testing
-
-    for tp in ("debug", "info", "warning", "error"):
-        M.addMessage(tp, f"This is a {tp} message")
-
     for i in editionNumbers:
         jsonDir = f"{editionDir}/{i}/meta"
         jsonFile = "dc.json"
@@ -180,9 +175,12 @@ def editionAbout(editionN):
     aboutFile = "about.md"
     aboutHtml = render_md(M, aboutDir, aboutFile)
 
+    bgUrl = url_for("editionBackground", editionN=editionN)
+
     return render_template(
         "editionTexts.html",
         text=aboutHtml,
+        bgUrl=bgUrl,
         messages=M.generateMessages(),
     )
 
@@ -190,15 +188,14 @@ def editionAbout(editionN):
 @app.route("/<int:editionN>/<int:modelN>")
 # Display page for individual models in an edition
 def model_page(editionN, modelN):
-    # M = Messages(app)
-    pass
+    M = Messages(app)
+    return render_template("model.html")
 
 
 @app.route("/<int:editionN>")
 # Display for editions page(s)
 def edition_page(editionN):
     M = Messages(app)
-    M.addMessage("debug", f"I am here {editionN=}")
 
     Dir = f"{editionDir}/{editionN}"
     introFile = "intro.md"
@@ -210,21 +207,23 @@ def edition_page(editionN):
     aboutUrl = url_for("editionAbout", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
+    editionNumbers = getEditionsList(M)
     modelNumbers = getModelsList(M)
+    
     modelData = {}
+    for i in editionNumbers:
+        for j in modelNumbers:
+            modelDir =  f"{editionDir}/{i}/3d/{j}"
+            modelFile = "title.txt"
+            nameFile = os.path.join(modelDir, modelFile)
+            with open(nameFile) as f:
+                title = f.read()
 
-    for j in modelNumbers:
-        modelDir = f"{Dir}/3d/{j}"
-        modelFile = "title.txt"
-        nameFile = os.path.join(modelDir, modelFile)
-        with open(nameFile) as f:
-            title = f.read()
-
-        url = f"""/{j}"""
-        modelData[j] = dict(
-            title=title,
-            url=url,
-        )
+            url = f"""/{j}"""
+            modelData[j] = dict(
+                title=title,
+                url=url,
+            )
 
     modelLinks = []
 
@@ -259,10 +258,12 @@ def editionBackground(editionN):
     backgroundFile = "description.md"
     backgroundHtml = render_md(M, Dir, backgroundFile)
 
+    aboutUrl = url_for("editionAbout", editionN=editionN)
+
     return render_template(
         "editionTexts.html",
         text=backgroundHtml,
-        editionN=editionN,
+        aboutUrl=aboutUrl,
         messages=M.generateMessages(),
     )
 

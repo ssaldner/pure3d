@@ -1,8 +1,9 @@
 html {
-  background-color: #d7dce0;
+  background-color: #fdfeff;
 }
 
 img {
+  width: 45%;
   display: block;
   margin: 0 auto;
 }
