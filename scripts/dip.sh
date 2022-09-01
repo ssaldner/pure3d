@@ -18,7 +18,7 @@ scriptdir=`pwd`
 cd ../src/dip
 
 if [[ "$1" == "debug" ]]; then
-    export FLASK_DEBUG=1
+    flaskdebug=" --debug"
 elif [[ "$1" != "" ]]; then
     echo $HELP
     echo ""
@@ -26,10 +26,10 @@ elif [[ "$1" != "" ]]; then
     echo "Wrong argument `$1`"
     exit 1
 else
-    export FLASK_DEBUG=0
+    flaskdebug=""
 fi
 
-flask run &
+flask$flaskdebug run &
 pid=$!
 sleep 1
 python3 "$scriptdir/browser.py" http://127.0.0.1:5000
