@@ -96,3 +96,9 @@ p.error {
 .radio {
   display: none;
 }
+
+voyager-explorer {
+  display: block;
+  position: relative;
+  height: 500px;
+}
