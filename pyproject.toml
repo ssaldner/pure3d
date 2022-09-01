@@ -23,7 +23,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["pyyaml", "markdownify", "markdown", "flask", "wsgidav"]
+dependencies = ["pyyaml", "markdownify", "markdown", "flask", "wsgidav", "cheroot"]
 dynamic = ["version"]
 
 [project.urls]
