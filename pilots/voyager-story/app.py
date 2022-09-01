@@ -1,7 +1,7 @@
 import sys
 import os
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from flask import Flask, render_template, abort, make_response
+from flask import Flask, render_template
 from webdavapp import app as webdavapp
 
 
@@ -31,19 +31,6 @@ def fillTemplate(name):
 @app.route("/")
 def index():
     return fillTemplate("index")
-
-
-@app.route("/dataw/<path:path>")
-def dataw(path):
-    dataPath = f"{DATA_DIR}/{path}"
-    if not os.path.isfile(dataPath):
-        debug(f"File does not exist: {dataPath}")
-        abort(404)
-
-    with open(dataPath, "rb") as fh:
-        textData = fh.read()
-
-    return make_response(textData)
 
 
 app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
