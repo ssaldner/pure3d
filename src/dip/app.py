@@ -17,6 +17,10 @@ BASE = os.path.expanduser("~/github/clariah/pure3d")
 DATA_DIR = f"{BASE}/data"
 EDITION_DIR = f"{DATA_DIR}/editions"
 
+ROOT_URL = "/data/editions/1/3d/4/"
+SCENE = "clanwilliam.json"
+HEIGHT = "400px"
+
 
 def getEditionsList(M):
     # to get enumeration of top level directories
@@ -64,7 +68,6 @@ def render_md(M, mdPath, mdFile):
 def dcReaderJSON(M):
     # to read different values from the Dublin core file
     pass
-
 
 # app url routes start here
 
@@ -182,8 +185,25 @@ def editionAbout(editionN):
 # Display page for individual models in an edition
 def model_page(editionN, modelN):
     M = Messages(app)
+
+    md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"
+
+    # render about information
+    aboutFile = "about.md"
+    aboutHtml = render_md(M, md, aboutFile)
+
+    # displaying 3d models
+    st = f"display: block; position: relative; height: {HEIGHT};"
     return render_template(
-        "model.html", editionN=editionN, modelN=modelN, messages=M.generateMessages()
+        "model.html",
+        aboutHtml=aboutHtml,
+        editionN=editionN,
+        modelN=modelN,
+        root=ROOT_URL,
+        scene=SCENE,
+        ext="dev",
+        st=st,
+        messages=M.generateMessages(),
     )
 
 
@@ -193,15 +213,19 @@ def edition_page(editionN):
     M = Messages(app)
 
     ed = f"{EDITION_DIR}/{editionN}"
+
+    # rendering texts
     introFile = "intro.md"
     usageFile = "usage.md"
 
     introHtml = render_md(M, ed, introFile)
     usageHtml = render_md(M, ed, usageFile)
 
+    # url variables for tabs on page
     aboutUrl = url_for("editionAbout", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
+    # hyper-linked models list
     modelNumbers = getModelsList(M, editionN)
     modelData = {}
 

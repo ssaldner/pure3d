@@ -1,7 +1,20 @@
 {% extends 'edition.html' %}
 
-{% block model %}
-
-<p>edition {{editionN}} model {{modelN}}</p>
-
+{% block head %}
+<link href="/static/dist/css/voyager-explorer.{{ext}}.css" rel="stylesheet">
+<script defer src="/static/dist/js/voyager-explorer.{{ext}}.js"></script>
 {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="model-info">
+        {{aboutHtml|safe}}
+    </div>
+
+    <div class="model">
+        <h1>3d Model appears here</h1>
+        <voyager-explorer 
+        root="{{root}}" document="{{scene}}" st="{{st}}">
+        </voyager-explorer>
+    </div>
+    {% endblock %}

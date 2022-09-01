@@ -1,34 +1,43 @@
 <html>
+
 	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Pure3D</title>
 		<!-- href="/static/assets/style.css"-->
-		<link rel="stylesheet" type="text/css"  href="{{ url_for('static',filename='assets/style.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/style.css')}}">
+		<link href="/static/dist/fonts/fonts.css" rel="stylesheet">
+		<link rel="shortcut icon" type="image/png" href="{{url_for('static',filename='dist/favicon.png')}}">
+
+	{% block head %} {% endblock %}
+	
 	</head>
-<body>
- 	<header>
-		<div class="logo">
-			{% block logo %} {% endblock %}
-		</div>	
 
-		<div class="messages">
-			{{ messages | safe }}
-		</div>
-	</header>
+	<body>
+		<header>
+			<div class="logo">
+				{% block logo %} {% endblock %}
+			</div>
 
-	<nav>
-		<br>
+			<div class="messages">
+				{{ messages | safe }}
+			</div>
+		</header>
+
+		<nav>
+			<br>
 			{% block navigation %} {% endblock %}
-		  
-	</nav>	
 
-	<main>
-		<div class="content">
-			{% block content %} {% endblock %}
-		</div>
-	</main>
+		</nav>
 
-	<footer>		
-			
-	</footer>
+		<main>
+			<div class="content">
+				{% block content %} {% endblock %}
+			</div>
+		</main>
+
+		<footer>
+
+		</footer>
+
 </html>
-

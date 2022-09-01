@@ -76,6 +76,17 @@ p.error {
   text-align: center;
 }
 
+.edition-info {
+  width: 20%;
+  text-align: justify;
+}
+
+.model {
+  width: 80%;
+  height: 750px;
+  text-align: center;
+}
+
 .warpper {
   display: flex;
   flex-direction: column;
@@ -95,4 +106,10 @@ p.error {
 
 .radio {
   display: none;
+}
+
+.voyager-explorer {
+  display: block;
+  position: relative;
+  height: 500px;
 }
