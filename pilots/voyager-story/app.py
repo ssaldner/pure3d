@@ -1,4 +1,3 @@
-import sys
 import os
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from flask import Flask, render_template
@@ -13,11 +12,6 @@ HEIGHT = "800px"
 STATUS = os.environ["PILOT_MODE"]
 
 app = Flask(__name__)
-
-
-def debug(msg):
-    sys.stderr.write(f"{msg}\n")
-    sys.stderr.flush()
 
 
 def fillTemplate(name):
