@@ -17,6 +17,10 @@ BASE = os.path.expanduser("~/github/clariah/pure3d")
 DATA_DIR = f"{BASE}/data"
 EDITION_DIR = f"{DATA_DIR}/editions"
 
+ROOT_URL = "/data/editions/1/3d/4/"
+SCENE = "clanwilliam.json"
+HEIGHT = "400px"
+
 
 def getEditionsList(M):
     # to get enumeration of top level directories
@@ -64,7 +68,6 @@ def render_md(M, mdPath, mdFile):
 def dcReaderJSON(M):
     # to read different values from the Dublin core file
     pass
-
 
 # app url routes start here
 
@@ -190,13 +193,16 @@ def model_page(editionN, modelN):
     aboutHtml = render_md(M, md, aboutFile)
 
     # displaying 3d models
-    
-
+    st = f"display: block; position: relative; height: {HEIGHT};"
     return render_template(
         "model.html",
         aboutHtml=aboutHtml,
         editionN=editionN,
         modelN=modelN,
+        root=ROOT_URL,
+        scene=SCENE,
+        ext="dev",
+        st=st,
         messages=M.generateMessages(),
     )
 
