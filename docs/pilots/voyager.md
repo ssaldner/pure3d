@@ -51,7 +51,7 @@ The source code is in
 [pilot voyager-explorer](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-explorer), see in particular the controllers in
 [app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-explorer/app.py)
 and the template
-[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-explorer/templates/index.html)
+[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-explorer/templates/index.html).
 
 When you are done with the pilot, press `Ctrl+C`.
 
@@ -84,9 +84,7 @@ which is served by this webdav browser.
 
 The source code is in 
 [pilot webdav](https://github.com/CLARIAH/pure3d/tree/main/pilots/webdav), see in particular the controller
-[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/webdav/app.py)
-and the template
-[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/webdav/templates/index.html)
+[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/webdav/app.py).
 
 # Chaining
 
