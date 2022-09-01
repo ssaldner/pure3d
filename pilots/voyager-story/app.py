@@ -4,8 +4,6 @@ from flask import Flask, render_template
 from webdavapp import app as webdavapp
 
 
-BASE = os.path.dirname(os.path.dirname(__file__))
-DATA_DIR = f"{BASE}/data/3d"
 ROOT_URL = "/data/"
 SCENE = "clanwilliam.json"
 HEIGHT = "800px"
