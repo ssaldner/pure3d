@@ -10,7 +10,7 @@ SCENE = "clanwilliam.json"
 HEIGHT = "800px"
 STATUS = os.environ["PILOT_MODE"]
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=f"{BASE}/static")
 
 
 def debug(msg):

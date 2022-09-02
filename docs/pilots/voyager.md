@@ -147,3 +147,10 @@ and
 and the template
 [index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story/templates/index.html).
 
+## Problems
+
+Articles do not load in the article editor.
+
+An exception is raised in the Webdav code that is included in the Voyager-Story.
+
+
