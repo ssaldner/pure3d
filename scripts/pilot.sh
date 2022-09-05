@@ -7,8 +7,10 @@ Usage
 
 Run it from the /scripts directory in the repo.
 
-./pilot.sh name
+./pilot.sh name [prod]
     Run named pilot in debug mode.
+    An environment variable PILOT_MODE will be set to dev or prod
+    default dev, if prod is passed: prod
 """
 
 scriptdir=`pwd`
@@ -24,6 +26,21 @@ if [[ "$1" == "" ]]; then
 fi
 
 pilotname="$1"
+shift
+
+
+if [[ "$1" == "prod" ]]; then
+    PILOT_MODE="prod"
+    shift
+else
+    PILOT_MODE="dev"
+fi
+if [[ "$1" == "" ]]; then
+    PILOT_PORT="5000"
+else
+    PILOT_PORT="$1"
+    shift
+fi
 
 if [[ ! -d "$pilotname" ]]; then
     echo "Pilot '$pilotname' does not exist"
@@ -31,11 +48,24 @@ if [[ ! -d "$pilotname" ]]; then
 fi
 
 cd "$pilotname"
-export FLASK_DEBUG=1
-flask run &
+export PILOT_MODE
+export PILOT_PORT
+
+# start server
+
+if [[ -f "cmd.sh" ]]; then
+    ./cmd.sh &
+else
+    flask --debug --app app:app run --port $PILOT_PORT &
+fi
 pid=$!
+pgid=`ps -o pgid= $pid | grep -o '[0-9]*'`
+
 sleep 1
-python3 "$scriptdir/browser.py" http://127.0.0.1:5000
-trap "kill $pid" SIGINT
-echo "flask runs as process $pid"
+
+# start browser
+
+python3 "$scriptdir/browser.py" http://127.0.0.1:$PILOT_PORT/
+trap "kill -- -$pgid" SIGINT
+echo "server runs as process $pid with parent $pgid"
 wait "$pid"

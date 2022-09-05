@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>Voyager Explorer ({{status}})</h1>
+<p>Here is model {{scene}}.</p>
+<iframe width="{{width}}" height="{{height}}" src="/voyager/{{scene}}"/>
+{% endblock %}
