@@ -1,14 +1,10 @@
 {% extends "layout.html" %}
 
 {% block head %}
-    <link rel="stylesheet" href="/static/dist/css/voyager-story.{{ext}}.css">
-    <script defer src="/static/dist/js/voyager-story.{{ext}}.js"></script>
 {% endblock %}
 
 {% block body %}
 <h1>Voyager Story ({{status}})</h1>
-<voyager-story
-      style="{{style}}"
-      root="{{root}}" document="{{scene}}">
-</voyager-story>
+<p>Here is model {{scene}}.</p>
+<iframe width="{{width}}" height="{{height}}" src="/voyager/{{scene}}"/>
 {% endblock %}
