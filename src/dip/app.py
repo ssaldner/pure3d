@@ -193,7 +193,7 @@ def model_page(editionN, modelN):
     aboutHtml = render_md(M, md, aboutFile)
 
     # displaying 3d models
-    st = f"display: block; position: relative; height: {HEIGHT};"
+    style = f"display: block; position: relative; height: {HEIGHT};"
     return render_template(
         "model.html",
         aboutHtml=aboutHtml,
@@ -202,7 +202,7 @@ def model_page(editionN, modelN):
         root=ROOT_URL,
         scene=SCENE,
         ext="dev",
-        st=st,
+        style=style,
         messages=M.generateMessages(),
     )
 
