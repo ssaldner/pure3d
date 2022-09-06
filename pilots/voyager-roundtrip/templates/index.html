@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>Voyager Roundtrip ({{status}})</h1>
+<p>Here is model {{scene}}.</p>
+<iframe width="{{width}}" height="{{height}}" src="/voyager/{{scene}}"></iframe>
+<p>
+    <a target="_blank" href="/voyager/{{scene}}?edit=1">edit this model (opens in a new tab)</a>
+</p>
+{% endblock %}

@@ -1,5 +1,5 @@
 import os
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from dispatcher import DispatcherMiddleware
 from flask import Flask, render_template
 from webdavapp import app as webdavapp
 
@@ -31,5 +31,5 @@ def voyager(scene):
 
 
 app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
-    '/data': webdavapp,
+    '/data/': webdavapp,
 })
