@@ -227,16 +227,18 @@ def model_page(editionN, modelN):
     )
 
 
-@app.route("/voyager/<string:scene>")
-def voyager(scene):
+@app.route("/voyager/<string:scene>/<path:root>")
+def voyager(scene, root):
     # url for voyager in explorer mode
+    M = Messages(app)
     ext = "min" 
-    root = session.get("md", None)
+    
     return render_template(
         "voyager.html",
         ext=ext,
         root=root, 
-        scene=scene
+        scene=scene,
+        messages=M.generateMessages()
     )
 
 
