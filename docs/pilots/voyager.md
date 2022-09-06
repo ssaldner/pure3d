@@ -173,10 +173,10 @@ In this attempt we use the wrong chaining, see
 [pilot voyager-story-attempt1](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story-attempt1).
 
 The tricky thing is that an awful lot goes right, but not everything.
-First I could fix a number of problems by fixing something in the Voyager code,
+I have tried to fix a number of problems by patching Voyager code,
 but subtle bugs kept appearing.
 
-Then I discovered that I should also fix by WebDAV server setup.
+Then I discovered that I should also fix the WebDAV server setup on my side.
 
 # Voyager story
 
@@ -201,45 +201,4 @@ These are the differences:
 In the process we also sanitized the data organization of articles and media files in our example dataset.
 The images are in a `media` folder, and this folder now resides inside the `articles` folder instead next of it.
 
-# Voyager roundtrip
-
-Now we can show a voyager roundtrip, where we load a model, and view its annotations,
-then modify an article in an other tab, and observe the changes in the first viewer.
-
-Let's walk through this scenario screenshot by screenshot.
-If you do it yourself, do
-
-```
-./pilot.sh voyager-roundtrip prod
-```
-
-You're in the viewer (Voyager-Explorer):
-
-![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round1.jpg)
-
-Click on the edit link and you get a new tab where you're in Voyager-Story:
-
-![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round2.jpg)
-
-Now make an edit in the title (an extra `XXXX`) and in the text (an extra `XXXX`).
-Note that we have changed the title as it appears in the metadata on the left,
-but not as it appears in the heading of the article itself.
-
-Make sure you save the article and the whole story (there are two save buttons).
-The latter is in order to save the metadata into the scene file, i.e. the clanwilliam.json file.
-
-![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round3.jpg)
-
-Go back to the previous tab where the viewer is still open.
-Do a refresh. Navigate to the articles. You'll see the change in the metadata.
-
-![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round4.jpg)
-
-Click on the article. You'll see the change in the body text.
-
-![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round5.jpg)
-
-
-
-
-
+Based on this preparation we can do a [roundtrip](roundtrip.md).

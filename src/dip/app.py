@@ -22,10 +22,11 @@ EDITION_DIR = f"{DATA_DIR}/editions"
 WIDTH = "600px"
 HEIGHT = "600px"
 
+
 # functions
 def getEditionsList(M):
     # to get enumeration of top level directories
-    # these are joined with the "edition" directory path to get 
+    # these are joined with the "edition" directory path to get
     # path of each edition
     numbers = []
 
@@ -72,11 +73,14 @@ def dcReaderJSON(M):
     # to read different values from the Dublin core file
     pass
 
+
 def debug(msg):
     sys.stderr.write(f"{msg}\n")
     sys.stderr.flush()
 
+
 # app url routes start here
+
 
 @app.route("/")
 @app.route("/home")
@@ -112,7 +116,7 @@ def home():
             url=url,
         )
 
-    editionLinks = [] # to get url redirections of individual pages of each edition
+    editionLinks = []  # to get url redirections of individual pages of each edition
 
     for (i, data) in sorted(editionData.items()):
         title = data["title"]
@@ -178,7 +182,7 @@ def editionAbout(editionN):
     aboutDir = f"{EDITION_DIR}/{editionN}"
     aboutFile = "about.md"
     aboutHtml = render_md(M, aboutDir, aboutFile)
-    
+
     homeUrl = url_for("edition_page", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
@@ -197,17 +201,18 @@ def model_page(editionN, modelN):
     M = Messages(app)
 
     md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"  # model directories
-    session["md"] = md
 
-    # render about information
+    # render About information
     aboutFile = "about.md"
     aboutHtml = render_md(M, md, aboutFile)
 
+    # urls for different tabs on the edition page
     homeUrl = url_for("edition_page", editionN=editionN)
     aboutUrl = url_for("editionAbout", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
-    # displaying 3d models
+    # displaying 3d models 
+    # accesses the scene file
     for file in os.listdir(md):
         if file.endswith(".json"):
             scene = file
@@ -223,6 +228,7 @@ def model_page(editionN, modelN):
         homeUrl=homeUrl,
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
+        root=md,
         messages=M.generateMessages(),
     )
 
@@ -245,8 +251,7 @@ def voyager(scene, root):
 @app.route("/data/<path:path>")
 def data(path):
     # url accesing data from the editions
-    md = session.get("md", None)
-    dataPath = f"{md}/{path}"
+    dataPath = f"{DATA_DIR}/{path}"
     if not os.path.isfile(dataPath):
         debug(f"File does not exist: {dataPath}")
         abort(404)
@@ -255,6 +260,7 @@ def data(path):
         textData = fh.read()
 
     return make_response(textData)
+
 
 @app.route("/<int:editionN>")
 # Display for editions page(s)
