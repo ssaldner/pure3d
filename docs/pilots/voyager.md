@@ -99,18 +99,42 @@ to do just that.
 To show the idea, there is a pilot that chains to trivial flask apps:
 
 ```
-./pilot.sh chaining
+./pilot.sh chainingstraight
 ```
 
 The source code is in 
-[pilot webdav](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining), see in particular the controllers in
-[app1.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/app1.py)
+[pilot chainingstraight](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight),
+see in particular the controllers in
+[app1.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/app1.py)
 and
-[app2.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/app2.py)
+[app2.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/app2.py)
 which are being chained in 
-[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/app.py)
+[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/app.py)
 and the template
-[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/templates/index.html)
+[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/templates/index.html)
+
+However, there is a quirk with this chaining: after the initial part of the url has been
+determined the app to which control should be dispatched, that initial part is stripped
+from the url, and the remainder is what the target app sees.
+
+We want to pass the full url, not the trimmed one, to the target app.
+
+For that, we have customised the werkzeug library, by copying the DispatcherMiddleware class
+to a local file, and modifying the class.
+
+To see it, do:
+
+```
+./pilot.sh chaining
+```
+
+The Dispatcher source code is in
+[dispatcher.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/dispatcher.py)
+used by
+[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/app.py).
+
+The rest is equal to `chainingstraight`.
+
 
 # Voyager story
 
@@ -119,7 +143,7 @@ Now we can deploy a server that can handle voyager-story.
 You can see it by doing
 
 ```
-./pilot.sh voyager-story prod
+./pilot.sh voyager-story
 ```
 
 A flask server is started, a web browser opens and loads a page
@@ -132,12 +156,6 @@ The idea is that the http commands that voyager-story sends to
 the server are intercepted by the webdav part of the chained server,
 and everything else by the flask app part of the server.
 
-There are still some problems with article editing,
-but it seems that our chained server has the potential to
-tame the voyager.
-We have observed that new files have been created on the server
-by WebDav commands emitted by the voyager while it was running
-in the client.
 
 The source code is in 
 [pilot voyager-story](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story), see in particular the controllers in
@@ -147,10 +165,19 @@ and
 and the template
 [index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story/templates/index.html).
 
-## Problems
+## Problematic journey
 
-Articles do not load in the article editor.
+If the WebDAV setup is not exactly right, you are bound to get problems.
+My first attempt used the wrong chaining, see
+[pilot voyager-story-attempt1](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story-attemp1).
 
-An exception is raised in the Webdav code that is included in the Voyager-Story.
+The tricky thing was that an awful lot went right, but not everything.
+First I could fix a number of problems by fixing something in the Voyager code,
+but subtle bugs kept appearing.
 
+Then I discovered that I should also fix by WebDAV server setup.
 
+After that, there was only one remaining little issue in the Voyager code.
+I fixed that in the [voyager-story.dev.patch.js](https://github.com/CLARIAH/pure3d/blob/master/pilots/static/dist/js/voyager-story.dev.patch.js) and used that to run this pilot.
+
+See more in [issue 159 in the voyager repo](https://github.com/Smithsonian/dpo-voyager/issues/159).

@@ -9,7 +9,7 @@ DATA_DIR = f"{BASE}/data/3d"
 
 config = {
     "provider_mapping": {
-        "/": {
+        "/data/": {
             "root": DATA_DIR,
             "readonly": False,
         },

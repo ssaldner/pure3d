@@ -1,7 +1,7 @@
 from app1 import app1
 from app2 import app2
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from flask import Flask, render_template
+from dispatcher import DispatcherMiddleware
 
 
 app = Flask(__name__)
