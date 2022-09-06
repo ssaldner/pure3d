@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, abort, make_response, session
+from flask import Flask, render_template, url_for, abort, make_response
 import os
 import sys
 import json
@@ -200,7 +200,8 @@ def editionAbout(editionN):
 def model_page(editionN, modelN):
     M = Messages(app)
 
-    md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"  # model directories
+    md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"  # model directory on filesystem
+    root = f"data/editions/{editionN}/3d/{modelN}/"  # model root url
 
     # render About information
     aboutFile = "about.md"
@@ -211,7 +212,7 @@ def model_page(editionN, modelN):
     aboutUrl = url_for("editionAbout", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
-    # displaying 3d models 
+    # displaying 3d models
     # accesses the scene file
     for file in os.listdir(md):
         if file.endswith(".json"):
@@ -228,7 +229,7 @@ def model_page(editionN, modelN):
         homeUrl=homeUrl,
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
-        root=md,
+        root=root,
         messages=M.generateMessages(),
     )
 
@@ -237,14 +238,11 @@ def model_page(editionN, modelN):
 def voyager(scene, root):
     # url for voyager in explorer mode
     M = Messages(app)
-    ext = "min" 
-    
+    ext = "min"
+    root = f"/{root}"
+
     return render_template(
-        "voyager.html",
-        ext=ext,
-        root=root, 
-        scene=scene,
-        messages=M.generateMessages()
+        "voyager.html", ext=ext, root=root, scene=scene, messages=M.generateMessages()
     )
 
 
