@@ -49,9 +49,9 @@ this:
 
 The source code is in 
 [pilot voyager-explorer](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-explorer), see in particular the controllers in
-[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-explorer/app.py)
+[app.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/voyager-explorer/app.py)
 and the template
-[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-explorer/templates/index.html).
+[index.html](https://github.com/CLARIAH/pure3d/blob/main/pilots/voyager-explorer/templates/index.html).
 
 When you are done with the pilot, press `Ctrl+C`.
 
@@ -84,7 +84,7 @@ which is served by this webdav browser.
 
 The source code is in 
 [pilot webdav](https://github.com/CLARIAH/pure3d/tree/main/pilots/webdav), see in particular the controller
-[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/webdav/app.py).
+[app.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/webdav/app.py).
 
 # Chaining
 
@@ -105,13 +105,13 @@ To show the idea, there is a pilot that chains to trivial flask apps:
 The source code is in 
 [pilot chainingstraight](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight),
 see in particular the controllers in
-[app1.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/app1.py)
+[app1.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/chainingstraight/app1.py)
 and
-[app2.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/app2.py)
+[app2.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/chainingstraight/app2.py)
 which are being chained in 
-[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/app.py)
+[app.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/chainingstraight/app.py)
 and the template
-[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/chainingstraight/templates/index.html)
+[index.html](https://github.com/CLARIAH/pure3d/blob/main/pilots/chainingstraight/templates/index.html)
 
 However, there is a quirk with this chaining: after the initial part of the url has been
 determined the app to which control should be dispatched, that initial part is stripped
@@ -129,21 +129,21 @@ To see it, do:
 ```
 
 The Dispatcher source code is in
-[dispatcher.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/dispatcher.py)
+[dispatcher.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/chaining/dispatcher.py)
 used by
-[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/chaining/app.py).
+[app.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/chaining/app.py).
 
 The rest is equal to `chainingstraight`.
 
 
-# Voyager story
+# Voyager story - attempt 1
 
 Now we can deploy a server that can handle voyager-story.
 
 You can see it by doing
 
 ```
-./pilot.sh voyager-story
+./pilot.sh voyager-story-attempt1
 ```
 
 A flask server is started, a web browser opens and loads a page
@@ -158,26 +158,88 @@ and everything else by the flask app part of the server.
 
 
 The source code is in 
-[pilot voyager-story](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story), see in particular the controllers in
-[app.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story/app.py)
+[pilot voyager-story-attempt1](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story),
+see in particular the controllers in
+[app.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/voyager-story-attempt1/app.py)
 and
-[webdavapp.py](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story/webdavapp.py)
+[webdavapp.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/voyager-story-attempt1/webdavapp.py)
 and the template
-[index.html](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story/templates/index.html).
+[index.html](https://github.com/CLARIAH/pure3d/blob/main/pilots/voyager-story-attempt1/templates/index.html).
 
 ## Problematic journey
 
 If the WebDAV setup is not exactly right, you are bound to get problems.
-My first attempt used the wrong chaining, see
-[pilot voyager-story-attempt1](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story-attemp1).
+In this attempt we use the wrong chaining, see
+[pilot voyager-story-attempt1](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story-attempt1).
 
-The tricky thing was that an awful lot went right, but not everything.
+The tricky thing is that an awful lot goes right, but not everything.
 First I could fix a number of problems by fixing something in the Voyager code,
 but subtle bugs kept appearing.
 
 Then I discovered that I should also fix by WebDAV server setup.
 
-After that, there was only one remaining little issue in the Voyager code.
-I fixed that in the [voyager-story.dev.patch.js](https://github.com/CLARIAH/pure3d/blob/master/pilots/static/dist/js/voyager-story.dev.patch.js) and used that to run this pilot.
+# Voyager story
 
-See more in [issue 159 in the voyager repo](https://github.com/Smithsonian/dpo-voyager/issues/159).
+Now we can deploy a server that can handle voyager-story *properly*.
+
+You can see it by doing
+
+```
+./pilot.sh voyager-story
+```
+
+These are the differences:
+
+*   We use the customised dispatcher (like in pilot `chaining` and unlike before as in `chainingstraight`).
+    See [app.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/voyager-story/app.py) and
+    See [webdavapp.py](https://github.com/CLARIAH/pure3d/blob/main/pilots/voyager-story/webdavapp.py) and
+*   I patched one remaining little issue in the Voyager code, both in
+    [voyager-story.dev.patch.js](https://github.com/CLARIAH/pure3d/blob/master/pilots/static/dist/js/voyager-story.dev.patch.js) and
+    [voyager-story.min.patch.js](https://github.com/CLARIAH/pure3d/blob/master/pilots/static/dist/js/voyager-story.min.patch.js).
+    See more in [issue 159 in the voyager repo](https://github.com/Smithsonian/dpo-voyager/issues/159).
+
+In the process we also sanitized the data organization of articles and media files in our example dataset.
+The images are in a `media` folder, and this folder now resides inside the `articles` folder instead next of it.
+
+# Voyager roundtrip
+
+Now we can show a voyager roundtrip, where we load a model, and view its annotations,
+then modify an article in an other tab, and observe the changes in the first viewer.
+
+Let's walk through this scenario screenshot by screenshot.
+If you do it yourself, do
+
+```
+./pilot.sh voyager-roundtrip prod
+```
+
+You're in the viewer (Voyager-Explorer):
+
+![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round1.jpg)
+
+Click on the edit link and you get a new tab where you're in Voyager-Story:
+
+![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round2.jpg)
+
+Now make an edit in the title (an extra `XXXX`) and in the text (an extra `XXXX`).
+Note that we have changed the title as it appears in the metadata on the left,
+but not as it appears in the heading of the article itself.
+
+Make sure you save the article and the whole story (there are two save buttons).
+The latter is in order to save the metadata into the scene file, i.e. the clanwilliam.json file.
+
+![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round3.jpg)
+
+Go back to the previous tab where the viewer is still open.
+Do a refresh. Navigate to the articles. You'll see the change in the metadata.
+
+![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round4.jpg)
+
+Click on the article. You'll see the change in the body text.
+
+![screenshot](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/images/round5.jpg)
+
+
+
+
+

@@ -14,14 +14,14 @@ scenes:
   setup: 0
 nodes:
 - translation:
-  - 29079.6878052
-  - 7194.9844041
-  - 813.1365748
+  - 21447.8740375
+  - 8092.647262
+  - 10696.9852228
   rotation:
-  - -0.0097279
-  - 0.6941614
-  - 0.0093828
-  - 0.7196925
+  - -0.010957
+  - 0.5388455
+  - 0.0070095
+  - 0.8423042
   scale:
   - 1
   - 1
@@ -30,9 +30,9 @@ nodes:
   camera: 0
 - rotation:
   - 0
-  - 0.6942248
+  - 0.5388911
   - 0
-  - 0.7197582
+  - 0.8423754
   scale:
   - 847.1218168
   - 847.1218168
@@ -717,27 +717,15 @@ metas:
         house caught fire.
     taglist:
       EN: []
-  - id: v5hEC7WbSUyk
+  - id: ilq2GFNMD9rV
     uris:
-      EN: articles/new-article-v5hEC7WbSUyk-0.html
+      EN: articles/AA-test.html
     titles:
-      EN: New Article
+      EN: AA Test
     leads:
-      EN: ''
-  - id: dfBDFr3GDJso
-    uris:
-      EN: articles/new-article-dfBDFr3GDJso-0.html
-    titles:
-      EN: New Article
-    leads:
-      EN: ''
-  - id: SpfIhzlp1ewA
-    uris:
-      EN: articles/new-article-SpfIhzlp1ewA-0.html
-    titles:
-      EN: New Article
-    leads:
-      EN: ''
+      EN: Good, good.
+    taglist:
+      EN: []
   audio:
   - id: quMsEH2vMjfA
     name: New Audio Element
