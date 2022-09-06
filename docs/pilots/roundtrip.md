@@ -67,7 +67,9 @@ also serve you the same material in voyager-editor where you can edit the scene.
 The webapp that does this, is a little Flask app, written in a few lines of Python.
 
 We can now make that webapp bigger, so that we can serve many scenes and models to many users.
+Not only on a local web server, but also over the internet.
 We do that by changing the logic of the webapp, instead of adding new installations of sandbox systems.
+There will still be a myriad things to handle, but the hurdle of integrating voyager in an ordinary webapp context has been taken.
 
 This step from sandbox to pilot is just the next step on the road to the Pure3D infrastructure.
 
