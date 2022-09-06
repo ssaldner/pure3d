@@ -1,10 +1,5 @@
 {% extends 'edition.html' %}
 
-{% block head %}
-<link href="/static/dist/css/voyager-explorer.{{ext}}.css" rel="stylesheet">
-<script defer src="/static/dist/js/voyager-explorer.{{ext}}.js"></script>
-{% endblock %}
-
 {% block content %}
 <div class="container">
     <div class="model-info">
@@ -12,9 +7,7 @@
     </div>
 
     <div class="model">
-        <h1>3d Model appears here</h1>
-        <voyager-explorer 
-        root="{{root}}" document="{{scene}}" style="{{st}}">
-        </voyager-explorer>
+        <h1>Voyager Explorer</h1>
+        <iframe width="{{width}}" height="{{height}}" src="/voyager/{{scene}}"/>
     </div>
     {% endblock %}

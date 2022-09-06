@@ -76,13 +76,13 @@ p.error {
   text-align: center;
 }
 
-.edition-info {
-  width: 20%;
+.model-info {
+  width: 70%;
   text-align: justify;
 }
 
 .model {
-  width: 80%;
+  width: 70%;
   height: 750px;
   text-align: center;
 }

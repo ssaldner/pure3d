@@ -1,5 +1,6 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, abort, make_response, session
 import os
+import sys
 import json
 from markdown import markdown
 
@@ -9,6 +10,7 @@ from helpers.files import readFile, dirExists
 
 # create and configure app
 app = Flask(__name__)
+app.secret_key = "dev"
 title = "PURE3D: An Infrastructure for Publication and Preservation of 3D Scholarship"
 heading = "Pure 3D website"
 
@@ -17,13 +19,14 @@ BASE = os.path.expanduser("~/github/clariah/pure3d")
 DATA_DIR = f"{BASE}/data"
 EDITION_DIR = f"{DATA_DIR}/editions"
 
-ROOT_URL = "/data/editions/1/3d/4/"
-SCENE = "clanwilliam.json"
-HEIGHT = "400px"
+WIDTH = "600px"
+HEIGHT = "600px"
 
-
+# functions
 def getEditionsList(M):
     # to get enumeration of top level directories
+    # these are joined with the "edition" directory path to get 
+    # path of each edition
     numbers = []
 
     if not dirExists(EDITION_DIR):
@@ -69,8 +72,11 @@ def dcReaderJSON(M):
     # to read different values from the Dublin core file
     pass
 
-# app url routes start here
+def debug(msg):
+    sys.stderr.write(f"{msg}\n")
+    sys.stderr.flush()
 
+# app url routes start here
 
 @app.route("/")
 @app.route("/home")
@@ -78,6 +84,8 @@ def dcReaderJSON(M):
 def home():
     M = Messages(app)
 
+    # display list of editions on home page
+    # used "dc.title" from the Dublin Core metadata
     editionNumbers = getEditionsList(M)
 
     editionData = {}
@@ -104,7 +112,7 @@ def home():
             url=url,
         )
 
-    editionLinks = []
+    editionLinks = [] # to get url redirections of individual pages of each edition
 
     for (i, data) in sorted(editionData.items()):
         title = data["title"]
@@ -170,12 +178,14 @@ def editionAbout(editionN):
     aboutDir = f"{EDITION_DIR}/{editionN}"
     aboutFile = "about.md"
     aboutHtml = render_md(M, aboutDir, aboutFile)
-
+    
+    homeUrl = url_for("edition_page", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
     return render_template(
         "editionTexts.html",
         text=aboutHtml,
+        homeUrl=homeUrl,
         bgUrl=bgUrl,
         messages=M.generateMessages(),
     )
@@ -186,26 +196,63 @@ def editionAbout(editionN):
 def model_page(editionN, modelN):
     M = Messages(app)
 
-    md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"
+    md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"  # model directories
+    session["md"] = md
 
     # render about information
     aboutFile = "about.md"
     aboutHtml = render_md(M, md, aboutFile)
 
+    homeUrl = url_for("edition_page", editionN=editionN)
+    aboutUrl = url_for("editionAbout", editionN=editionN)
+    bgUrl = url_for("editionBackground", editionN=editionN)
+
     # displaying 3d models
-    st = f"display: block; position: relative; height: {HEIGHT};"
+    for file in os.listdir(md):
+        if file.endswith(".json"):
+            scene = file
+
     return render_template(
         "model.html",
         aboutHtml=aboutHtml,
         editionN=editionN,
         modelN=modelN,
-        root=ROOT_URL,
-        scene=SCENE,
-        ext="dev",
-        st=st,
+        scene=scene,
+        height=HEIGHT,
+        width=WIDTH,
+        homeUrl=homeUrl,
+        aboutUrl=aboutUrl,
+        bgUrl=bgUrl,
         messages=M.generateMessages(),
     )
 
+
+@app.route("/voyager/<string:scene>")
+def voyager(scene):
+    # url for voyager in explorer mode
+    ext = "min" 
+    root = session.get("md", None)
+    return render_template(
+        "voyager.html",
+        ext=ext,
+        root=root, 
+        scene=scene
+    )
+
+
+@app.route("/data/<path:path>")
+def data(path):
+    # url accesing data from the editions
+    md = session.get("md", None)
+    dataPath = f"{md}/{path}"
+    if not os.path.isfile(dataPath):
+        debug(f"File does not exist: {dataPath}")
+        abort(404)
+
+    with open(dataPath, "rb") as fh:
+        textData = fh.read()
+
+    return make_response(textData)
 
 @app.route("/<int:editionN>")
 # Display for editions page(s)
@@ -276,10 +323,12 @@ def editionBackground(editionN):
     backgroundHtml = render_md(M, ed, backgroundFile)
 
     aboutUrl = url_for("editionAbout", editionN=editionN)
+    homeUrl = url_for("edition_page", editionN=editionN)
 
     return render_template(
         "editionTexts.html",
         text=backgroundHtml,
+        homeUrl=homeUrl,
         aboutUrl=aboutUrl,
         messages=M.generateMessages(),
     )
