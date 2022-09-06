@@ -14,7 +14,14 @@ When finished, it will run on infrastructure of the [KNAW/Humanities Cluster](ht
 # Documentation
 Technical documentation is in the [docs](https://github.com/CLARIAH/pure3d/blob/main/docs/index.md).
 
-See in particular a [set of pilots](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/voyager.md) showing how we tame the Smithsonian Voyager, a 3D viewer in Javascript.
+See in particular
+
+* a [set of pilots](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/voyager.md)
+  showing how we tame the Smithsonian Voyager, a 3D viewer in Javascript, and use it in an ordinary
+  webserver-client context.
+* a [roundtrip](https://github.com/CLARIAH/pure3d/blob/main/docs/pilots/roundtrip.md)
+  showing how you can edit a model in voyager-story and then can see the changes in voyager-explorer,
+  both served by the same webapp.
 
 # Team
 At the University of Maastricht (see also [here](https://pure3d.eu/index.php/about/team/)):

@@ -22,10 +22,11 @@ EDITION_DIR = f"{DATA_DIR}/editions"
 WIDTH = "600px"
 HEIGHT = "600px"
 
+
 # functions
 def getEditionsList(M):
     # to get enumeration of top level directories
-    # these are joined with the "edition" directory path to get 
+    # these are joined with the "edition" directory path to get
     # path of each edition
     numbers = []
 
@@ -72,11 +73,14 @@ def dcReaderJSON(M):
     # to read different values from the Dublin core file
     pass
 
+
 def debug(msg):
     sys.stderr.write(f"{msg}\n")
     sys.stderr.flush()
 
+
 # app url routes start here
+
 
 @app.route("/")
 @app.route("/home")
@@ -112,7 +116,7 @@ def home():
             url=url,
         )
 
-    editionLinks = [] # to get url redirections of individual pages of each edition
+    editionLinks = []  # to get url redirections of individual pages of each edition
 
     for (i, data) in sorted(editionData.items()):
         title = data["title"]
@@ -178,7 +182,7 @@ def editionAbout(editionN):
     aboutDir = f"{EDITION_DIR}/{editionN}"
     aboutFile = "about.md"
     aboutHtml = render_md(M, aboutDir, aboutFile)
-    
+
     homeUrl = url_for("edition_page", editionN=editionN)
     bgUrl = url_for("editionBackground", editionN=editionN)
 
@@ -230,14 +234,9 @@ def model_page(editionN, modelN):
 @app.route("/voyager/<string:scene>")
 def voyager(scene):
     # url for voyager in explorer mode
-    ext = "min" 
+    ext = "min"
     root = session.get("md", None)
-    return render_template(
-        "voyager.html",
-        ext=ext,
-        root=root, 
-        scene=scene
-    )
+    return render_template("voyager.html", ext=ext, root=root, scene=scene)
 
 
 @app.route("/data/<path:path>")
@@ -253,6 +252,7 @@ def data(path):
         textData = fh.read()
 
     return make_response(textData)
+
 
 @app.route("/<int:editionN>")
 # Display for editions page(s)

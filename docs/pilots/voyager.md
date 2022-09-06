@@ -173,10 +173,10 @@ In this attempt we use the wrong chaining, see
 [pilot voyager-story-attempt1](https://github.com/CLARIAH/pure3d/tree/main/pilots/voyager-story-attempt1).
 
 The tricky thing is that an awful lot goes right, but not everything.
-First I could fix a number of problems by fixing something in the Voyager code,
+I have tried to fix a number of problems by patching Voyager code,
 but subtle bugs kept appearing.
 
-Then I discovered that I should also fix by WebDAV server setup.
+Then I discovered that I should also fix the WebDAV server setup on my side.
 
 # Voyager story
 
