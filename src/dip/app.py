@@ -222,13 +222,13 @@ def model_page(editionN, modelN):
         aboutHtml=aboutHtml,
         editionN=editionN,
         modelN=modelN,
+        root=md,
         scene=scene,
         height=HEIGHT,
         width=WIDTH,
         homeUrl=homeUrl,
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
-        root=md,
         messages=M.generateMessages(),
     )
 
