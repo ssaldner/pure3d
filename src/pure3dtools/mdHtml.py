@@ -124,10 +124,10 @@ MD_OPTIONS = dict(
 )
 
 
-MEDIA_RE = re.compile(
+media_RE = re.compile(
     r"""
     (=['"])
-    Media
+    media
     /
 """,
     re.X | re.S,
@@ -166,7 +166,7 @@ def clearTree(path):
 
 
 def tweak(html):
-    return MEDIA_RE.sub(r"\1../media/", html)
+    return media_RE.sub(r"\1../media/", html)
 
 
 def convertFile(direction, fileIn, locOut, keep=False):
