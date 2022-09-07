@@ -62,7 +62,7 @@ This completes the roundtrip.
 ## Observation
 What you just saw is a little website, served by a simple webserver on your computer.
 The webserver is capable of serving you a model plus scene inside the voyager-explorer, and it can
-also serve you the same material in voyager-editor where you can edit the scene.
+also serve you the same material in voyager-story where you can edit the scene.
 
 The webapp that does this, is a little Flask app, written in a few lines of Python.
 
