@@ -316,6 +316,7 @@ def edition_page(editionN):
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
         modelLinks=modelLinks,
+        banner=banner,
         messages=M.generateMessages(),
     )
 
