@@ -2,6 +2,7 @@ html {
   background-color: #fdfeff;
 }
 
+
 img {
   width: 45%;
   display: block;
@@ -62,7 +63,8 @@ p.error {
 }
 
 .edition-icons {
-  width: 50%;
+  width: 25%;
+  height: 25%;
   text-align: center;
 }
 
@@ -72,7 +74,8 @@ p.error {
 }
 
 .model-icons {
-  width: 50%;
+  width: 25%;
+  height: 25%;
   text-align: center;
 }
 
@@ -113,3 +116,27 @@ p.error {
   position: relative;
   height: 500px;
 }
+
+.home-button{
+  text-align: right;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  height: 2.5rem;
+  min-width:100%;
+}
+
+#footer img{
+  width:100%;
+}
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 2.5rem;    
+}
+
