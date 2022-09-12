@@ -217,6 +217,7 @@ def model_page(editionN, modelN):
     for file in os.listdir(md):
         if file.endswith(".json"):
             scene = file
+    
 
     return render_template(
         "model.html",
@@ -245,7 +246,6 @@ def voyager(scene, root):
         "voyager.html", ext=ext, root=root, scene=scene, messages=M.generateMessages()
     )
 
-
 @app.route("/data/<path:path>")
 def data(path):
     # url accesing data from the editions
@@ -266,7 +266,12 @@ def edition_page(editionN):
     M = Messages(app)
 
     ed = f"{EDITION_DIR}/{editionN}"
+    candyLogo = f"editions/{editionN}/candy/logo.png"
+    
+    #display project logo as banner
+    logo = url_for('data', path=candyLogo)
 
+    
     # rendering texts
     introFile = "intro.md"
     usageFile = "usage.md"
@@ -290,23 +295,29 @@ def edition_page(editionN):
             title = f.read()
 
         url = f"""/{editionN}/{j}"""
+        candyIcon = f"editions/{editionN}/3d/{j}/candy/icon.png"
+        icon = url_for('data', path=candyIcon)
         modelData[j] = dict(
             title=title,
-            url=url,
+            url=url,icon=icon
         )
+
 
     modelLinks = []
 
     for (i, data) in sorted(modelData.items()):
         title = data["title"]
         url = data["url"]
+        icon = data["icon"]
         modelLinks.append(
             f"""
+            <img src="{icon}" alt="model icon">
             <a href="{url}">{title}</a><br>
         """
         )
 
     modelLinks = "\n".join(modelLinks)
+
 
     return render_template(
         "edition.html",
@@ -316,7 +327,7 @@ def edition_page(editionN):
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
         modelLinks=modelLinks,
-        banner=banner,
+        logo=logo,icon=icon,
         messages=M.generateMessages(),
     )
 
