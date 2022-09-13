@@ -2,12 +2,9 @@ import sys
 import webbrowser
 
 
-browserType = "Chrome"
+# browserType = "google-chrome"
 browserType = None
 browserRep = "default web browser" if browserType is None else browserType
-
-
-print(webbrowser._browsers)
 
 
 def openWeb(url):

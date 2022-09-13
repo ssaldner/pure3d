@@ -112,14 +112,11 @@ def home():
         url = f"""/{i}"""
 
         candy = f"editions/{i}/candy/icon.png"
-    
-        #display project logo as banner
-        logo = url_for('data', path=candy)
 
-        editionData[i] = dict(
-            title=title,
-            url=url, logo=logo
-        )
+        # display project logo as banner
+        logo = url_for("data", path=candy)
+
+        editionData[i] = dict(title=title, url=url, logo=logo)
 
     editionLinks = []  # to get url redirections of individual pages of each edition
 
@@ -138,7 +135,8 @@ def home():
 
     return render_template(
         "index.html",
-        url=url, title=title,
+        url=url,
+        title=title,
         editionLinks=editionLinks,
         messages=M.generateMessages(),
     )
@@ -211,9 +209,9 @@ def model_page(editionN, modelN):
     root = f"data/editions/{editionN}/3d/{modelN}/"  # model root url
 
     candyLogo = f"editions/{editionN}/candy/logo.png"
-    
-    #display project logo as banner
-    logo = url_for('data', path=candyLogo)
+
+    # display project logo as banner
+    logo = url_for("data", path=candyLogo)
 
     # render About information
     aboutFile = "about.md"
@@ -229,7 +227,6 @@ def model_page(editionN, modelN):
     for file in os.listdir(md):
         if file.endswith(".json"):
             scene = file
-    
 
     return render_template(
         "model.html",
@@ -259,6 +256,7 @@ def voyager(scene, root):
         "voyager.html", ext=ext, root=root, scene=scene, messages=M.generateMessages()
     )
 
+
 @app.route("/data/<path:path>")
 def data(path):
     # url accesing data from the editions
@@ -281,7 +279,7 @@ def edition_page(editionN):
     ed = f"{EDITION_DIR}/{editionN}"
     candyLogo = f"editions/{editionN}/candy/logo.png"
 
-    #display title
+    # display title
     jsonDir = f"{EDITION_DIR}/{editionN}/meta"
     jsonFile = "dc.json"
     fh = readFile(jsonDir, jsonFile)
@@ -296,11 +294,10 @@ def edition_page(editionN):
     else:
         M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
         ed_title = "No title"
-    
-    #display project logo as banner
-    logo = url_for('data', path=candyLogo)
 
-    
+    # display project logo as banner
+    logo = url_for("data", path=candyLogo)
+
     # rendering texts
     introFile = "intro.md"
     usageFile = "usage.md"
@@ -325,12 +322,8 @@ def edition_page(editionN):
 
         url = f"""/{editionN}/{j}"""
         candyIcon = f"editions/{editionN}/3d/{j}/candy/icon.png"
-        icon = url_for('data', path=candyIcon)
-        modelData[j] = dict(
-            title=title,
-            url=url,icon=icon
-        )
-
+        icon = url_for("data", path=candyIcon)
+        modelData[j] = dict(title=title, url=url, icon=icon)
 
     modelLinks = []
 
@@ -347,7 +340,6 @@ def edition_page(editionN):
 
     modelLinks = "\n".join(modelLinks)
 
-
     return render_template(
         "edition.html",
         usage=usageHtml,
@@ -356,7 +348,8 @@ def edition_page(editionN):
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
         modelLinks=modelLinks,
-        logo=logo,icon=icon,
+        logo=logo,
+        icon=icon,
         ed_title=ed_title,
         messages=M.generateMessages(),
     )
