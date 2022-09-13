@@ -12,7 +12,7 @@ The ingest system is an online file system that gives authenticated users the fo
 * A way to get the contents of a workspace into the AIP system.
 
 # Workspaces and user roles
-Work on editions happens in an online *workspace*, offered by the Pure3D infrastructure.
+Work on projects happens in an online *workspace*, offered by the Pure3D infrastructure.
 A workspace is an online folder with a predefined structure, see below. 
 Some folders are under direct control of the editors, other folders contain generated/derived materials.
 
@@ -27,7 +27,7 @@ Admin tasks are:
 * invite other users to the workspace
 * delete users from the workspace
 * change the roles of workspace users
-* publish and archive the edition that is made in the workspace
+* publish and archive the project that is made in the workspace
 * clear the workspace after the work is done
 
 # Conflict reduction
@@ -55,8 +55,8 @@ From this list they can enter a workspace.
 This will bring users to the main page of the workspace, from where they can see all accessible data in the workspace.
 
 ## Requesting a fresh workspace
-Users may point to an existing edition and ask to load it into the workspace in order to work on a new version of that edition.
-If no such edition is given, a bare workspace will be created, ready for working on a brand new edition.
+Users may point to an existing project and ask to load it into the workspace in order to work on a new version of that project.
+If no such project is given, a bare workspace will be created, ready for working on a brand new project.
 
 Additionally:
 * a form is presented to fill out and/or update essential metadata (Dublin Core). The response will be saved to a file in the workspace.
@@ -102,11 +102,11 @@ The system presents an embedded 3D viewer (e.g. the Smithsonian Voyager) and let
 The system presents the versions involved in a save conflict, showing which users saved what at what time, and lets the editor choose between the versions. If none of the versions is right, the editor can supply a new version.
 
 ## An admin publishes a workspace
- When an admin deems the edition-in-the-works to be publishable, (s)he can publish the workspace. 
+ When an admin deems the project-in-the-works to be publishable, (s)he can publish the workspace. 
 * The system will generate formatted pages from the markdown and media for the last time.
-* The workspace contents is copied to the AIP storage and put in place there. It will become the first version of a new edition or the next version of an existing edition.
-* A persistent identifier will be registered for the edition version
-* The list of all versions of the edition will be updated
+* The workspace contents is copied to the AIP storage and put in place there. It will become the first version of a new project or the next version of an existing project.
+* A persistent identifier will be registered for the project version
+* The list of all versions of the project will be updated
 * The system will offer to update the list of contributors in the Dublin Core metadata based on the list of all admins, editors and readers that have been involved with the workspace.
 
 ## An admin clears a workspace
@@ -120,15 +120,15 @@ Here is the file and folder layout of a workspace
 `meta` ==all metadata==
 * `dc.json`  ==Dublin Core==
 	* title ==title of DSE as a whole==
-	   Will be shown as the name of the edition.
+	   Will be shown as the name of the project.
 	* creator ==with contact details==
-	   Will be shown on the *Contact* tab of the edition
+	   Will be shown on the *Contact* tab of the project
 	* contributors
-	   Will be shown on the *Acknowledgements* tab of the edition
+	   Will be shown on the *Acknowledgements* tab of the project
 	* date created
 	* subject
 	* source
-    The fields `creator` and `contributor` will be shown on the  will be shown on the *Contact* tab of the edition.
+    The fields `creator` and `contributor` will be shown on the  will be shown on the *Contact* tab of the project.
 * `license.txt` ==text of license==
 * `license.json` ==properties of license==
 * *xxx*`.json` ==metadata according to schema *xxx*==
@@ -167,7 +167,7 @@ Here is the file and folder layout of a workspace
   * *doc*`.pdf`
   * *explanation*`.txt`
   
-`candy` ==a bunch of salient screenshots that can be used as icons to represent the edition==
+`candy` ==a bunch of salient screenshots that can be used as icons to represent the project==
 * *logo*`.png`
 * *icon*`.png`
   
@@ -177,15 +177,15 @@ Here is the file and folder layout of a workspace
 * *image*`.png`
 
 `texts` ==markdown-formatted texts for various purposes==
-* `intro.md` ==short introduction to the edition==
-   This will be shown on the *Home* tab of the edition.
-* `usage.md` ==ways in which readers can use the edition==
-   This will be shown on the *Home* tab of the edition, below the `intro` section.
-* `about.md` ==more details about the edition, colofon like==
+* `intro.md` ==short introduction to the project==
+   This will be shown on the *Home* tab of the project.
+* `usage.md` ==ways in which readers can use the project==
+   This will be shown on the *Home* tab of the project, below the `intro` section.
+* `about.md` ==more details about the project, colofon like==
    This does not have to include sources and contact details.
-   This will be shown on the *About* tab of the edition.
-* `description.md` ==a longer narrative that describes the edition==
-   This will be shown on the *Project Background* tab of the edition.
+   This will be shown on the *About* tab of the project.
+* `description.md` ==a longer narrative that describes the project==
+   This will be shown on the *Project Background* tab of the project.
 * `articles` ==texts that can be called up within the 3d viewers; arbitrary number with arbitrary names==
   * *a1*`.md`
   * *a2*`.md`

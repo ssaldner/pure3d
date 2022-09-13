@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block logo %} 
-	<a href="{{homeUrl}}"><img src="{{logo}}" alt="Edition logo"></a>
+	<a href="{{homeUrl}}"><img src="{{logo}}" alt="Model logo"></a>
 {%endblock%}
 
 {% block navigation %}
@@ -33,7 +33,7 @@
 {% block content %}
 <h1><center>{{ed_title | safe}}</center></h1>
 <div class = "container">
-	<div class="edition-info">
+	<div class="project-info">
 		<h1>Introduction</h1>
 		{{ intro|safe }}
 
