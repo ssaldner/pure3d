@@ -14,25 +14,32 @@ Run it from the /scripts directory in the repo.
     Debug mode
 """
 
+if [[ "$1" == "--help" ]]; then
+    echo $HELP
+    exit 0
+fi
+
 scriptdir=`pwd`
 cd ../src/dip
 
-if [[ "$1" == "debug" ]]; then
-    flaskdebug=" --debug"
-elif [[ "$1" != "" ]]; then
-    echo $HELP
-    echo ""
-    echo "Error in calling this program!"
-    echo "Wrong argument `$1`"
-    exit 1
-else
+flaskdebug = " --debug"
+
+if [[ "$1" == "prod" ]]; then
     flaskdebug=""
+    shift
 fi
 
-flask$flaskdebug run &
+if [[ "$1" == "" ]]; then
+    flaskport="5000"
+else
+    flaskport="$1"
+    shift
+fi
+
+flask$flaskdebug run --port $flaskport &
 pid=$!
 sleep 1
-python3 "$scriptdir/browser.py" http://127.0.0.1:5000
+python3 "$scriptdir/browser.py" http://127.0.0.1:$flaskport
 trap "kill $pid" SIGINT
 echo "flask runs as process $pid"
 wait "$pid"

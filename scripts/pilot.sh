@@ -7,10 +7,12 @@ Usage
 
 Run it from the /scripts directory in the repo.
 
-./pilot.sh name [prod]
+./pilot.sh name ['prod'] [port]
     Run named pilot in debug mode.
     An environment variable PILOT_MODE will be set to dev or prod
-    default dev, if prod is passed: prod
+    default dev, if 'prod' is passed: prod
+
+    You can also specify a port.
 """
 
 scriptdir=`pwd`
