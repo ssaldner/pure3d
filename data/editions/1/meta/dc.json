@@ -1,6 +1,8 @@
 {
   "filename": "/github/clariah/pure3d/data/editions/1",
   "dc.title": "Contested Memories: The Battle of Mount Street Bridge",
+  "dc.abstract": "short one (instead of intro.md)",
+  "dc.abstract.extended":"on home of edition",
   "dc.creator": "Susan Schriebman",
   "dc.contributor": "Kelly Gillikin Schoueri, Costas Papadopoulos, Billy Donnelly, Luca Moines, John Kaulakis, Sandra Boheme Martinez",
   "dc.audience": "Digital Humanities, Early Modern History, Irish History",
@@ -19,5 +21,6 @@
   "dc.acessRights": "Open Access - Unrestricted Access",
   "dc.license": "Creative Commons",
   "dc.dateAccepted": "12-08-2022",
-  "dc.dateSubmitted": "23-06-2022"
+  "dc.dateSubmitted": "23-06-2022",
+  "dc.date.Published": ""
 }
