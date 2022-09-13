@@ -1,17 +1,17 @@
 #!/bin/bash
 
 BASE=github/clariah/pure3d
-EDITION_DIR="$BASE/data/editions"
-LOCAL_DIR="$BASE/_local/generated/editions"
+PROJECT_DIR="$BASE/data/projects"
+LOCAL_DIR="$BASE/_local/generated/projects"
 
-cd ~/$EDITION_DIR
+cd ~/$PROJECT_DIR
 
-editions=`ls`
+projects=`ls`
 
-for edition in $editions
+for project in $projects
 do
-    echo "Edition $edition"
-    cd $edition
+    echo "Model $project"
+    cd $project
     if [[ -e "3d" ]]; then
         cd "3d"
         models=`ls`

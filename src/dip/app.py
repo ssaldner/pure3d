@@ -7,7 +7,6 @@ from markdown import markdown
 from helpers.messages import Messages
 from helpers.files import readFile, dirExists
 
-
 # create and configure app
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -17,24 +16,24 @@ heading = "Pure 3D website"
 # variables
 BASE = os.path.expanduser("~/github/clariah/pure3d")
 DATA_DIR = f"{BASE}/data"
-EDITION_DIR = f"{DATA_DIR}/editions"
+PROJECT_DIR = f"{DATA_DIR}/projects"
 
 WIDTH = "600px"
 HEIGHT = "600px"
 
 
 # functions
-def getEditionsList(M):
+def getProjectsList(M):
     # to get enumeration of top level directories
-    # these are joined with the "edition" directory path to get
-    # path of each edition
+    # these are joined with the "project" directory path to get
+    # path of each project
     numbers = []
 
-    if not dirExists(EDITION_DIR):
-        M.addMessage("error", f"Edition directory {EDITION_DIR} does not exist")
+    if not dirExists(PROJECT_DIR):
+        M.addMessage("error", f"Project directory {PROJECT_DIR} does not exist")
         return numbers
 
-    with os.scandir(EDITION_DIR) as ed:
+    with os.scandir(PROJECT_DIR) as ed:
         for entry in ed:
             if entry.is_dir():
                 name = entry.name
@@ -43,17 +42,17 @@ def getEditionsList(M):
     return sorted(numbers)
 
 
-def getModelsList(M, editionN):
-    # to get enumeration of sub-directories under folder "3d"
-    modelns = []
-    modelDir = f"{EDITION_DIR}/{editionN}/3d"
-    with os.scandir(modelDir) as md:
-        for model in md:
-            if model.is_dir():
-                name = model.name
+def getEditionsList(M, projectN):
+    # to get enumeration of sub-directories under folder "editions"
+    editionNs = []
+    editionDir = f"{PROJECT_DIR}/{projectN}/editions"
+    with os.scandir(editionDir) as md:
+        for edition in md:
+            if edition.is_dir():
+                name = edition.name
                 if name.isdigit():
-                    modelns.append(int(name))
-    return sorted(modelns)
+                    editionNs.append(int(name))
+    return sorted(editionNs)
 
 
 def render_md(M, mdPath, mdFile):
@@ -88,14 +87,14 @@ def debug(msg):
 def home():
     M = Messages(app)
 
-    # display list of editions on home page
+    # display list of projects on home page
     # used "dc.title" from the Dublin Core metadata
-    editionNumbers = getEditionsList(M)
+    projectNumbers = getProjectsList(M)
 
-    editionData = {}
+    projectData = {}
 
-    for i in editionNumbers:
-        jsonDir = f"{EDITION_DIR}/{i}/meta"
+    for i in projectNumbers:
+        jsonDir = f"{PROJECT_DIR}/{i}/meta"
         jsonFile = "dc.json"
         fh = readFile(jsonDir, jsonFile)
         if type(fh) is str:
@@ -111,33 +110,35 @@ def home():
             title = "No title"
         url = f"""/{i}"""
 
-        candy = f"editions/{i}/candy/icon.png"
+        candy = f"projects/{i}/candy/icon.png"
+    
+        #display project logo as banner
+        logo = url_for('data', path=candy)
 
-        # display project logo as banner
-        logo = url_for("data", path=candy)
+        projectData[i] = dict(
+            title=title,
+            url=url, logo=logo
+        )
 
-        editionData[i] = dict(title=title, url=url, logo=logo)
+    projectLinks = []  # to get url redirections of individual pages of each project
 
-    editionLinks = []  # to get url redirections of individual pages of each edition
-
-    for (i, data) in sorted(editionData.items()):
+    for (i, data) in sorted(projectData.items()):
         title = data["title"]
         url = data["url"]
         logo = data["logo"]
-        editionLinks.append(
+        projectLinks.append(
             f"""
             <img src="{logo}">
             <a href="{url}">{title}</a><br>
         """
         )
 
-    editionLinks = "\n".join(editionLinks)
+    projectLinks = "\n".join(projectLinks)
 
     return render_template(
         "index.html",
-        url=url,
-        title=title,
-        editionLinks=editionLinks,
+        url=url, title=title,
+        projectLinks=projectLinks,
         messages=M.generateMessages(),
     )
 
@@ -179,20 +180,20 @@ def contact():
     pass
 
 
-@app.route("/<int:editionN>/about")
-# Display about page for specific edition
-def editionAbout(editionN):
+@app.route("/<int:projectN>/about")
+# Display about page for specific project
+def projectAbout(projectN):
     M = Messages(app)
 
-    aboutDir = f"{EDITION_DIR}/{editionN}"
+    aboutDir = f"{PROJECT_DIR}/{projectN}"
     aboutFile = "about.md"
     aboutHtml = render_md(M, aboutDir, aboutFile)
 
-    homeUrl = url_for("edition_page", editionN=editionN)
-    bgUrl = url_for("editionBackground", editionN=editionN)
+    homeUrl = url_for("project_page", projectN=projectN)
+    bgUrl = url_for("projectBackground", projectN=projectN)
 
     return render_template(
-        "editionTexts.html",
+        "projectTexts.html",
         text=aboutHtml,
         homeUrl=homeUrl,
         bgUrl=bgUrl,
@@ -200,39 +201,39 @@ def editionAbout(editionN):
     )
 
 
-@app.route("/<int:editionN>/<int:modelN>")
-# Display page for individual models in an edition
-def model_page(editionN, modelN):
+@app.route("/<int:projectN>/<int:editionN>")
+# Display page for individual editions in an project
+def edition_page(projectN, editionN):
     M = Messages(app)
 
-    md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"  # model directory on filesystem
-    root = f"data/editions/{editionN}/3d/{modelN}/"  # model root url
+    ed = f"{PROJECT_DIR}/{projectN}/editions/{editionN}"  # edition directory on filesystem
+    root = f"data/projects/{projectN}/editions/{editionN}/"  # edition root url
 
-    candyLogo = f"editions/{editionN}/candy/logo.png"
-
-    # display project logo as banner
-    logo = url_for("data", path=candyLogo)
+    candyLogo = f"projects/{projectN}/candy/logo.png"
+    
+    #display project logo as banner
+    logo = url_for('data', path=candyLogo)
 
     # render About information
     aboutFile = "about.md"
-    aboutHtml = render_md(M, md, aboutFile)
+    aboutHtml = render_md(M, ed, aboutFile)
 
-    # urls for different tabs on the edition page
-    homeUrl = url_for("edition_page", editionN=editionN)
-    aboutUrl = url_for("editionAbout", editionN=editionN)
-    bgUrl = url_for("editionBackground", editionN=editionN)
+    # urls for different tabs on the project page
+    homeUrl = url_for("project_page", projectN=projectN)
+    aboutUrl = url_for("projectAbout", projectN=projectN)
+    bgUrl = url_for("projectBackground", projectN=projectN)
 
-    # displaying 3d models
+    # displaying 3d editions
     # accesses the scene file
-    for file in os.listdir(md):
+    for file in os.listdir(ed):
         if file.endswith(".json"):
             scene = file
 
     return render_template(
-        "model.html",
+        "edition.html",
         aboutHtml=aboutHtml,
+        projectN=projectN,
         editionN=editionN,
-        modelN=modelN,
         scene=scene,
         height=HEIGHT,
         width=WIDTH,
@@ -259,7 +260,7 @@ def voyager(scene, root):
 
 @app.route("/data/<path:path>")
 def data(path):
-    # url accesing data from the editions
+    # url accesing data from the projects
     dataPath = f"{DATA_DIR}/{path}"
     if not os.path.isfile(dataPath):
         debug(f"File does not exist: {dataPath}")
@@ -271,16 +272,16 @@ def data(path):
     return make_response(textData)
 
 
-@app.route("/<int:editionN>")
-# Display for editions page(s)
-def edition_page(editionN):
+@app.route("/<int:projectN>")
+# Display for projects page(s)
+def project_page(projectN):
     M = Messages(app)
 
-    ed = f"{EDITION_DIR}/{editionN}"
-    candyLogo = f"editions/{editionN}/candy/logo.png"
+    pd = f"{PROJECT_DIR}/{projectN}"
+    candyLogo = f"projects/{projectN}/candy/logo.png"
 
-    # display title
-    jsonDir = f"{EDITION_DIR}/{editionN}/meta"
+    #display title
+    jsonDir = f"{PROJECT_DIR}/{projectN}/meta"
     jsonFile = "dc.json"
     fh = readFile(jsonDir, jsonFile)
     if type(fh) is str:
@@ -290,10 +291,10 @@ def edition_page(editionN):
         dcJson = json.load(fh)
 
     if "dc.title" in dcJson:
-        ed_title = dcJson["dc.title"]
+        pd_title = dcJson["dc.title"]
     else:
         M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
-        ed_title = "No title"
+        pd_title = "No title"
 
     # display project logo as banner
     logo = url_for("data", path=candyLogo)
@@ -302,72 +303,76 @@ def edition_page(editionN):
     introFile = "intro.md"
     usageFile = "usage.md"
 
-    introHtml = render_md(M, ed, introFile)
-    usageHtml = render_md(M, ed, usageFile)
+    introHtml = render_md(M, pd, introFile)
+    usageHtml = render_md(M, pd, usageFile)
 
     # url variables for tabs on page
-    aboutUrl = url_for("editionAbout", editionN=editionN)
-    bgUrl = url_for("editionBackground", editionN=editionN)
+    aboutUrl = url_for("projectAbout", projectN=projectN)
+    bgUrl = url_for("projectBackground", projectN=projectN)
 
-    # hyper-linked models list
-    modelNumbers = getModelsList(M, editionN)
-    modelData = {}
+    # hyper-linked editions list
+    editionNumbers = getEditionsList(M, projectN)
+    editionData = {}
 
-    for j in modelNumbers:
-        modelDir = f"{ed}/3d/{j}"
-        modelFile = "title.txt"
-        nameFile = os.path.join(modelDir, modelFile)
+    for j in editionNumbers:
+        editionDir = f"{pd}/editions/{j}"
+        editionFile = "title.txt"
+        nameFile = os.path.join(editionDir, editionFile)
         with open(nameFile) as f:
             title = f.read()
 
-        url = f"""/{editionN}/{j}"""
-        candyIcon = f"editions/{editionN}/3d/{j}/candy/icon.png"
-        icon = url_for("data", path=candyIcon)
-        modelData[j] = dict(title=title, url=url, icon=icon)
+        url = f"""/{projectN}/{j}"""
+        candyIcon = f"projects/{projectN}/editions/{j}/candy/icon.png"
+        icon = url_for('data', path=candyIcon)
+        editionData[j] = dict(
+            title=title,
+            url=url,icon=icon
+        )
 
-    modelLinks = []
 
-    for (i, data) in sorted(modelData.items()):
+    editionLinks = []
+
+    for (i, data) in sorted(editionData.items()):
         title = data["title"]
         url = data["url"]
         icon = data["icon"]
-        modelLinks.append(
+        editionLinks.append(
             f"""
-            <img src="{icon}" alt="model icon">
+            <img src="{icon}" alt="edition icon">
             <a href="{url}">{title}</a><br>
         """
         )
 
-    modelLinks = "\n".join(modelLinks)
+    editionLinks = "\n".join(editionLinks)
 
     return render_template(
-        "edition.html",
+        "project.html",
         usage=usageHtml,
         intro=introHtml,
-        editioN=editionN,
+        editioN=projectN,
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
-        modelLinks=modelLinks,
+        editionLinks=editionLinks,
         logo=logo,
         icon=icon,
-        ed_title=ed_title,
+        pd_title=pd_title,
         messages=M.generateMessages(),
     )
 
 
-@app.route("/<int:editionN>/project_background")
-# Display about page for specific edition
-def editionBackground(editionN):
+@app.route("/<int:projectN>/project_background")
+# Display about page for specific project
+def projectBackground(projectN):
     M = Messages(app)
-    ed = f"{EDITION_DIR}/{editionN}"
+    ed = f"{PROJECT_DIR}/{projectN}"
     backgroundFile = "description.md"
     backgroundHtml = render_md(M, ed, backgroundFile)
 
-    aboutUrl = url_for("editionAbout", editionN=editionN)
-    homeUrl = url_for("edition_page", editionN=editionN)
+    aboutUrl = url_for("projectAbout", projectN=projectN)
+    homeUrl = url_for("project_page", projectN=projectN)
 
     return render_template(
-        "editionTexts.html",
+        "projectTexts.html",
         text=backgroundHtml,
         homeUrl=homeUrl,
         aboutUrl=aboutUrl,
@@ -375,9 +380,9 @@ def editionBackground(editionN):
     )
 
 
-@app.route("/<int:editionN>/sources")
-# Display about page for specific edition
-def editionSources(editionN):
+@app.route("/<int:projectN>/sources")
+# Display about page for specific project
+def projectSources(projectN):
     # M = Messages(app)
     pass
 

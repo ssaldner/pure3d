@@ -62,24 +62,24 @@ p.error {
   text-align: justify;
 }
 
-.edition-icons {
+.project-icons {
   width: 20%;
   height: 20%;
   text-align: center;
 }
 
-.edition-info {
+.project-info {
   width: 50%;
   text-align: justify;
 }
 
-.model-icons {
+.edition-icons {
   width: 25%;
   height: 25%;
   text-align: center;
 }
 
-.model-info {
+.edition-info {
   width: 70%;
   text-align: justify;
 }

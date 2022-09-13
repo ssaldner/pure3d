@@ -2,7 +2,7 @@
 17-08-2022
 **getting started with FAIR**
 
-[Agenda and introduction](https://github.com/CLARIAH/pure3d/blob/main/docs/architecture/DigitalScholarlyEditions.md) 
+[Agenda and introduction](https://github.com/CLARIAH/pure3d/blob/main/docs/architecture/DigitalScholarlyProjects.md) 
 *   11:00 - 11:30 Coffee, welcome, introduction of participants
 *   11:30 - 12:00 Current state of Pure3D, with a demo of the "sandboxes"
 *   12:00 - 12:30 Towards Pure3D as an infrastructure
@@ -28,7 +28,7 @@ DANS:
 *   Eko Indarto (Software developer, Java, Python)
 
 # Themes:
-* The Digital Scholarly Edition according to Pure3D
+* The Digital Scholarly Model according to Pure3D
 * The role of the Smithsonian Voyager in the current setup
 * 3D and sustainability: 
 * collaboratively editing annotations to 3D datasets
@@ -37,14 +37,14 @@ DANS:
 
 # Minutes
 In the morning Kelly and Sohini gave a demo of current 3D annotating in practice.
-In the afternoon, Dirk introduced his document on Digital Scholarly Editions.
+In the afternoon, Dirk introduced his document on Digital Scholarly Projects.
 We organize the minutes by subject, and not by when we discussed it.
 
 ## Mount street bridge demo
 Kelly gave a demo of the Mount Street Bridge dataset plus it annotations and indicated how these annotations have been created and by whom. It started with a sandbox setup where for each user a dedicated online filesystem and a dedicated Voyager viewer were connected, so that a users could save their own annotations on their own filesystem.
 M reported that they were working on a shared filesystem, with backups, as a move to be protected from data-loss, and a step towards a real infrastructure.
 Dirk remarked that in the end the infrastructure would send Voyager instances to the users' browsers and capture the saved annotations and store them somewhere on the infrastructure.
-Now the saved data flows as json to the Nextcloud, later the webserver will receive the annotation data and process it according to which user made the annotations and to which edition (s)he is working on. It will end up in the user's workspace, which might be a GitLab repository!
+Now the saved data flows as json to the Nextcloud, later the webserver will receive the annotation data and process it according to which user made the annotations and to which project (s)he is working on. It will end up in the user's workspace, which might be a GitLab repository!
 The demo setting uses Nextcloud as a data backend for the Voyager, but in a webserver context that need not be the case, there will be much more control over the transactions between client and server.
 
 ## Viewer dependency
@@ -69,21 +69,21 @@ If our partners were predominantly scholars, we would have gone for other interf
 There is yet another viewer in the picture: Virtual Interiors, which is attractive to researchers. But VI is still work in progress, and it needs additional development (e.g. editing functionality) by third parties to integrate it in whatever infrastructure.
     
 ## Deep linking and persistent identifiers
-Persistent identifiers. It is one thing to persistently link to an edition as a whole, but how do you link persistently to the elements of an edition, or even to the parts of a 3D model?
-You could use persistent identifiers with a resolution infrastructure to point to the edition as a whole, and make a system of fragment identifiers to point to parts of the edition.
+Persistent identifiers. It is one thing to persistently link to an project as a whole, but how do you link persistently to the elements of an project, or even to the parts of a 3D model?
+You could use persistent identifiers with a resolution infrastructure to point to the project as a whole, and make a system of fragment identifiers to point to parts of the project.
 
 ## Fragment identifiers and standards
 When you descend to parts of a 3D model, the `glTF` format provides ways to address them. The Voyager viewer uses these ways (but slightly modified) to do that for the targets of their annotations.
 Other viewers, such as ATON seem to do the same, so we hope that the interoperability between viewers is a tractable problem.
 And we have to solve it in order to be able to preserve annotations for the long term.
-One use case for which this linking is particularly important is when researchers want to add observations and comments to existing editions and models: annotation in the wild after the creation process.
+One use case for which this linking is particularly important is when researchers want to add observations and comments to existing projects and models: annotation in the wild after the creation process.
 
 ## Management of wild annotations
 There are several choices for storing those annotations: let researchers store them in whatever online location; or let Pure3D store them on its own infrastructure. In both cases, Pure3D needs functionality to display models with annotation sets on demand by the user.
-Jerry stresses the point that because of the immersive views that 3D models offer, later researchers can develop new insights that they want to share on top of an existing edition. A finished DSE is then still *living data*.
+Jerry stresses the point that because of the immersive views that 3D models offer, later researchers can develop new insights that they want to share on top of an existing project. A finished DSE is then still *living data*.
 Also Kelly mentions the point that readers may want to leave annotations.
 
-## The Digital Scholarly Edition concept
+## The Digital Scholarly Model concept
 Dirk advocated a working definition of DSE, since we have to design the Pure3D infrastructure as an archive of DSEs, with its functions of (collaborative) ingest, archive management (with preservation planning), and dissemination.
 The working definition is (still a bit vaguely):
 *A collection of (markdown) texts that forms a narrative, together with a set of 3D models and their annotations, in such a way that the narrative can link to (elements) of the models, and the models can link via their annotations to parts of the narrative. Narrative and annotations may contain arbitrary media elements, such as images, videos and other 3D models.*
@@ -91,7 +91,7 @@ A DSE is a complex beast, not a single entity, and the task of preserving such a
 However, rather than preserving arbitrary websites, it is in our power to constrain DSEs in ways that make it easier to preserve them: eventually they will be converted to static HTML pages, where search controls are defined and implemented Pure3D wide, not per DSE.
 
 ### Wireframes
-Sohini showed the wireframe diagram for the Pure3D component that will disseminate editions to the public. This triggered a number of ahas and remarks.
+Sohini showed the wireframe diagram for the Pure3D component that will disseminate projects to the public. This triggered a number of ahas and remarks.
 
 ### Definition of a DSE
 Both René and Jerry remarked that it would be nice to have a real definition of what a DSE can contain, expressed in metadata as well.
@@ -111,7 +111,7 @@ So if we use Dataverse, we need extra middleware between Dataverse and the user 
 
 ### Workspaces for authoring
 However, when a DSE is being authored, the process is much more complex than a series of sessions with Voyager. Several people work on the narrative, the media content, the annotations, and others do specialized tasks, such as proof-reading, correcting, supplying links to sources, etc.
-For this we need a workspace per edition.
+For this we need a workspace per project.
 It is unlikely that generic repository systems like Dataverse offer workspaces in the ways we want. Packrat is a system that does offer such a workspace. And there are systems that are good in offering workspaces to people. Content management systems do that, but also GitHub/GitLab are good examples. Content management systems usually offer authoring environments, while GitHub/GitLab are best for authoring on distributed, local computers, with frequent merging of content.
 
 ### Where does Dataverse fit among these systems
@@ -133,7 +133,7 @@ Costas mentioned the [Electronic writing association - ELO](https://eliterature.
 
 ## Jerry
 Good progress, but things are still flexible.
-The wireframes were really helpful to gain more insight in scholarly editions. With my DANS hat I am interested in preserving DSEs, so I would like to delineate the concept of DSE more in order to be able to better preserve it.
+The wireframes were really helpful to gain more insight in scholarly projects. With my DANS hat I am interested in preserving DSEs, so I would like to delineate the concept of DSE more in order to be able to better preserve it.
 With my researcher's hat I am very interested to find an infrastructure to realize these ideas, but that's more something for the HuC/CLARIAH party.
 Best things happen if you discover things by accident, and for that you must keep trying new things. Let's keep each other informed. 
 * [x] invite DANSers to Slack
@@ -169,7 +169,7 @@ Quote:
 
 ## Costas
 Useful meeting. 
-* [ ] I am already planning a series of workshops to help users a bit more on the editions. Introduce metadata to them. Definitive metadata schema. Even if preliminary.
+* [ ] I am already planning a series of workshops to help users a bit more on the projects. Introduce metadata to them. Definitive metadata schema. Even if preliminary.
 Would like to see next:
 * [ ] how do you DANS people see yourself within Pure3D? What new goals do you identify?
 
