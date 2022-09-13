@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block logo %} 
-	<a href="/"><img src="{{ url_for('static',filename='media/Pure3D_logo.PNG')}}" alt="The Pure3D logo"></a>
+	<a href="{{homeUrl}}"><img src="{{logo}}" alt="Edition logo"></a>
 {%endblock%}
 
 {% block navigation %}
@@ -31,7 +31,7 @@
 {% endblock %}
 
 {% block content %}
-<h1><center>TITLE</center></h1>
+<h1><center>{{ed_title | safe}}</center></h1>
 <div class = "container">
 	<div class="edition-info">
 		<h1>Introduction</h1>
@@ -43,8 +43,16 @@
 
 	<div class = "model-icons">
 		<h1><emp>Models</emp></h1>
-				{{ modelLinks|safe }}
+			{{ modelLinks|safe }}
 	</div>
 </div>
 
+{% endblock %}
+
+{% block footer %}
+
+<div class = "home-button"
+	<br>
+	<a href="/"><label class="button" id="main-home-tab" for="main-home">PURE3D Home</label></a>
+</div>
 {% endblock %}

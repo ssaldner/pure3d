@@ -6,35 +6,43 @@
 		<title>Pure3D</title>
 		<!-- href="/static/assets/style.css"-->
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/style.css')}}">
-	{% block head %} {% endblock %}
-	
+		{% block head %} {% endblock %}
+
 	</head>
 
 	<body>
-		<header>
-			<div class="logo">
-				{% block logo %} {% endblock %}
+		<div id="page-container">
+			<div id="content-wrap">
+				<header>
+					<div class="logo">
+						{% block logo %} {% endblock %}
+					</div>
+
+					<div class="messages">
+						{{ messages | safe }}
+					</div>
+				</header>
+
+				<nav>
+					<br>
+					{% block navigation %} {% endblock %}
+
+				</nav>
+
+				<main>
+					<div class="content">
+						{% block content %} {% endblock %}
+					</div>
+				</main>
+
+				<footer id="footer">
+					<br>
+						{% block footer %} {% endblock %}
+					<br>
+					<img src="{{ url_for('static',filename='media/Website_Footer.png')}}">
+				</footer>
 			</div>
-
-			<div class="messages">
-				{{ messages | safe }}
-			</div>
-		</header>
-
-		<nav>
-			<br>
-			{% block navigation %} {% endblock %}
-
-		</nav>
-
-		<main>
-			<div class="content">
-				{% block content %} {% endblock %}
-			</div>
-		</main>
-
-		<footer>
-
-		</footer>
+		</div>
+	</body>
 
 </html>

@@ -69,7 +69,7 @@ def render_md(M, mdPath, mdFile):
     return html
 
 
-def dcReaderJSON(M):
+def dcReaderJSON(M, dcDir, dcFile):
     # to read different values from the Dublin core file
     pass
 
@@ -111,9 +111,14 @@ def home():
             title = "No title"
         url = f"""/{i}"""
 
+        candy = f"editions/{i}/candy/icon.png"
+    
+        #display project logo as banner
+        logo = url_for('data', path=candy)
+
         editionData[i] = dict(
             title=title,
-            url=url,
+            url=url, logo=logo
         )
 
     editionLinks = []  # to get url redirections of individual pages of each edition
@@ -121,8 +126,10 @@ def home():
     for (i, data) in sorted(editionData.items()):
         title = data["title"]
         url = data["url"]
+        logo = data["logo"]
         editionLinks.append(
             f"""
+            <img src="{logo}">
             <a href="{url}">{title}</a><br>
         """
         )
@@ -131,7 +138,7 @@ def home():
 
     return render_template(
         "index.html",
-        url=url,
+        url=url, title=title,
         editionLinks=editionLinks,
         messages=M.generateMessages(),
     )
@@ -203,6 +210,11 @@ def model_page(editionN, modelN):
     md = f"{EDITION_DIR}/{editionN}/3d/{modelN}"  # model directory on filesystem
     root = f"data/editions/{editionN}/3d/{modelN}/"  # model root url
 
+    candyLogo = f"editions/{editionN}/candy/logo.png"
+    
+    #display project logo as banner
+    logo = url_for('data', path=candyLogo)
+
     # render About information
     aboutFile = "about.md"
     aboutHtml = render_md(M, md, aboutFile)
@@ -217,6 +229,7 @@ def model_page(editionN, modelN):
     for file in os.listdir(md):
         if file.endswith(".json"):
             scene = file
+    
 
     return render_template(
         "model.html",
@@ -230,6 +243,7 @@ def model_page(editionN, modelN):
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
         root=root,
+        logo=logo,
         messages=M.generateMessages(),
     )
 
@@ -244,7 +258,6 @@ def voyager(scene, root):
     return render_template(
         "voyager.html", ext=ext, root=root, scene=scene, messages=M.generateMessages()
     )
-
 
 @app.route("/data/<path:path>")
 def data(path):
@@ -266,7 +279,28 @@ def edition_page(editionN):
     M = Messages(app)
 
     ed = f"{EDITION_DIR}/{editionN}"
+    candyLogo = f"editions/{editionN}/candy/logo.png"
 
+    #display title
+    jsonDir = f"{EDITION_DIR}/{editionN}/meta"
+    jsonFile = "dc.json"
+    fh = readFile(jsonDir, jsonFile)
+    if type(fh) is str:
+        M.addMessage("error", fh)
+        dcJson = {}
+    else:
+        dcJson = json.load(fh)
+
+    if "dc.title" in dcJson:
+        ed_title = dcJson["dc.title"]
+    else:
+        M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
+        ed_title = "No title"
+    
+    #display project logo as banner
+    logo = url_for('data', path=candyLogo)
+
+    
     # rendering texts
     introFile = "intro.md"
     usageFile = "usage.md"
@@ -290,23 +324,29 @@ def edition_page(editionN):
             title = f.read()
 
         url = f"""/{editionN}/{j}"""
+        candyIcon = f"editions/{editionN}/3d/{j}/candy/icon.png"
+        icon = url_for('data', path=candyIcon)
         modelData[j] = dict(
             title=title,
-            url=url,
+            url=url,icon=icon
         )
+
 
     modelLinks = []
 
     for (i, data) in sorted(modelData.items()):
         title = data["title"]
         url = data["url"]
+        icon = data["icon"]
         modelLinks.append(
             f"""
+            <img src="{icon}" alt="model icon">
             <a href="{url}">{title}</a><br>
         """
         )
 
     modelLinks = "\n".join(modelLinks)
+
 
     return render_template(
         "edition.html",
@@ -316,7 +356,8 @@ def edition_page(editionN):
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
         modelLinks=modelLinks,
-        banner=banner,
+        logo=logo,icon=icon,
+        ed_title=ed_title,
         messages=M.generateMessages(),
     )
 
