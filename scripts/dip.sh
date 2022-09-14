@@ -22,10 +22,13 @@ fi
 scriptdir=`pwd`
 cd ../src/dip
 
-flaskdebug = " --debug"
+flaskdebug=" --debug"
 
 if [[ "$1" == "prod" ]]; then
     flaskdebug=""
+    shift
+elif [[ "$1" == "debug" ]]; then
+    flaskdebug=" --debug"
     shift
 fi
 
