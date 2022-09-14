@@ -1,6 +1,6 @@
 # PURE3D Website Organisation/Terminology
 
-![](docs/15SeptMeeting/Website-organisation/website.png)
+![](/website.png)
 
 ## The Pure3D Website will be organised in four levels
 
