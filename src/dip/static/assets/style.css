@@ -3,9 +3,9 @@ html {
 }
 
 
-img {
-  width: 45%;
-  display: block;
+.logo img {
+
+  display: left;
   margin: 0 auto;
 }
 
@@ -19,6 +19,10 @@ img {
   display: table;
   position: relative;
   margin: auto;
+}
+
+.login-buttons{
+  text-align: right;
 }
 
 .container {
@@ -62,9 +66,9 @@ p.error {
   text-align: justify;
 }
 
-.project-icons {
-  width: 20%;
-  height: 20%;
+.project-icons img{
+  width: 10rem;
+  height: 10rem;
   text-align: center;
 }
 
@@ -73,14 +77,19 @@ p.error {
   text-align: justify;
 }
 
-.edition-icons {
-  width: 25%;
-  height: 25%;
+.edition-icons img{
+  width: 10rem;
+  height: 10rem;
+  text-align: center;
+}
+
+.edition-icons{
+  width: 50%;
   text-align: center;
 }
 
 .edition-info {
-  width: 70%;
+  width: 50%;
   text-align: justify;
 }
 

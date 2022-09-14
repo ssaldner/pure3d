@@ -1,18 +1,18 @@
 ## Dublin Core Metadata for projects
 
-title: project 
+title: edition
 
-abstract:project_short
+abstract:edition_short
 
-abstract:project_long
+abstract:edition_long
 
-creator:project
+creator:edition
 
 creator:3d model
 
 creator:object ==> creator of original existing object (for example art or lamp)
 
-contributor:project
+contributor:edition
 
 audience 
 
