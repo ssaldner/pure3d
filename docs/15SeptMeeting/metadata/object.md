@@ -1,6 +1,6 @@
-## Dublin Core metadata for individual objects within an project (images, audio files etc)
+# Dublin Core metadata for individual objects within an project (images, audio files etc)
 
-# To appear with `Advanced Search`
+## To appear with `Advanced Search`
 
 Title:object
 

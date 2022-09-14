@@ -1,8 +1,8 @@
-## PURE3D Website Organisation/Terminology
+# PURE3D Website Organisation/Terminology
 
-![image](docs/15SeptMeeting/Website-organisation/website.png)
+![](docs/15SeptMeeting/Website-organisation/website.png)
 
-# The Pure3D Website will be organised in four levels
+## The Pure3D Website will be organised in four levels
 
 `Pure3D Infrastructure`: Consists of the entire website infrastructure
 * Multiple projects (displayed with title and an abstract on the main *Home* page)
