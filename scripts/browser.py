@@ -3,19 +3,21 @@ import webbrowser
 
 
 # browserType = "google-chrome"
-browserType = None
-browserRep = "default web browser" if browserType is None else browserType
+# browserType = None
+# browserRep = "default web browser" if browserType is None else browserType
 
 
 def openWeb(url):
-    browser = webbrowser.get(using=browserType)
-    browser.open(url, new=2, autoraise=True)
+    webbrowser.open(url, new=2, autoraise=True)
+    # browser = webbrowser.get(using=browserType)
+    # browser.open(url, new=2, autoraise=True)
 
 
 def main():
     if len(sys.argv) > 1:
         url = sys.argv[1]
-        print(f"opening {url} in {browserRep} ...")
+        # print(f"opening {url} in {browserRep} ...")
+        print(f"opening {url} in default web browser ...")
         openWeb(url)
 
 
