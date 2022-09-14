@@ -4,6 +4,6 @@ cd projects
 
 for pr in `ls`
 do
-    echo "renaming 3d to projects in projects $pr"
-    sudo mv ../$pr/3d ../$pr/projects
+    echo "renaming 3d to editionsin projects $pr"
+    sudo mv ../$pr/3d ../$pr/editions
 done
