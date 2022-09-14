@@ -1,3 +1,4 @@
+from re import template
 from flask import Flask, render_template, url_for, abort, make_response
 import os
 import sys
@@ -68,14 +69,35 @@ def render_md(M, mdPath, mdFile):
     return html
 
 
-def dcReaderJSON(M, dcDir, dcFile):
+def dcReaderJSON(M, dcDir, dcField):
     # to read different values from the Dublin core file
-    pass
+    dcFile = "dc.json"
+    fh = readFile(dcDir, dcFile)
+    if type(fh) is str:
+        M.addMessage("error", fh)
+        dcJson = {}
+    else:
+        dcJson = json.load(fh)
+
+    if dcField in dcJson:
+        dcFieldValue = dcJson[dcField]
+    else:
+        M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
+        dcFieldValue = "Requested information not avilable"
+    return dcFieldValue
 
 
 def debug(msg):
     sys.stderr.write(f"{msg}\n")
     sys.stderr.flush()
+
+
+def projectUrls():
+    pass
+
+
+def editionUrls():
+    pass
 
 
 # app url routes start here
@@ -87,59 +109,8 @@ def debug(msg):
 def home():
     M = Messages(app)
 
-    # display list of projects on home page
-    # used "dc.title" from the Dublin Core metadata
-    projectNumbers = getProjectsList(M)
-
-    projectData = {}
-
-    for i in projectNumbers:
-        jsonDir = f"{PROJECT_DIR}/{i}/meta"
-        jsonFile = "dc.json"
-        fh = readFile(jsonDir, jsonFile)
-        if type(fh) is str:
-            M.addMessage("error", fh)
-            dcJson = {}
-        else:
-            dcJson = json.load(fh)
-
-        if "dc.title" in dcJson:
-            title = dcJson["dc.title"]
-        else:
-            M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
-            title = "No title"
-        url = f"""/{i}"""
-
-        candy = f"projects/{i}/candy/icon.png"
-    
-        #display project logo as banner
-        logo = url_for('data', path=candy)
-
-        projectData[i] = dict(
-            title=title,
-            url=url, logo=logo
-        )
-
-    projectLinks = []  # to get url redirections of individual pages of each project
-
-    for (i, data) in sorted(projectData.items()):
-        title = data["title"]
-        url = data["url"]
-        logo = data["logo"]
-        projectLinks.append(
-            f"""
-            <img src="{logo}">
-            <a href="{url}">{title}</a><br>
-        """
-        )
-
-    projectLinks = "\n".join(projectLinks)
-
     return render_template(
         "index.html",
-        url=url, title=title,
-        projectLinks=projectLinks,
-        messages=M.generateMessages(),
     )
 
 
@@ -166,6 +137,54 @@ def about():
     )
 
 
+@app.route("/projects")
+def projects():
+    M = Messages(app)
+
+    # display list of projects on home page
+    # used "dc.title" from the Dublin Core metadata
+    projectNumbers = getProjectsList(M)
+
+    projectData = {}
+
+    for i in projectNumbers:
+        jsonDir = f"{PROJECT_DIR}/{i}/meta"
+        jsonField = "dc.title"
+        title = dcReaderJSON(M, jsonDir, jsonField)
+
+        url = f"""/{i}"""
+
+        candy = f"projects/{i}/candy/icon.png"
+
+        # display project logo as banner
+        logo = url_for("data", path=candy)
+
+        projectData[i] = dict(title=title, url=url, logo=logo)
+
+    projectLinks = []  # to get url redirections of individual pages of each project
+
+    for (i, data) in sorted(projectData.items()):
+        title = data["title"]
+        url = data["url"]
+        logo = data["logo"]
+        projectLinks.append(
+            f"""
+            <a href="{url}"><img src="{logo}"></a><br>
+            <a href="{url}">{title}</a><br>
+        """
+        )
+
+    projectLinks = "\n".join(projectLinks)
+
+    return render_template(
+        "projectList.html",
+        url=url,
+        title=title,
+        projectLinks=projectLinks,
+        messages=M.generateMessages(),
+    )
+
+
 @app.route("/supriseme")
 def supriseme():
     # M = Messages(app)
@@ -173,8 +192,15 @@ def supriseme():
     pass
 
 
-@app.route("/contact")
-def contact():
+@app.route("/login")
+def login():
+    # M = Messages(app)
+
+    pass
+
+
+@app.route("/register")
+def register():
     # M = Messages(app)
 
     pass
@@ -210,9 +236,9 @@ def edition_page(projectN, editionN):
     root = f"data/projects/{projectN}/editions/{editionN}/"  # edition root url
 
     candyLogo = f"projects/{projectN}/candy/logo.png"
-    
-    #display project logo as banner
-    logo = url_for('data', path=candyLogo)
+
+    # display project logo as banner
+    logo = url_for("data", path=candyLogo)
 
     # render About information
     aboutFile = "about.md"
@@ -280,21 +306,10 @@ def project_page(projectN):
     pd = f"{PROJECT_DIR}/{projectN}"
     candyLogo = f"projects/{projectN}/candy/logo.png"
 
-    #display title
+    # display title
     jsonDir = f"{PROJECT_DIR}/{projectN}/meta"
-    jsonFile = "dc.json"
-    fh = readFile(jsonDir, jsonFile)
-    if type(fh) is str:
-        M.addMessage("error", fh)
-        dcJson = {}
-    else:
-        dcJson = json.load(fh)
-
-    if "dc.title" in dcJson:
-        pd_title = dcJson["dc.title"]
-    else:
-        M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
-        pd_title = "No title"
+    jsonField = "dc.title"
+    pd_title = dcReaderJSON(M, jsonDir, jsonField)
 
     # display project logo as banner
     logo = url_for("data", path=candyLogo)
@@ -323,12 +338,8 @@ def project_page(projectN):
 
         url = f"""/{projectN}/{j}"""
         candyIcon = f"projects/{projectN}/editions/{j}/candy/icon.png"
-        icon = url_for('data', path=candyIcon)
-        editionData[j] = dict(
-            title=title,
-            url=url,icon=icon
-        )
-
+        icon = url_for("data", path=candyIcon)
+        editionData[j] = dict(title=title, url=url, icon=icon)
 
     editionLinks = []
 
@@ -338,7 +349,7 @@ def project_page(projectN):
         icon = data["icon"]
         editionLinks.append(
             f"""
-            <img src="{icon}" alt="edition icon">
+            <a href="{url}"><img src="{icon}" alt="edition icon"><br>
             <a href="{url}">{title}</a><br>
         """
         )
