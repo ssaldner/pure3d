@@ -22,5 +22,5 @@ Sohini will write a lot of code here. See [dip](../../src/dip).
 * The difficult part is to support the way the Voyager viewer talks back to the server.
 * The only thing the docs say is that it expects the server to be able to handle WebDAV requests.
 * We managed to weave the WebDAV protocol into an arbitrary Flask webapp.
-* However, we discovered a quirk in the Voyager and proposed a fix, which was accepted.
+* However, we discovered a quirk in the Voyager and proposed a [fix](https://github.com/Smithsonian/ff-scene/pull/2), which was accepted.
 * For other viewers, the road is expected to be bumpy for the same main reason: lack of specs.

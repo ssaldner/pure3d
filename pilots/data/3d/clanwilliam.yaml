@@ -14,9 +14,9 @@ scenes:
   setup: 0
 nodes:
 - translation:
-  - 21447.8740375
-  - 8092.647262
-  - 10696.9852228
+  - 23469.9423293
+  - 8150.60147
+  - 11630.6109947
   rotation:
   - -0.010957
   - 0.5388455
@@ -52,10 +52,6 @@ nodes:
   - -0.1070728
   - 0.1880998
   - 0.8484633
-  scale:
-  - 1
-  - 1
-  - 1
   name: Key
   light: 0
 - rotation:
@@ -63,6 +59,10 @@ nodes:
   - 0.163893
   - -0.3861077
   - 0.8356136
+  scale:
+  - 1
+  - 1
+  - 1
   name: 'Fill #1'
   light: 1
 - translation:
@@ -461,11 +461,11 @@ metas:
     uris:
       EN: articles/clanwilliam-house.html
     titles:
-      EN: 'Clanwilliam House: The Last Line of Defence'
+      EN: 'Clanwilliam House: UUUU The Last Line of Defence'
     leads:
-      EN: "Number 1 Clanwilliam House was the third location occupied by the men in\
-        \ Michael Malone\u2019s C Company, and the only building to the north of the\
-        \ Grand Canal at Mount Street Bridge"
+      EN: "Number 1aaaa Clanwilliam House was the third location occupied by the men\
+        \ in Michael Malone\u2019s C Company, and the only building to the north of\
+        \ the Grand Canal at Mount Street Bridge"
     taglist:
       EN: []
   - id: ZLcyPP5ByOcV
