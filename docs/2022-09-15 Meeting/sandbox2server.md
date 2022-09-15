@@ -2,6 +2,7 @@
 ![diagram](voyagerserving.png)
 * In the sandbox situation, each user got a separate application in which a voyager demo server was set up.
 * In the new situation, there is one server, which serves the voyager viewer to all users.
+* currently, the Pure3D data storage is just a mockup of 2 projects with 2 editions each, stored on the webserver's file system
 
 Some key differences
 
