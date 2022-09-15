@@ -1,4 +1,4 @@
-## Dublin Core Metadata for projects
+## Dublin Core Metadata for editions
 
 title: edition
 
