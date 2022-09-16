@@ -184,7 +184,7 @@ def projects():
     )
 
 
-@app.route("/supriseme")
+@app.route("/suprise-me")
 def supriseme():
     # M = Messages(app)
 
@@ -277,7 +277,6 @@ def voyager(scene, root):
     M = Messages(app)
     ext = "min"
     root = f"/{root}"
-
     return render_template(
         "voyager.html", ext=ext, root=root, scene=scene, messages=M.generateMessages()
     )
