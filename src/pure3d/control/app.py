@@ -27,7 +27,6 @@ if not os.path.exists(SECRET_FILE):
 with open(SECRET_FILE) as fh:
     app.secret_key = fh.read()
 
-
 title = "PURE3D: An Infrastructure for Publication and Preservation of 3D Scholarship"
 heading = "Pure 3D website"
 
@@ -213,6 +212,9 @@ def edition_page(projectId, editionId):
     for file in os.listdir(ed):
         if file.endswith(".json"):
             scene = file
+        else:
+            M.error(f"{scene} file does not exist")
+            scene = ""
 
     return render_template(
         "edition.html",
@@ -237,7 +239,12 @@ def voyager(scene, root):
     # url for voyager in explorer mode
     M = Messages(app)
     ext = "min"
-    root = f"/{root}"
+
+    if os.path.exists(root):
+        root = f"/{root}"
+    else:
+        M.error(f"Voyager cannot be loaded for {root}")
+        root = ""
 
     return render_template(
         "voyager.html",

@@ -15,6 +15,6 @@ def dcReaderJSON(M, dcDir, dcField):
     if dcField in dcJson:
         dcFieldValue = dcJson[dcField]
     else:
-        M.warning("No 'dc.title' in Dublin Core metadata")
+        M.warning("No '{dcFieldValue}' in Dublin Core metadata")
         dcFieldValue = "Requested information not avilable"
     return dcFieldValue

@@ -1,5 +1,5 @@
 import sys
-from helpers.generic import htmlEsc
+from pure3d.control.helpers.generic import htmlEsc
 
 
 def debug(msg):
