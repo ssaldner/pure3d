@@ -7,11 +7,11 @@ Usage
 
 Run it from the /scripts directory in the repo.
 
-./dip.sh test
-./dip.sh
+./pure3d.sh test
+./pure3d.sh
     Test mode
 
-./dip.sh prod
+./pure3d.sh prod
     Production mode
 """
 
@@ -21,7 +21,7 @@ if [[ "$1" == "--help" ]]; then
 fi
 
 scriptdir=`pwd`
-cd ../src/dip
+cd ../src/pure3d/control
 
 flaskdebug=" --debug"
 flasktest="test"
@@ -42,6 +42,10 @@ else
     flaskport="$1"
     shift
 fi
+
+export flasktest
+export flaskdebug
+export flaskport
 
 flask$flaskdebug run --port $flaskport &
 pid=$!

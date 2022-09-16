@@ -7,7 +7,7 @@ def dcReaderJSON(M, dcDir, dcField):
     dcFile = "dc.json"
     fh = readFile(dcDir, dcFile)
     if type(fh) is str:
-        M.addMessage("error", fh)
+        M.error(fh)
         dcJson = {}
     else:
         dcJson = json.load(fh)
@@ -15,6 +15,6 @@ def dcReaderJSON(M, dcDir, dcField):
     if dcField in dcJson:
         dcFieldValue = dcJson[dcField]
     else:
-        M.addMessage("warning", "No 'dc.title' in Dublin Core metadata")
+        M.warning("No 'dc.title' in Dublin Core metadata")
         dcFieldValue = "Requested information not avilable"
     return dcFieldValue

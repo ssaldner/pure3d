@@ -1,18 +1,32 @@
-from flask import Flask, render_template, url_for, abort, make_response
+from flask import Flask, render_template, url_for, abort, redirect, make_response
+import sys
 import os
 from markdown import markdown
 
 from helpers.generic import renderMd
 from helpers.messages import debug, Messages
-from helpers.files import readFile, dirExists
-from settings import BASE, DATA_DIR, PROJECT_DIR
+from helpers.files import readFile
+from settings import BASE, DATA_DIR, PROJECT_DIR, SECRET_FILE
 from dublincore import dcReaderJSON
+from projects import Projects
 
-from authorise.py import Auth
+from authorise import Auth
 
 # create and configure app
-app = Flask(__name__)
-app.secret_key = "dev"
+app = Flask(__name__, static_folder="../static")
+
+if not os.path.exists(SECRET_FILE):
+    debug(f"Missing secret file for sessions: {SECRET_FILE}")
+    debug("Create that file with contents a random string like this:")
+    debug("fjOL901Mc3XZy8dcbBnOxNwZsOIBlul")
+    debug("But do not choose this one.")
+    debug("Use your password manager to create a random one.")
+    debug("Aborting ...")
+    sys.exit(1)
+
+with open(SECRET_FILE) as fh:
+    app.secret_key = fh.read()
+
 
 title = "PURE3D: An Infrastructure for Publication and Preservation of 3D Scholarship"
 heading = "Pure 3D website"
@@ -22,40 +36,15 @@ heading = "Pure 3D website"
 WIDTH = "600px"
 HEIGHT = "600px"
 
-AUTH = Auth()
+M = Messages(app)
+Projects = Projects(M)
+AUTH = Auth(M, Projects)
+Projects.addAuth(AUTH)
 
 
-# functions
-def getProjectsList(M):
-    # to get enumeration of top level directories
-    # these are joined with the "project" directory path to get
-    # path of each project
-    numbers = []
-
-    if not dirExists(PROJECT_DIR):
-        M.addMessage("error", f"Project directory {PROJECT_DIR} does not exist")
-        return numbers
-
-    with os.scandir(PROJECT_DIR) as ed:
-        for entry in ed:
-            if entry.is_dir():
-                name = entry.name
-                if name.isdigit():
-                    numbers.append(int(name))
-    return sorted(numbers)
-
-
-def getEditionsList(M, projectN):
-    # to get enumeration of sub-directories under folder "editions"
-    editionNs = []
-    editionDir = f"{PROJECT_DIR}/{projectN}/editions"
-    with os.scandir(editionDir) as md:
-        for edition in md:
-            if edition.is_dir():
-                name = edition.name
-                if name.isdigit():
-                    editionNs.append(int(name))
-    return sorted(editionNs)
+def redirectResult(url, good):
+    code = 302 if good else 303
+    return redirect(url, code=code)
 
 
 # app url routes start here
@@ -65,11 +54,11 @@ def getEditionsList(M, projectN):
 @app.route("/home")
 # Display home page
 def home():
-    M = Messages(app)
 
     return render_template(
         "index.html",
         messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
@@ -82,7 +71,7 @@ def about():
     fileName = "about.md"
     fh = readFile(fileDir, fileName)
     if type(fh) is str:
-        M.addMessage("error", fh)
+        M.error(fh)
         text = ""
     else:
         text = fh.read()
@@ -93,6 +82,7 @@ def about():
         "about.html",
         about=html,
         messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
@@ -102,11 +92,11 @@ def projects():
 
     # display list of projects on home page
     # used "dc.title" from the Dublin Core metadata
-    projectNumbers = getProjectsList(M)
+    projectIds = Projects.getProjectList()
 
     projectData = {}
 
-    for i in projectNumbers:
+    for i in projectIds:
         jsonDir = f"{PROJECT_DIR}/{i}/meta"
         jsonField = "dc.title"
         title = dcReaderJSON(M, jsonDir, jsonField)
@@ -141,6 +131,7 @@ def projects():
         title=title,
         projectLinks=projectLinks,
         messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
@@ -153,9 +144,17 @@ def supriseme():
 
 @app.route("/login")
 def login():
-    # M = Messages(app)
+    if AUTH.authenticate(login=True):
+        good = True
+    else:
+        good = False
+    return redirectResult("/", good)
 
-    pass
+
+@app.route("/logout")
+def logout():
+    AUTH.deauthenticate()
+    return redirectResult("/", True)
 
 
 @app.route("/register")
@@ -165,17 +164,17 @@ def register():
     pass
 
 
-@app.route("/<int:projectN>/about")
+@app.route("/<int:projectId>/about")
 # Display about page for specific project
-def projectAbout(projectN):
+def projectAbout(projectId):
     M = Messages(app)
 
-    aboutDir = f"{PROJECT_DIR}/{projectN}"
+    aboutDir = f"{PROJECT_DIR}/{projectId}"
     aboutFile = "about.md"
     aboutHtml = renderMd(M, aboutDir, aboutFile)
 
-    homeUrl = url_for("project_page", projectN=projectN)
-    bgUrl = url_for("projectBackground", projectN=projectN)
+    homeUrl = url_for("project_page", projectId=projectId)
+    bgUrl = url_for("projectBackground", projectId=projectId)
 
     return render_template(
         "projectTexts.html",
@@ -183,18 +182,19 @@ def projectAbout(projectN):
         homeUrl=homeUrl,
         bgUrl=bgUrl,
         messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
-@app.route("/<int:projectN>/<int:editionN>")
+@app.route("/<int:projectId>/<int:editionId>")
 # Display page for individual editions in an project
-def edition_page(projectN, editionN):
+def edition_page(projectId, editionId):
     M = Messages(app)
 
-    ed = f"{PROJECT_DIR}/{projectN}/editions/{editionN}"  # edition directory on filesystem
-    root = f"data/projects/{projectN}/editions/{editionN}/"  # edition root url
+    ed = f"{PROJECT_DIR}/{projectId}/editions/{editionId}"  # edition directory on filesystem
+    root = f"data/projects/{projectId}/editions/{editionId}/"  # edition root url
 
-    candyLogo = f"projects/{projectN}/candy/logo.png"
+    candyLogo = f"projects/{projectId}/candy/logo.png"
 
     # display project logo as banner
     logo = url_for("data", path=candyLogo)
@@ -204,9 +204,9 @@ def edition_page(projectN, editionN):
     aboutHtml = renderMd(M, ed, aboutFile)
 
     # urls for different tabs on the project page
-    homeUrl = url_for("project_page", projectN=projectN)
-    aboutUrl = url_for("projectAbout", projectN=projectN)
-    bgUrl = url_for("projectBackground", projectN=projectN)
+    homeUrl = url_for("project_page", projectId=projectId)
+    aboutUrl = url_for("projectAbout", projectId=projectId)
+    bgUrl = url_for("projectBackground", projectId=projectId)
 
     # displaying 3d editions
     # accesses the scene file
@@ -217,8 +217,8 @@ def edition_page(projectN, editionN):
     return render_template(
         "edition.html",
         aboutHtml=aboutHtml,
-        projectN=projectN,
-        editionN=editionN,
+        projectId=projectId,
+        editionId=editionId,
         scene=scene,
         height=HEIGHT,
         width=WIDTH,
@@ -228,6 +228,7 @@ def edition_page(projectN, editionN):
         root=root,
         logo=logo,
         messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
@@ -239,7 +240,12 @@ def voyager(scene, root):
     root = f"/{root}"
 
     return render_template(
-        "voyager.html", ext=ext, root=root, scene=scene, messages=M.generateMessages()
+        "voyager.html",
+        ext=ext,
+        root=root,
+        scene=scene,
+        messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
@@ -257,16 +263,16 @@ def data(path):
     return make_response(textData)
 
 
-@app.route("/<int:projectN>")
+@app.route("/<int:projectId>")
 # Display for projects page(s)
-def project_page(projectN):
+def project_page(projectId):
     M = Messages(app)
 
-    pd = f"{PROJECT_DIR}/{projectN}"
-    candyLogo = f"projects/{projectN}/candy/logo.png"
+    pd = f"{PROJECT_DIR}/{projectId}"
+    candyLogo = f"projects/{projectId}/candy/logo.png"
 
     # display title
-    jsonDir = f"{PROJECT_DIR}/{projectN}/meta"
+    jsonDir = f"{PROJECT_DIR}/{projectId}/meta"
     jsonField = "dc.title"
     pd_title = dcReaderJSON(M, jsonDir, jsonField)
 
@@ -281,22 +287,22 @@ def project_page(projectN):
     usageHtml = renderMd(M, pd, usageFile)
 
     # url variables for tabs on page
-    aboutUrl = url_for("projectAbout", projectN=projectN)
-    bgUrl = url_for("projectBackground", projectN=projectN)
+    aboutUrl = url_for("projectAbout", projectId=projectId)
+    bgUrl = url_for("projectBackground", projectId=projectId)
 
     # hyper-linked editions list
-    editionNumbers = getEditionsList(M, projectN)
+    editionIds = Projects.getEditionsList(projectId)
     editionData = {}
 
-    for j in editionNumbers:
+    for j in editionIds:
         editionDir = f"{pd}/editions/{j}"
         editionFile = "title.txt"
         nameFile = os.path.join(editionDir, editionFile)
         with open(nameFile) as f:
             title = f.read()
 
-        url = f"""/{projectN}/{j}"""
-        candyIcon = f"projects/{projectN}/editions/{j}/candy/icon.png"
+        url = f"""/{projectId}/{j}"""
+        candyIcon = f"projects/{projectId}/editions/{j}/candy/icon.png"
         icon = url_for("data", path=candyIcon)
         editionData[j] = dict(title=title, url=url, icon=icon)
 
@@ -319,7 +325,7 @@ def project_page(projectN):
         "project.html",
         usage=usageHtml,
         intro=introHtml,
-        editioN=projectN,
+        editioN=projectId,
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
         editionLinks=editionLinks,
@@ -327,19 +333,20 @@ def project_page(projectN):
         icon=icon,
         pd_title=pd_title,
         messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
-@app.route("/<int:projectN>/project_background")
+@app.route("/<int:projectId>/project_background")
 # Display about page for specific project
-def projectBackground(projectN):
+def projectBackground(projectId):
     M = Messages(app)
-    ed = f"{PROJECT_DIR}/{projectN}"
+    ed = f"{PROJECT_DIR}/{projectId}"
     backgroundFile = "description.md"
     backgroundHtml = renderMd(M, ed, backgroundFile)
 
-    aboutUrl = url_for("projectAbout", projectN=projectN)
-    homeUrl = url_for("project_page", projectN=projectN)
+    aboutUrl = url_for("projectAbout", projectId=projectId)
+    homeUrl = url_for("project_page", projectId=projectId)
 
     return render_template(
         "projectTexts.html",
@@ -347,12 +354,13 @@ def projectBackground(projectN):
         homeUrl=homeUrl,
         aboutUrl=aboutUrl,
         messages=M.generateMessages(),
+        testUsers=AUTH.wrapTestUsers(),
     )
 
 
-@app.route("/<int:projectN>/sources")
+@app.route("/<int:projectId>/sources")
 # Display about page for specific project
-def projectSources(projectN):
+def projectSources(projectId):
     # M = Messages(app)
     pass
 

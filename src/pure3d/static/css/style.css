@@ -3,6 +3,28 @@ html {
 }
 
 
+#topbar
+{
+	width: 100vw;
+  height: 2rem;
+	flex: 0 0 auto;
+	margin: 0em;
+	padding: 0em;
+}
+
+#msgbar
+{
+  position: absolute;
+  top: 0.5rem;
+  right: 5vw;
+	width: 30vw;
+  display: flex;
+	flex-flow: column nowrap;
+	justify-content: flex-start;
+  align-items: stretch;
+	align-content: flex-start;
+}
+
 .logo img {
 
   display: left;

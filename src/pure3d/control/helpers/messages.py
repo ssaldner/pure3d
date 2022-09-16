@@ -15,11 +15,17 @@ class Messages:
     def clearMessages(self):
         self.messages.clear()
 
-    def addMessage(self, tp, msg):
-        app = self.app
-        debug = app.config["DEBUG"]
-        if tp != "debug" or debug:
-            self.messages.append((tp, msg))
+    def debug(self, msg):
+        self._addMessage("debug", msg)
+
+    def info(self, msg):
+        self._addMessage("info", msg)
+
+    def warning(self, msg):
+        self._addMessage("warning", msg)
+
+    def error(self, msg):
+        self._addMessage("error", msg)
 
     def generateMessages(self):
         html = []
@@ -29,3 +35,9 @@ class Messages:
         self.clearMessages()
 
         return "\n".join(html)
+
+    def _addMessage(self, tp, msg):
+        app = self.app
+        debug = app.config["DEBUG"]
+        if tp != "debug" or debug:
+            self.messages.append((tp, msg))

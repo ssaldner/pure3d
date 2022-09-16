@@ -4,12 +4,12 @@ from markdown import markdown
 from helpers.files import readFile
 
 
-def render_md(M, mdPath, mdFile):
+def renderMd(M, mdPath, mdFile):
     # to render markdown files
     fileDir = f"{mdPath}/texts"
     fh = readFile(fileDir, mdFile)
     if type(fh) is str:
-        M.addMessage("error", fh)
+        M.error(fh)
         html = ""
     else:
         text = fh.read()
