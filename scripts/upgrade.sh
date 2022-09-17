@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd projects
+cd ../data/projects
 
 for ed in `ls`
 do

@@ -1,7 +1,7 @@
 import yaml
 from markdown import markdown
 
-from pure3d.control.helpers.files import readFile
+from helpers.files import readFile
 
 
 def renderMd(M, mdPath, mdFile):
