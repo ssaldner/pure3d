@@ -18,9 +18,6 @@ BASE = os.path.expanduser("~/github/clariah/pure3d")
 DATA_DIR = f"{BASE}/data"
 PROJECT_DIR = f"{DATA_DIR}/projects"
 
-WIDTH = "600px"
-HEIGHT = "600px"
-
 
 # functions
 def getProjectsList(M):
@@ -260,8 +257,8 @@ def edition_page(projectN, editionN):
         projectN=projectN,
         editionN=editionN,
         scene=scene,
-        height=HEIGHT,
-        width=WIDTH,
+        height="600px",
+        width="600px",
         homeUrl=homeUrl,
         aboutUrl=aboutUrl,
         bgUrl=bgUrl,
