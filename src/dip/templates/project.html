@@ -60,7 +60,13 @@
     </div>
   </div>
 
-  {% endblock %} {% block footer %}
+  <a href="{{createUrl}}">Add metadata here</a>
+
+  <h1>Metadata Appears Here :</h1>
+  {% for key,value in metadata_form.items() %}
+  <h2>{{key}}</h2>
+  <p>{{value}}</p>
+  {% endfor %} {% endblock %} {% block footer %}
 
   <div class="home-button" <br>
     <a href="/"

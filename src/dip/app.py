@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, abort, make_response
+from venv import create
+from flask import Flask, render_template, url_for, abort, make_response, request
 import os
 import sys
 import json
@@ -293,7 +294,7 @@ def data(path):
     return make_response(textData)
 
 
-@app.route("/<int:projectN>")
+@app.route("/<int:projectN>", methods=["GET", "POST"])
 # Display for projects page(s)
 def project_page(projectN):
     M = Messages(app)
@@ -319,6 +320,7 @@ def project_page(projectN):
     # url variables for tabs on page
     aboutUrl = url_for("projectAbout", projectN=projectN)
     bgUrl = url_for("projectBackground", projectN=projectN)
+    createUrl = url_for("addMetadata", projectN=projectN)
 
     # hyper-linked editions list
     editionNumbers = getEditionsList(M, projectN)
@@ -351,17 +353,38 @@ def project_page(projectN):
 
     editionLinks = "\n".join(editionLinks)
 
+    # show metadata
+
+    metadata_form = {}
+    if request.method == 'POST':
+        metadata_form = request.form
+
     return render_template(
         "project.html",
         usage=usageHtml,
         intro=introHtml,
         editioN=projectN,
         aboutUrl=aboutUrl,
+        createUrl=createUrl,
         bgUrl=bgUrl,
         editionLinks=editionLinks,
         logo=logo,
         icon=icon,
         pd_title=pd_title,
+        metadata_form=metadata_form,
+        messages=M.generateMessages(),
+    )
+
+
+@app.route("/<int:projectN>/metadata/", methods=("GET", "POST"))
+def addMetadata(projectN):
+    # adding metadata for projects
+    M = Messages(app)
+    projUrl = url_for("project_page", projectN=projectN)
+    return render_template(
+        "addMetadata.html",
+        projectN=projectN,
+        projUrl=projUrl,
         messages=M.generateMessages(),
     )
 
