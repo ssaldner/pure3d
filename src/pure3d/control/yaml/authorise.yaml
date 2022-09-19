@@ -76,6 +76,20 @@ projectrules:
       delete:
       - creator
       - editor
+    admin:
+      create:
+      - editor
+      - creator
+      read:
+      - reader
+      - editor
+      - creator
+      update:
+      - editor
+      - creator
+      delete:
+      - creator
+      - editor
   null:
     null: false
     guest: false
