@@ -209,12 +209,13 @@ def edition_page(projectId, editionId):
 
     # displaying 3d editions
     # accesses the scene file
+    scene = None
     for file in os.listdir(ed):
         if file.endswith(".json"):
             scene = file
-        else:
-            M.error(f"{scene} file does not exist")
-            scene = ""
+    if scene is None:
+        M.error(f"{scene} file does not exist")
+        scene = ""
 
     return render_template(
         "edition.html",
@@ -242,6 +243,9 @@ def voyager(scene, root):
 
     if os.path.exists(root):
         root = f"/{root}"
+        # here we should add extra checks: the root should start with "data/editions"
+        # and also it should point to a directory that the current user is allowed
+        # to see. We can use the new authorise function for that
     else:
         M.error(f"Voyager cannot be loaded for {root}")
         root = ""
