@@ -354,10 +354,16 @@ def project_page(projectN):
     editionLinks = "\n".join(editionLinks)
 
     # show metadata
+    metadata = []
 
-    metadata_form = {}
     if request.method == 'POST':
         metadata_form = request.form
+
+        for key, value in metadata_form.items():
+            dcfield = key
+            dcvalue = value
+            metadata.append(f"""<h1>{dcfield}</h1><br>
+                                <p>{dcvalue}</p>""")
 
     return render_template(
         "project.html",
@@ -371,7 +377,7 @@ def project_page(projectN):
         logo=logo,
         icon=icon,
         pd_title=pd_title,
-        metadata_form=metadata_form,
+        metadata=metadata,
         messages=M.generateMessages(),
     )
 
