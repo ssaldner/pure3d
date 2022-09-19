@@ -19,11 +19,11 @@ class Projects:
         # path of each project
         AUTH = self.Auth
         M = self.Messages
-        numbers = []
+        projectIds = []
 
         if not dirExists(PROJECT_DIR):
             M.error(f"Project directory {PROJECT_DIR} does not exist")
-            return numbers
+            return projectIds
 
         with os.scandir(PROJECT_DIR) as ed:
             for entry in ed:
@@ -33,8 +33,8 @@ class Projects:
                         projectId = int(name)
                         permitted = AUTH.authorise(projectId, "read")
                         if permitted:
-                            numbers.append(int(name))
-        return sorted(numbers)
+                            projectIds.append(int(name))
+        return sorted(projectIds)
 
     def getEditionsList(self, projectId):
         # to get enumeration of sub-directories under folder "editions"
