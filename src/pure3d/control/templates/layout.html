@@ -15,27 +15,26 @@
     <div id="page-container">
       <div id="content-wrap">
         <header>
-          <div class="logo">{% block logo %} {% endblock %}</div>
-          <div id="topbar">{{ testUsers | safe }}</div>
+          <div id="topbar">
+            {% block logo %} {% endblock %}
+            <div id="login-buttons">{{ testUsers | safe }}</div>
+            <span class="fill">&nbsp;</span>
+            <a class="loginout" href="/login">
+              <label class="button" id="login-tab" for="login">login</label>
+            </a>
+          </div>
           <div id="msgbar">{{ messages | safe }}</div>
         </header>
 
-        <nav>
-          <br />
-          {% block navigation %} {% endblock %}
-        </nav>
+        <nav>{% block navigation %} {% endblock %}</nav>
 
-        <main>
-          <div class="content">{% block content %} {% endblock %}</div>
-        </main>
+        <main><div class="content">{% block content %} {% endblock %}</div></main>
 
         <footer id="footer">
-          <br />
           {% block footer %} {% endblock %}
-          <br />
           <img
             src="/static/media/Website_Footer.png"
-          />
+          >
         </footer>
       </div>
     </div>

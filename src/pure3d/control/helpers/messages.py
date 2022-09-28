@@ -28,12 +28,13 @@ class Messages:
         self._addMessage("error", msg)
 
     def generateMessages(self):
-        html = []
+        html = ["""<div class="messages">"""]
 
         for (tp, msg) in self.messages:
-            html.append(f"""<p class="message {tp}">{htmlEsc(msg)}</p>""")
-        self.clearMessages()
+            html.append(f"""<div class="msgitem {tp}">{htmlEsc(msg)}</p>""")
 
+        html.append("</div>")
+        self.clearMessages()
         return "\n".join(html)
 
     def _addMessage(self, tp, msg):

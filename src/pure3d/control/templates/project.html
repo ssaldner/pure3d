@@ -1,8 +1,8 @@
 {% extends 'layout.html' %} {% block logo %}
 <a href="{{homeUrl}}"><img src="{{logo}}" alt="Project logo" /></a>
 {%endblock%} {% block navigation %}
-<br />
-<div class="warpper">
+
+<div class="wrapper">
   <a href="{{homeUrl}}"
     ><input class="radio" id="home" name="group" type="home"
   /></a>
@@ -38,7 +38,6 @@
     <label class="tab" id="contact" for="surprise-me">Contact</label>
   </div>
 
-  <br />
   <div class="search-bar">
     <input type="search" name="search" placeholder="search item" />
     <input type="submit" value="Search" />
@@ -62,7 +61,7 @@
 
   {% endblock %} {% block footer %}
 
-  <div class="home-button" <br>
+  <div class="home-button">
     <a href="/"
       ><label class="button" id="main-home-tab" for="main-home"
         >PURE3D Home</label

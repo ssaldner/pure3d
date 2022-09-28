@@ -1,0 +1,1 @@
+http://localhost:8000/voyager-story-dev.html?mode=edit&root=models/tusk/&document=tusk.svx.json

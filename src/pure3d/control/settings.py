@@ -1,8 +1,9 @@
 import os
 
-BASE = os.path.expanduser("~/github/clariah/pure3d")
+ORG = "CLARIAH"
+REPO = "pure3d"
+BASE = os.path.expanduser(f"~/github/{ORG}/{REPO}")
 DATA_DIR = f"{BASE}/data"
-PROJECT_DIR = f"{DATA_DIR}/projects"
+DATA_URL = "data"
 YAML_DIR = f"{BASE}/src/pure3d/control/yaml"
-
 SECRET_FILE = "/opt/web-apps/pure3d.secret"

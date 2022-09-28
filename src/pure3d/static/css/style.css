@@ -1,88 +1,3 @@
-html {
-  background-color: #fdfeff;
-}
-
-
-#topbar
-{
-	width: 100vw;
-  height: 2rem;
-	flex: 0 0 auto;
-	margin: 0em;
-	padding: 0em;
-}
-
-#msgbar
-{
-  position: absolute;
-  top: 0.5rem;
-  right: 5vw;
-	width: 30vw;
-  display: flex;
-	flex-flow: column nowrap;
-	justify-content: flex-start;
-  align-items: stretch;
-	align-content: flex-start;
-}
-
-.logo img {
-
-  display: left;
-  margin: 0 auto;
-}
-
-.foot {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-.foot img {
-  display: table;
-  position: relative;
-  margin: auto;
-}
-
-.login-buttons{
-  text-align: right;
-}
-
-.container {
-  display: flex;
-}
-
-div.messages {
-  width: 100%;
-  border-radius: 0.3rem;
-  background-color: #ffffee;
-}
-
-p.message {
-  border-radius: 0.3rem;
-  padding: 0.1rem 0.5rem;
-  margin: 0.1rem;
-}
-
-p.debug {
-  color: white;
-  background-color: #0000ff;
-}
-
-p.info {
-  color: white;
-  background-color: #000000;
-}
-
-p.warning {
-  color: black;
-  background-color: #ff8800;
-}
-
-p.error {
-  color: black;
-  background-color: #ff0000;
-}
-
 .basic-info {
   width: 50%;
   text-align: justify;
@@ -121,7 +36,7 @@ p.error {
   text-align: center;
 }
 
-.warpper {
+.wrapper {
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -150,24 +65,5 @@ p.error {
 
 .home-button{
   text-align: right;
-}
-
-#footer {
-  position: absolute;
-  bottom: 0;
-  height: 2.5rem;
-  min-width:100%;
-}
-
-#footer img{
-  width:100%;
-}
-#page-container {
-  position: relative;
-  min-height: 100vh;
-}
-
-#content-wrap {
-  padding-bottom: 2.5rem;    
 }
 

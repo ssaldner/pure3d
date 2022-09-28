@@ -67,7 +67,13 @@ sleep 1
 
 # start browser
 
-python3 "$scriptdir/browser.py" http://127.0.0.1:$PILOT_PORT/
+if [[ -f "url.txt" ]]; then
+    url=`cat url.txt`
+else
+    url='http://127.0.0.1:$PILOT_PORT/'
+fi
+
+python3 "$scriptdir/browser.py" "$url"
 trap "kill -- -$pgid" SIGINT
 echo "server runs as process $pid with parent $pgid"
 wait "$pid"

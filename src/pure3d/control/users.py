@@ -1,4 +1,4 @@
-from helpers.generic import readYaml
+from helpers.files import readYaml
 from helpers.messages import debug
 from settings import YAML_DIR
 
