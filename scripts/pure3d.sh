@@ -1,7 +1,7 @@
 #!/bin/bash
 
-HELP="""
-Run Pure3D webapp
+HELP="
+Run Pure3D webapp, optionally start a browsing session as well.
 
 Usage
 
@@ -13,44 +13,61 @@ Run it from the /scripts directory in the repo.
 
 ./pure3d.sh prod
     Production mode
-"""
 
-if [[ "$1" == "--help" ]]; then
-    echo $HELP
-    exit 0
-fi
+Options:
 
-scriptdir=`pwd`
-cd ../src/pure3d/control
+--browser
+    Start a browsing session after starting the app.
+"
 
-flaskdebug=" --debug"
-flasktest="test"
+flaskdebug=""
+flasktest=""
+flaskport="5000"
+browse="x"
 
-if [[ "$1" == "prod" ]]; then
-    flaskdebug=""
-    flasktest=""
-    shift
-elif [[ "$1" == "test" ]]; then
-    flaskdebug=" --debug"
-    flasktest="test"
-    shift
-fi
+while [ ! -z "$1" ]; do
+    if [[ "$1" == "--help" ]]; then
+        printf "$HELP\n"
+        exit 0
+    fi
+    if [[ "$1" == "prod" ]]; then
+        flaskdebug=""
+        flasktest=""
+        shift
+    elif [[ "$1" == "test" ]]; then
+        flaskdebug=" --debug"
+        flasktest="test"
+        shift
+    elif [[ "$1" == "--browse" ]]; then
+        browse="v"
+        shift
+    else
+        flaskport="$1"
+        shift
+        break
+    fi
+done
 
-if [[ "$1" == "" ]]; then
-    flaskport="5000"
-else
-    flaskport="$1"
-    shift
-fi
+scriptdir="${0%/*}"
+cd "$scriptdir/.."
+repodir="`pwd`"
+cd "src/pure3d/control"
+printf "Working in repo $repodir\n"
+
 
 export flasktest
 export flaskdebug
 export flaskport
+export repodir
 
-flask$flaskdebug run --port $flaskport &
-pid=$!
-sleep 1
-python3 "$scriptdir/browser.py" http://127.0.0.1:$flaskport
-trap "kill $pid" SIGINT
-echo "flask runs as process $pid"
-wait "$pid"
+if [[ "$browse" == "v" ]]; then
+    flask$flaskdebug run --port $flaskport &
+    pid=$!
+    sleep 1
+    python3 "$repodir/scripts/browser.py" http://127.0.0.1:$flaskport
+    trap "kill $pid" SIGINT
+    echo "flask runs as process $pid"
+    wait "$pid"
+else
+    flask$flaskdebug run --port $flaskport
+fi
