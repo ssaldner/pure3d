@@ -60,10 +60,12 @@
     </div>
   </div>
 
-  <a href="{{createUrl}}">Add metadata here</a>
-
-  <h1>Metadata Appears Here :</h1>
-    {{metadata | safe}}
+  <details>
+    <summary>Metadata Appears Here :</summary> <a href="editUrl">Edit</a>
+      <div> 
+        {{ metadata | safe}}
+      </div>
+  </details>
   {% endblock %} {% block footer %}
 
   <div class="home-button" <br>
