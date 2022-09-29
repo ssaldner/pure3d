@@ -5,8 +5,7 @@ from markdown import markdown
 
 from helpers.files import readYaml, readPath, listFiles
 from helpers.generic import AttrDict
-from helpers.messages import debug
-from settings import YAML_DIR, DATA_DIR, DATA_URL
+from helpers.messages import error
 
 COMPONENT = dict(
     home=("texts/intro", "md", True),
@@ -26,10 +25,12 @@ class ProjectError(Exception):
 
 
 class Projects:
-    def __init__(self, Settings, Messages):
-        self.Settings = Settings
+    def __init__(self, Config, Messages):
+        self.Config = Config
         self.Messages = Messages
-        self.projectStatus = readYaml(f"{YAML_DIR}/projectstatus.yaml")
+
+        yamlDir = Config.yamlDir
+        self.projectStatus = readYaml(f"{yamlDir}/projectstatus.yaml")
 
     def addAuth(self, Auth):
         self.Auth = Auth
@@ -54,6 +55,10 @@ class Projects:
         ----------
         """
 
+        Config = self.Config
+        dataDir = Config.dataDir
+        dataUrl = Config.dataUrl
+
         location = ""
         if item:
             location += f"/{item}"
@@ -68,11 +73,11 @@ class Projects:
         if extension:
             location += f".{extension}"
 
-        path = f"{DATA_DIR}/{location}"
-        url = f"{DATA_URL}/{location}"
+        path = f"{dataDir}/{location}"
+        url = f"{dataUrl}/{location}"
 
         if extension is not None and not os.path.exists(path):
-            debug(f"{path=}")
+            error(f"{path=}")
             raise ProjectError(f"location `{location}` not found")
 
         return (path, url)
@@ -106,7 +111,7 @@ class Projects:
                 componentData[component] = (path, url, content)
 
         except ProjectError as e:
-            debug(f"{e=}")
+            error(f"{e=}")
             raise e
 
         return componentData
@@ -120,9 +125,9 @@ class Projects:
         return listFiles(path, ".json")
 
     def wrapScenes(self, projectId, editionId, sceneNames):
-        Settings = self.Settings
-        previewWidth = Settings["previewWidth"]
-        previewHeight = Settings["previewHeight"]
+        Config = self.Config
+        previewWidth = Config.previewWidth
+        previewHeight = Config.previewHeight
         scenes = []
 
         for sceneName in sceneNames:

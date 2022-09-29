@@ -2,22 +2,22 @@ import os
 
 from flask import request, session
 
-from helpers.messages import debug
-from users import getTestUsers, getPermissions, getUserProject
+from helpers.messages import error
 
 TEST_MODE = os.environ["flasktest"] == "test"
 
 
 class Auth:
-    def __init__(self, Messages, Projects):
+    def __init__(self, Messages, Users, Projects):
         self.Messages = Messages
+        self.Users = Users
         self.Projects = Projects
-        self.authData = getPermissions()
-        userData = getTestUsers() if TEST_MODE else {}
+        self.authData = Users.getPermissions()
+        userData = Users.getTestUsers() if TEST_MODE else {}
         self.testUserIds = userData.get("testUserIds", set())
         self.userNameById = userData.get("userNameById", {})
         self.userRoleById = userData.get("userRoleById", {})
-        userProjectData = getUserProject()
+        userProjectData = Users.getUserProject()
         self.userProjects = userProjectData["userProjects"]
         self.projectUsers = userProjectData["projectUsers"]
         self.user = {}
@@ -148,5 +148,7 @@ class Auth:
             projectRules[userRole] if userRole in projectRules else projectRules[None]
         ).get(action, False)
         permission = condition if type(condition) is bool else projectRole in condition
-        debug(f"A {userRole} {userId} {self.userNameById.get(userId, None)} project {projectId} {projectRole=} {condition=} ==> {permission}")
+        error(
+            f"A {userRole} {userId} {self.userNameById.get(userId, None)} project {projectId} {projectRole=} {condition=} ==> {permission}"
+        )
         return permission

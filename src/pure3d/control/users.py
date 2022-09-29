@@ -1,39 +1,49 @@
 from helpers.files import readYaml
-from helpers.messages import debug
-from settings import YAML_DIR
+from helpers.messages import error
 
 
-def getTestUsers():
-    testUsers = readYaml(f"{YAML_DIR}/testusers.yaml")
-    userNameById = {}
-    userRoleById = {}
-    testUserIds = set()
+class Users:
+    def __init__(self, Config):
+        self.Config = Config
 
-    for (name, info) in testUsers.items():
-        userId = info["id"]
-        if userId in testUserIds:
-            prevName = userNameById[userId]
-            debug(f"WARNING: duplicate test user {userId} = {name}, {prevName}")
-            continue
-        testUserIds.add(userId)
-        userNameById[userId] = name
-        userRoleById[userId] = info["role"]
+    def getTestUsers(self):
+        Config = self.Config
+        yamlDir = Config.yamlDir
 
-    return dict(
-        testUserIds=testUserIds, userNameById=userNameById, userRoleById=userRoleById
-    )
+        testUsers = readYaml(f"{yamlDir}/testusers.yaml")
+        userNameById = {}
+        userRoleById = {}
+        testUserIds = set()
 
+        for (name, info) in testUsers.items():
+            userId = info["id"]
+            if userId in testUserIds:
+                prevName = userNameById[userId]
+                error(f"WARNING: duplicate test user {userId} = {name}, {prevName}")
+                continue
+            testUserIds.add(userId)
+            userNameById[userId] = name
+            userRoleById[userId] = info["role"]
 
-def getPermissions():
-    authData = readYaml(f"{YAML_DIR}/authorise.yaml")
-    return authData
+        return dict(
+            testUserIds=testUserIds, userNameById=userNameById, userRoleById=userRoleById
+        )
 
+    def getPermissions(self):
+        Config = self.Config
+        yamlDir = Config.yamlDir
 
-def getUserProject():
-    projectUsers = readYaml(f"{YAML_DIR}/projectusers.yaml")
+        authData = readYaml(f"{yamlDir}/authorise.yaml")
+        return authData
 
-    userProjects = {}
-    for (project, users) in projectUsers.items():
-        for (user, role) in users.items():
-            userProjects.setdefault(user, {})[project] = role
-    return dict(projectUsers=projectUsers, userProjects=userProjects)
+    def getUserProject(self):
+        Config = self.Config
+        yamlDir = Config.yamlDir
+
+        projectUsers = readYaml(f"{yamlDir}/projectusers.yaml")
+
+        userProjects = {}
+        for (project, users) in projectUsers.items():
+            for (user, role) in users.items():
+                userProjects.setdefault(user, {})[project] = role
+        return dict(projectUsers=projectUsers, userProjects=userProjects)

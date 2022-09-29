@@ -1,7 +1,68 @@
 import os
+import sys
 
-REPO_DIR = os.environ["repodir"]
-DATA_DIR = f"{REPO_DIR}/data"
+from helpers.files import readYaml
+from helpers.messages import error
+from helpers.generic import AttrDict
+
+
 DATA_URL = "data"
-YAML_DIR = f"{REPO_DIR}/src/pure3d/control/yaml"
-SECRET_FILE = "/opt/web-apps/pure3d.secret"
+
+
+class Settings:
+    def __init__(self):
+        self.good = False
+        self.config = AttrDict()
+        self.checkEnv()
+        if not self.good:
+            error("Aborting ...")
+            sys.exit(1)
+
+    def checkEnv(self):
+        repoDir = os.environ.get("repodir", None)
+        if repoDir is None:
+            error("Environment variable `repodir` not defined")
+            error("Don't know where I must be running")
+            return
+
+        config = self.config
+        config.repoDir = repoDir
+        yamlDir = f"{repoDir}/src/pure3d/control/yaml"
+        config.yamlDir = yamlDir
+
+        settings = readYaml(f"{yamlDir}/settings.yaml")
+        if settings is None:
+            error("Cannot read settings.yaml in {yamlDir}")
+            return
+        for (k, v) in settings.items():
+            config[k] = v
+
+        secretFileLoc = os.environ.get("SECRET_FILE", None)
+        if secretFileLoc is None:
+            error("Environment variable `SECRET_FILE` not defined")
+            return
+
+        if not os.path.exists(secretFileLoc):
+            error(f"Missing secret file for sessions: {secretFileLoc}")
+            error("Create that file with contents a random string like this:")
+            error("fjOL901Mc3XZy8dcbBnOxNwZsOIBlul")
+            error("But do not choose this one.")
+            error("Use your password manager to create a random one.")
+
+        dataDir = os.environ.get("DATA_DIR", None)
+        if dataDir is None:
+            error("Environment variable `DATA_DIR` not defined")
+            return
+
+        config.dataDir = dataDir
+        if not os.path.exists(dataDir):
+            error(f"Data directory does not exist: {dataDir}")
+            return
+
+        with open(secretFileLoc) as fh:
+            config.secret_key = fh.read()
+
+        self.good = True
+
+    def getConfig(self):
+        return self.config

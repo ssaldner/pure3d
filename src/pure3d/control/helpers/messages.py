@@ -2,9 +2,14 @@ import sys
 from helpers.generic import htmlEsc
 
 
-def debug(msg):
+def error(msg):
     sys.stderr.write(f"{msg}\n")
     sys.stderr.flush()
+
+
+def info(msg):
+    sys.stout.write(f"{msg}\n")
+    sys.stout.flush()
 
 
 class Messages:

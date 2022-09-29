@@ -18,6 +18,8 @@ def readFile(fileDir, fileName):
 
 
 def readYaml(path):
+    if not os.path.isfile(path):
+        return None
     with open(path) as fh:
         data = yaml.load(fh, Loader=yaml.FullLoader)
     return data
