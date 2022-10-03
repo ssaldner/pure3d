@@ -6,6 +6,7 @@ from webdavapp import app as webdavapp
 
 BASE = os.path.dirname(os.path.dirname(__file__))
 ROOT_URL = "/data/"
+RES_ROOT_URL = "/static/dist"
 SCENE = "clanwilliam.json"
 WIDTH = "1000px"
 HEIGHT = "600px"
@@ -26,6 +27,7 @@ def voyager(scene):
         "voyager.html",
         ext=ext,
         root=ROOT_URL,
+        resourceRoot=RES_ROOT_URL,
         scene=scene,
     )
 

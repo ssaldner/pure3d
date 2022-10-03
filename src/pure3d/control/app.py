@@ -6,6 +6,7 @@ from helpers.messages import error, Messages
 from settings import Settings
 from projects import Projects, ProjectError
 from users import Users
+from pages import Pages
 
 from authorise import Auth
 
@@ -19,8 +20,9 @@ app.secret_key = Config.secret_key
 M = Messages(app)
 Users = Users(Config)
 Projects = Projects(Config, M)
-AUTH = Auth(M, Users, Projects)
-Projects.addAuth(AUTH)
+Auth = Auth(M, Users, Projects)
+Projects.addAuth(Auth)
+Pages = Pages(M, Projects, ProjectError, Auth)
 
 
 def redirectResult(url, good):
@@ -34,48 +36,23 @@ def redirectResult(url, good):
 @app.route("/")
 @app.route("/home")
 def home():
-    try:
-        projectData = Projects.getInfo(None, None, "home")
-    except ProjectError as e:
-        M.error(e)
-        abort(404)
-
-    error(f"{projectData=}")
-
-    return render_template(
-        "index.html",
-        text=projectData.home[2],
-        messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
-    )
+    return Pages.base("home", None, None, "home")
 
 
 @app.route("/about")
 def about():
-    M = Messages(app)
-
-    try:
-        projectData = Projects.getInfo(None, None, "about")
-    except ProjectError as e:
-        M.error(e)
-        abort(404)
-
-    return render_template(
-        "about.html",
-        text=projectData.about[2],
-        messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
-    )
+    return Pages.base("about", None, None, "home", "about")
 
 
-@app.route("/supriseme")
-def supriseme():
-    pass
+@app.route("/surpriseme")
+def surpriseme():
+    content = "<h2>You will be surprised!</h2>"
+    return Pages.base("surpriseme", None, None, "home", content=content)
 
 
 @app.route("/login")
 def login():
-    if AUTH.authenticate(login=True):
+    if Auth.authenticate(login=True):
         good = True
     else:
         good = False
@@ -84,75 +61,27 @@ def login():
 
 @app.route("/logout")
 def logout():
-    AUTH.deauthenticate()
+    Auth.deauthenticate()
     return redirectResult("/", True)
 
 
 @app.route("/projects")
 def projects():
-    M = Messages(app)
+    title = """<h2>Scholarly projects</h2>"""
 
-    try:
-        (homePath, homeUrl, homeContent) = Projects.getInfo(None, None, "home")["home"]
-        projectList = Projects.getProjectList()
-
-    except ProjectError as e:
-        M.error(e)
-        abort(404)
-
-    projectLinks = Projects.wrapItemLinks(projectList)
-
-    return render_template(
-        "projectList.html",
-        url=homeUrl,
-        projectLinks=projectLinks,
-        messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
-    )
+    return Pages.base("projects", None, None, "list", title=title)
 
 
-@app.route("/<int:projectId>")
+@app.route("/projects/<int:projectId>")
 def projectPage(projectId):
-    M = Messages(app)
-
-    try:
-        (homePath, homeUrl, homeContent) = Projects.getInfo(None, None, "home")["home"]
-        projectData = Projects.getInfo(
-            projectId,
-            None,
-            "home",
-            "title",
-            "icon",
-            "about",
-            "intro",
-            "usage",
-            "description",
-        )
-
-        editionList = Projects.getEditionsList(projectId)
-
-    except ProjectError as e:
-        M.error(e)
-        abort(404)
-
-    editionLinks = Projects.wrapItemLinks(editionList)
-
-    return render_template(
-        "project.html",
-        url=homeUrl,
-        projectData=projectData,
-        editionLinks=editionLinks,
-        messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
-    )
+    return Pages.base("projects", projectId, None, "home", "title", "icon", "intro", "about", "usage", "description", "list")
 
 
-@app.route("/<int:projectId>/about")
+@app.route("/projects/<int:projectId>/about")
 def projectAbout(projectId):
     M = Messages(app)
 
     try:
-        (homePath, homeUrl, homeContent) = Projects.getInfo(None, None, "home")["home"]
         projectData = Projects.getInfo(
             projectId, None, "home", "title", "icon", "about"
         )
@@ -163,14 +92,13 @@ def projectAbout(projectId):
 
     return render_template(
         "projectTexts.html",
-        url=homeUrl,
         projectData=projectData,
         messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
+        testUsers=Auth.wrapTestUsers(),
     )
 
 
-@app.route("/<int:projectId>/description")
+@app.route("/projects/<int:projectId>/description")
 def projectDescription(projectId):
     M = Messages(app)
 
@@ -189,11 +117,11 @@ def projectDescription(projectId):
         url=homeUrl,
         projectData=projectData,
         messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
+        testUsers=Auth.wrapTestUsers(),
     )
 
 
-@app.route("/<int:projectId>/editions/<int:editionId>")
+@app.route("/projects/<int:projectId>/editions/<int:editionId>")
 def editionPage(projectId, editionId):
     M = Messages(app)
 
@@ -229,7 +157,7 @@ def editionPage(projectId, editionId):
         editionData=editionData,
         scenes=scenes,
         messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
+        testUsers=Auth.wrapTestUsers(),
     )
 
 
@@ -241,10 +169,12 @@ def voyager(projectId, editionId, scene):
 
     try:
         (rootUrl, rootPath) = Projects.getLocation(
-            projectId=projectId,
-            editionId=editionId,
-            editionItem=editionItem,
-            extension=extension,
+            "projects",
+            projectId,
+            "editions",
+            editionId,
+            editionItem,
+            extension,
         )
     except ProjectError as e:
         M.error(e)
@@ -256,7 +186,7 @@ def voyager(projectId, editionId, scene):
         root=rootUrl,
         scene=scene,
         messages=M.generateMessages(),
-        testUsers=AUTH.wrapTestUsers(),
+        testUsers=Auth.wrapTestUsers(),
     )
 
 

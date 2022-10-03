@@ -124,7 +124,7 @@ class Auth:
 
         session.pop("userid", None)
 
-    def authorise(self, projectId, action):
+    def authorise(self, projectId, editionId, action):
         PROJECTS = self.Projects
         user = self.user
         userId = user.get("id", None)

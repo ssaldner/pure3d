@@ -2,19 +2,19 @@ import os
 import yaml
 
 
-def readPath(filePath):
+def readPath(filePath, mode="r"):
     if os.path.isfile(filePath):
-        with open(filePath) as fh:
+        with open(filePath, mode) as fh:
             text = fh.read()
         return text
     return ""
 
 
-def readFile(fileDir, fileName):
+def readFile(fileDir, fileName, mode="r"):
     filePath = f"{fileDir}/{fileName}"
     if not os.path.isfile(filePath):
         return f"No file {fileName} in {fileDir}"
-    return open(filePath)
+    return open(filePath, mode)
 
 
 def readYaml(path):

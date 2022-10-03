@@ -70,7 +70,7 @@ sleep 1
 if [[ -f "url.txt" ]]; then
     url=`cat url.txt`
 else
-    url='http://127.0.0.1:$PILOT_PORT/'
+    url="http://127.0.0.1:$PILOT_PORT/"
 fi
 
 python3 "$scriptdir/browser.py" "$url"

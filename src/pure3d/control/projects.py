@@ -5,16 +5,18 @@ from markdown import markdown
 
 from helpers.files import readYaml, readPath, listFiles
 from helpers.generic import AttrDict
-from helpers.messages import error
+
 
 COMPONENT = dict(
+    me=(None, None, None),
     home=("texts/intro", "md", True),
-    title=("meta/dc", "json", "dc.title"),
-    icon=("candy/icon", "png", None),
     about=("texts/about", "md", True),
     intro=("texts/intro", "md", True),
     usage=("texts/usage", "md", True),
     description=("texts/description", "md", True),
+    title=("meta/dc", "json", "dc.title"),
+    icon=("candy/icon", "png", None),
+    list=(None, None, None),
 )
 
 
@@ -28,6 +30,7 @@ class Projects:
     def __init__(self, Config, Messages):
         self.Config = Config
         self.Messages = Messages
+        self.comps = tuple(COMPONENT)
 
         yamlDir = Config.yamlDir
         self.projectStatus = readYaml(f"{yamlDir}/projectstatus.yaml")
@@ -37,14 +40,15 @@ class Projects:
 
     def getLocation(
         self,
-        item=None,
-        projectId=None,
-        projectItem=None,
-        editionId=None,
-        editionItem=None,
-        extension=None,
+        item,
+        projectId,
+        projectItem,
+        editionId,
+        editionItem,
+        extension,
+        api=False,
     ):
-        """Look up a resource.
+        """Look up the location of a resource.
 
         The resource will be returned as data url and as path in the file system.
         It will be checked if the resource exists.
@@ -61,73 +65,97 @@ class Projects:
 
         location = ""
         if item:
-            location += f"/{item}"
+            sep = "/" if location else ""
+            location += f"{sep}{item}"
         if projectId:
-            location += f"projects/{projectId}"
+            sep = "/" if location else ""
+            location += f"{sep}{projectId}"
         if projectItem:
-            location += f"/{projectItem}"
+            sep = "/" if location else ""
+            location += f"{sep}{projectItem}"
         if editionId:
-            location += f"/editions/{editionId}"
+            sep = "/" if location else ""
+            location += f"{sep}{editionId}"
         if editionItem:
-            location += f"/{editionItem}"
+            sep = "/" if location else ""
+            location += f"{sep}{editionItem}"
         if extension:
             location += f".{extension}"
 
         path = f"{dataDir}/{location}"
-        url = f"{dataUrl}/{location}"
+        url = location if api else f"/{dataUrl}/{location}"
+        print(f"{url=}")
 
-        if extension is not None and not os.path.exists(path):
-            error(f"{path=}")
+        if not api and extension is not None and not os.path.exists(path):
             raise ProjectError(f"location `{location}` not found")
 
         return (path, url)
 
-    def getInfo(self, projectId, editionId, *components, data=True):
+    def getInfo(self, projectId, editionId, *components):
         componentData = AttrDict()
 
         try:
             for component in components:
-                (item, extension, method) = COMPONENT[component]
+                if component not in COMPONENT:
+                    raise ProjectError(f"Unknown component {component}")
+
+                (it, extension, method) = COMPONENT[component]
+                item = None
+                projectItem = None
+                editionItem = None
+
+                if projectId is None:
+                    item = it
+                else:
+                    item = "projects"
+                    if editionId is None:
+                        projectItem = it
+                    else:
+                        projectItem = "editions"
+                        editionItem = it
+
                 (path, url) = self.getLocation(
-                    projectId=projectId,
-                    editionId=editionId,
-                    item=item,
-                    extension=extension,
+                    item,
+                    projectId,
+                    projectItem,
+                    editionId,
+                    editionItem,
+                    extension,
+                    api=it is None,
                 )
-                if data:
+                if extension in {"json", "md"}:
+                    content = readPath(path)
                     if extension == "json":
-                        content = json.load(path)
+                        content = json.loads(content)
                         if method:
-                            content = data[method]
+                            content = content[method]
                     elif extension == "md":
                         content = readPath(path)
                         if method:
                             content = markdown(content)
-                    else:
-                        content = None
+                elif component == "list":
+                    print(f"getList {projectId=}")
+                    content = self.getList(projectId)
+                    print(f"{content=}")
                 else:
                     content = None
 
                 componentData[component] = (path, url, content)
 
         except ProjectError as e:
-            error(f"{e=}")
             raise e
 
         return componentData
 
     def getScenes(self, projectId, editionId):
         try:
-            (path, url) = self.getLocation(projectId=projectId, editionId=editionId)
+            (path, url) = self.getLocation("projects", projectId, "editions", editionId, None, None)
         except ProjectError as e:
             raise e
 
         return listFiles(path, ".json")
 
     def wrapScenes(self, projectId, editionId, sceneNames):
-        Config = self.Config
-        previewWidth = Config.previewWidth
-        previewHeight = Config.previewHeight
         scenes = []
 
         for sceneName in sceneNames:
@@ -136,7 +164,7 @@ class Projects:
                     f"""
                     <div class="model">
                         <iframe
-                            width="{previewWidth}" height="{previewHeight}"
+                            class="previewer"
                             src="/voyager/{projectId}/{editionId}/{sceneName}.json"/>
                         </iframe>
                     </div>
@@ -146,78 +174,61 @@ class Projects:
 
         scenes = "\n".join(scenes)
 
-    def getProjectList(self):
+    def getList(self, projectId):
+        print("in getList")
         AUTH = self.Auth
-        projectList = []
+        theList = []
+
+        theIds = []
+        (basePath, baseUrl) = self.getLocation(
+            "projects",
+            projectId,
+            None if projectId is None else "editions",
+            None,
+            None,
+            "",
+            api=True,
+        )
+        print(f"{basePath=} {baseUrl=}")
 
         try:
-            projectIds = []
-            (projectPath, projectUrl) = self.getLocation(item="", extension="")
-
-            with os.scandir(projectPath) as ed:
+            with os.scandir(basePath) as ed:
                 for entry in ed:
                     if entry.is_dir():
                         name = entry.name
                         if name.isdigit():
-                            projectId = int(name)
-                            permitted = AUTH.authorise(projectId, "read")
+                            theId = int(name)
+                            args = (
+                                (theId, None)
+                                if projectId is None
+                                else (projectId, theId)
+                            )
+                            permitted = AUTH.authorise(*args, "read")
                             if permitted:
-                                projectIds.append(int(name))
+                                theIds.append(int(name))
 
-            for projectId in sorted(projectIds):
-                projectData = Projects.getInfo(projectId, None, "home", "title", "icon")
-                url = projectData["home"][1]
-                icon = projectData["icon"][1]
-                title = projectData["title"][2]
-                projectList.append(url, icon, title)
-
-        except ProjectError:
-            pass
-        return projectList
-
-    def getEditionsList(self, projectId):
-        # to get enumeration of sub-directories under folder "editions"
-        AUTH = self.Auth
-
-        permitted = AUTH.authorise(projectId, "read")
-        if not permitted:
-            return []
-
-        editionList = []
-
-        try:
-            (editionPath, editionUrl) = self.getLocation(
-                projectId=projectId, item="editions", extension=""
-            )
-
-            editionIds = []
-
-            with os.scandir(editionPath) as md:
-                for edition in md:
-                    if edition.is_dir():
-                        name = edition.name
-                        if name.isdigit():
-                            editionIds.append(int(name))
-
-            for editionId in sorted(editionIds):
-                editionData = Projects.getInfo(
-                    projectId, editionId, "home", "title", "icon"
-                )
-                url = editionData["home"][1]
-                icon = editionData["icon"][1]
-                title = editionData["title"][2]
-                editionList.append(url, icon, title)
+            print(f"{theIds=}")
+            for theId in sorted(theIds):
+                args = (theId, None) if projectId is None else (projectId, theId)
+                data = self.getInfo(*args, "me", "title", "icon")
+                url = data["me"][1]
+                icon = data["icon"][1]
+                title = data["title"][2]
+                theList.append((url, icon, title))
 
         except ProjectError:
             pass
-        return editionList
+
+        wrapped = self.wrapItemLinks(theList)
+        return wrapped
 
     def wrapItemLinks(self, linkItems):
         wrapped = []
 
         for (url, icon, title) in linkItems:
             wrapped.append(
-                f"""<a href="{url}"><img src="{icon}"><br>{title}</a><br>\n"""
+                f"""<a href="{url}"><img class="previewicon" src="{icon}">"""
+                f"""<br>{title}</a><br>\n"""
             )
 
         return "\n".join(wrapped)

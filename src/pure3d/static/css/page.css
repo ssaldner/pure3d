@@ -13,6 +13,16 @@
   flex: 1 1 auto;
 }
 
+img.previewicon {
+  /*width: 10rem;*/
+  height: 10rem;
+}
+
+iframe.previewer {
+  width: 10rem;
+  height: 10rem;
+}
+
 html {
   height: 100vh;
   width: 100vw;
@@ -23,28 +33,51 @@ html {
 body {
   height: 100vh;
   width: 100vw;
-  margin: 0rem !important;
-  padding: 1rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-content: flex-start;
 }
 
-#page-container {
-  position: relative;
-  min-height: 80vh;
-  height: calc(100vh - var(--topbar-height) - var(--footbar-height));
-}
-
-#content-wrap {
-  padding-bottom: 2.5rem;
-}
-
 /* MAIN PAGE DIVISION - absolute */
 
-#msgbar {
+#header {
   position: absolute;
+  top: 0;
+  height: calc(var(--topbar-height) + var(--nav-height));
+  width: 100vw;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#main {
+  position: absolute;
+  top: calc(var(--topbar-height) + var(--nav-height) + 1rem);
+  height: calc(100vh - var(--topbar-height) - var(--nav-height) - var(--footbar-height) - 3em);
+  width: 100vw;
+  overflow: auto;
+  flex: 0 1 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#footer {
+  position: absolute;
+  bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: var(--footbar-height);
+  width: 100vw;
+}
+
+#msgbar {
+  position: fixed;
   top: 0.5rem;
   right: 5vw;
   width: 30vw;
@@ -55,9 +88,13 @@ body {
   align-content: flex-start;
 }
 
-/* MAIN PAGE DIVISION - vertical */
+#nav {
+  width: 100%;
+  margin-top: 1rem;
+}
 
 #topbar {
+  position: relative;
   width: 100%;
   height: var(--topbar-height);
   display: flex;
@@ -69,17 +106,12 @@ body {
   margin: 0;
   padding: 0;
 }
-#rest {
-  width: 100vw;
-  height: calc(100vh - var(--topbar-height));
-  flex: 0 1 auto;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-content: flex-start;
-  margin: 0em;
-  padding: 0em;
+
+#footer img {
+  width: 100%;
+  height: var(--footbar-height);
 }
+/* MAIN PAGE DIVISION - vertical */
 
 /* REST DIVISION - horizontal */
 
@@ -235,27 +267,3 @@ details.nav {
   flex-flow: column nowrap;
 }
 
-/* FOOTER */
-
-.foot {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-.foot img {
-  display: table;
-  position: relative;
-  margin: auto;
-}
-
-#footer {
-  position: absolute;
-  bottom: 0;
-  height: 2.5rem;
-  min-width: 100%;
-}
-
-#footer img {
-  width: 100%;
-}

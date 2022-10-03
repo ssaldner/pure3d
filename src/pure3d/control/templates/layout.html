@@ -12,31 +12,26 @@
   </head>
 
   <body>
-    <div id="page-container">
-      <div id="content-wrap">
-        <header>
-          <div id="topbar">
-            {% block logo %} {% endblock %}
-            <div id="login-buttons">{{ testUsers | safe }}</div>
-            <span class="fill">&nbsp;</span>
-            <a class="loginout" href="/login">
-              <label class="button" id="login-tab" for="login">login</label>
-            </a>
-          </div>
-          <div id="msgbar">{{ messages | safe }}</div>
-        </header>
-
-        <nav>{% block navigation %} {% endblock %}</nav>
-
-        <main><div class="content">{% block content %} {% endblock %}</div></main>
-
-        <footer id="footer">
-          {% block footer %} {% endblock %}
-          <img
-            src="/static/media/Website_Footer.png"
-          >
-        </footer>
+    <header id="header">
+      <div id="msgbar">{{ messages | safe }}</div>
+      <div id="topbar">
+        {% block logo %} {% endblock %}
+        <div id="login-buttons">{{ testUsers | safe }}</div>
+        <span class="fill">&nbsp;</span>
+        <a class="loginout" href="/login">
+          <label class="button" id="login-tab" for="login">login</label>
+        </a>
       </div>
-    </div>
+      <nav id="nav">{% block navigation %} {% endblock %}</nav>
+    </header>
+    <main id="main">
+        <div class="content">{% block content %} {% endblock %}</div>
+    </main>
+    <footer id="footer">
+      {% block footer %} {% endblock %}
+      <img
+        src="/static/media/Website_Footer.png"
+      >
+    </footer>
   </body>
 </html>

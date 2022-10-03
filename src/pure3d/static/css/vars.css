@@ -166,6 +166,7 @@
     /* SIZES */
 
     --sidebar-width:                   20rem;
+    --nav-height:                      3rem;
     --topbar-height:                   3rem;
     --footbar-height:                  3rem;
 }

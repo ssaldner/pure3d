@@ -11,31 +11,11 @@
 {%endblock%}
 
 {% block navigation %}
-
 <div class="wrapper">
-  <a href="/home"><input class="radio" id="home" name="group" type="home" checked></a>
-  <a href="/about"><input class="radio" id="about" name="group" type="about"/></a>
-  <a href="/projects"><input class="radio" id="projects" name="group" type="projects"/></a>
-  <input class="radio" id="directory" name="group" type="directory">
-  <input class="radio" id="advanced-search" name="group" type="advanced-search">
-  <input class="radio" id="surprise-me" name="group" type="surprise-me">
-
-  <div class="tabs">
-      <span class="search-bar">
-        <input type="search" name="search" placeholder="search item">
-        <input type="submit" value="Search">
-      </span>
-    <label class="tab" id="home-tab" for="home">Home</label>
-    <label class="tab" id="about-tab" for="about">About</label>
-    <label class="tab" id="projects-tab" for="projects">3D Projects</label>
-    <label class="tab" id="directory-tab" for="directory">3D Directory</label>
-    <label class="tab" id="advanced-search-tab" for="advanced-search">Advanced Search</label>
-    <label class="tab" id="surprise-me" for="surprise-me">Surprise Me</label>
-  </div>
-
-  {% endblock %}
-
-  {% block content %}
-  {{ text|safe }}
-  {% endblock %}
+{{navigation|safe}}
 </div>
+{% endblock %}
+
+{% block content %}
+{{material|safe}}
+{% endblock %}
