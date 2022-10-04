@@ -25,14 +25,13 @@ Requirements
 This script can be started from any directory,
 and it will cd to the local clone of the pure3d repo.
 
-In test mode, a number of environment variables will
-be set to hard-wired values, pointing to
+A number of environment variables will
+be set to hard-wired default values, unless they are defined
+by the environment.
+These values point to
 files and directories with expected content, see below.
 
-In production mode, it is expected that the production
-environment has already set these environment variables.
-
-In both modes, when the python code starts,
+When the python code starts,
 it will first check whether these environmnet variables
 are defined, and secondly whether the things they point to
 exist. 
@@ -53,6 +52,17 @@ DATA_DIR
     It is recommended that the data dir is not anywhere
     inside the clone of this repository.
 "
+
+########################################################################
+# default values for variables
+# that have not but should be defined by the environment
+# before calling this script
+#
+SECRET_FILE_DEFAULT="/opt/web-apps/pure3d.secret"
+DATA_DIR_DEFAULT="/var/data/pure3d"
+#
+# end of default values
+########################################################################
 
 flaskdebug=""
 flasktest=""
@@ -82,10 +92,14 @@ while [ ! -z "$1" ]; do
     fi
 done
 
-if [[ "$flasktest" == "test" ]]; then
-    SECRET_FILE="/opt/web-apps/pure3d.secret"
-    DATA_DIR="/var/data/pure3d"
+# set several variables to default values if not supplied
+# by the environment 
+if [[ -z ${SECRET_FILE+x} ]]; then
+    SECRET_FILE="$SECRET_FILE_DEFAULT"
     export SECRET_FILE
+fi
+if [[ -z ${DATA_DIR+x} ]]; then
+    DATA_DIR="$DATA_DIR_DEFAULT"
     export DATA_DIR
 fi
 
