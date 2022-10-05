@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  pure3dapp:
+    image: registry.diginfra.net/vicd/pure3dapp:0.1
+    container_name: pure3dapp
+    hostname: pure3dapp
+    environment:
+      SECRET_FILE: ${SECRET_FILE}
+      DATA_DIR: ${DATA_DIR}
+      VIRTUAL_HOST: pure3dapp.sd.di.huc.knaw.nl
+      VIRTUAL_PORT: 38000
+    entrypoint: ./start.sh test
+    ports:
+      - "38000:8000"
+    networks:
+      - pure3dapp_network
+
+networks:
+  pure3dapp_network:
+    external:
+      name: nginxproxynetwork
