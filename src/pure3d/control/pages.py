@@ -19,7 +19,15 @@ class Pages:
         self.Auth = Auth
 
     def base(
-        self, url, projectId, editionId, *comps, title=None, content=None
+        self,
+        url,
+        projectId=None,
+        editionId=None,
+        sceneName=None,
+        left=(),
+        right=(),
+        title=None,
+        content=None,
     ):
         M = self.Messages
         Projects = self.Projects
@@ -27,26 +35,30 @@ class Pages:
         Auth = self.Auth
 
         try:
-            projectData = Projects.getInfo(projectId, editionId, *comps)
+            projectData = Projects.getInfo(
+                projectId, editionId, sceneName, *left, *right
+            )
         except ProjectError as e:
             M.error(e)
             abort(404)
 
         navigation = self.navigation(url)
-        material = []
+        material = dict(left=[], right=[])
 
-        for comp in comps:
-            material.append(
-                dedent(
-                    f"""
-            <div id="{comp}">
-                {projectData[comp][2]}
-            </div>
-            """
+        for (comps, side) in ((left, "left"), (right, "right")):
+            sideMaterial = material[side]
+            for comp in comps:
+                sideMaterial.append(
+                    dedent(
+                        f"""
+                <div id="{comp}">
+                    {projectData[comp][2]}
+                </div>
+                """
+                    )
                 )
-            )
 
-        material = "\n".join(material)
+            material[side] = "\n".join(sideMaterial)
 
         title = title or ""
         content = content or ""
@@ -54,7 +66,8 @@ class Pages:
         return render_template(
             "index.html",
             navigation=navigation,
-            material=title + material + content,
+            materialLeft=title + material["left"],
+            materialRight=material["right"] + content,
             messages=M.generateMessages(),
             testUsers=Auth.wrapTestUsers(),
         )

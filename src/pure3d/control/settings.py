@@ -6,9 +6,6 @@ from helpers.messages import error
 from helpers.generic import AttrDict
 
 
-DATA_URL = "data"
-
-
 class Settings:
     def __init__(self):
         self.good = False

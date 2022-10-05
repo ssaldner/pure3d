@@ -40,11 +40,10 @@ class Projects:
 
     def getLocation(
         self,
-        item,
         projectId,
-        projectItem,
         editionId,
-        editionItem,
+        sceneName,
+        item,
         extension,
         api=False,
     ):
@@ -64,65 +63,55 @@ class Projects:
         dataUrl = Config.dataUrl
 
         location = ""
+        if projectId:
+            sep = "/" if location else ""
+            location += f"{sep}projects/{projectId}"
+        if editionId:
+            sep = "/" if location else ""
+            location += f"{sep}editions/{editionId}"
+        if sceneName:
+            sep = "/" if location else ""
+            location += f"{sep}{sceneName}"
         if item:
             sep = "/" if location else ""
             location += f"{sep}{item}"
-        if projectId:
-            sep = "/" if location else ""
-            location += f"{sep}{projectId}"
-        if projectItem:
-            sep = "/" if location else ""
-            location += f"{sep}{projectItem}"
-        if editionId:
-            sep = "/" if location else ""
-            location += f"{sep}{editionId}"
-        if editionItem:
-            sep = "/" if location else ""
-            location += f"{sep}{editionItem}"
         if extension:
             location += f".{extension}"
 
-        path = f"{dataDir}/{location}"
-        url = location if api else f"/{dataUrl}/{location}"
-        print(f"{url=}")
+        locationPath = location
+        if sceneName:
+            locationPath = f"{locationPath}.{json}"
 
-        if not api and extension is not None and not os.path.exists(path):
+        path = f"{dataDir}/{locationPath}"
+        url = location if api else f"/{dataUrl}/{location}"
+        print(f"{dataDir=} {dataUrl=} {sceneName=} {item=} {path=} {url=}")
+
+        if (not api or sceneName) and not os.path.exists(path):
             raise ProjectError(f"location `{location}` not found")
 
         return (path, url)
 
-    def getInfo(self, projectId, editionId, *components):
+    def getInfo(self, projectId, editionId, sceneName, *components):
         componentData = AttrDict()
 
         try:
             for component in components:
+                print(f"{projectId=} {editionId=} {sceneName=} {component=}")
                 if component not in COMPONENT:
                     raise ProjectError(f"Unknown component {component}")
 
-                (it, extension, method) = COMPONENT[component]
-                item = None
-                projectItem = None
-                editionItem = None
-
-                if projectId is None:
-                    item = it
-                else:
-                    item = "projects"
-                    if editionId is None:
-                        projectItem = it
-                    else:
-                        projectItem = "editions"
-                        editionItem = it
+                (item, extension, method) = COMPONENT[component]
+                print(f"{item=} {extension=} {method=}")
 
                 (path, url) = self.getLocation(
-                    item,
                     projectId,
-                    projectItem,
                     editionId,
-                    editionItem,
+                    sceneName,
+                    item,
                     extension,
-                    api=it is None,
+                    api=item is None,
                 )
+                print(f"AAA {path=} {url=}")
                 if extension in {"json", "md"}:
                     content = readPath(path)
                     if extension == "json":
@@ -134,9 +123,7 @@ class Projects:
                         if method:
                             content = markdown(content)
                 elif component == "list":
-                    print(f"getList {projectId=}")
-                    content = self.getList(projectId)
-                    print(f"{content=}")
+                    content = self.getList(projectId, editionId, sceneName)
                 else:
                     content = None
 
@@ -147,74 +134,61 @@ class Projects:
 
         return componentData
 
-    def getScenes(self, projectId, editionId):
-        try:
-            (path, url) = self.getLocation("projects", projectId, "editions", editionId, None, None)
-        except ProjectError as e:
-            raise e
+    def getList(self, projectId, editionId, sceneName):
+        """Get a list of items.
 
-        return listFiles(path, ".json")
-
-    def wrapScenes(self, projectId, editionId, sceneNames):
-        scenes = []
-
-        for sceneName in sceneNames:
-            scenes.append(
-                dedent(
-                    f"""
-                    <div class="model">
-                        <iframe
-                            class="previewer"
-                            src="/voyager/{projectId}/{editionId}/{sceneName}.json"/>
-                        </iframe>
-                    </div>
-                    """
-                )
-            )
-
-        scenes = "\n".join(scenes)
-
-    def getList(self, projectId):
-        print("in getList")
+        If projectId is None: projects
+        Else, if editionId is None: editions,
+        Else: scene names for that edition
+        """
         AUTH = self.Auth
         theList = []
 
-        theIds = []
-        (basePath, baseUrl) = self.getLocation(
-            "projects",
-            projectId,
-            None if projectId is None else "editions",
-            None,
-            None,
-            "",
-            api=True,
-        )
-        print(f"{basePath=} {baseUrl=}")
-
         try:
-            with os.scandir(basePath) as ed:
-                for entry in ed:
-                    if entry.is_dir():
-                        name = entry.name
-                        if name.isdigit():
-                            theId = int(name)
-                            args = (
-                                (theId, None)
-                                if projectId is None
-                                else (projectId, theId)
-                            )
-                            permitted = AUTH.authorise(*args, "read")
-                            if permitted:
-                                theIds.append(int(name))
+            (basePath, baseUrl) = self.getLocation(
+                projectId,
+                editionId,
+                sceneName,
+                None,
+                "",
+                api=True,
+            )
+            if editionId is None:
+                theItems = []
+                with os.scandir(basePath) as ed:
+                    for entry in ed:
+                        if entry.is_dir():
+                            name = entry.name
+                            if name.isdigit():
+                                theId = int(name)
+                                args = (
+                                    (theId, None)
+                                    if projectId is None
+                                    else (projectId, theId)
+                                )
+                                permitted = AUTH.authorise(*args, "read")
+                                if permitted:
+                                    theItems.append(int(name))
+            else:
+                theItems = listFiles(basePath, ".json")
 
-            print(f"{theIds=}")
-            for theId in sorted(theIds):
-                args = (theId, None) if projectId is None else (projectId, theId)
-                data = self.getInfo(*args, "me", "title", "icon")
-                url = data["me"][1]
-                icon = data["icon"][1]
-                title = data["title"][2]
-                theList.append((url, icon, title))
+            for theItem in sorted(theItems):
+                if editionId is None:
+                    args = (
+                        (theItem, None) if projectId is None else (projectId, theItem)
+                    )
+                    data = self.getInfo(*args, sceneName, "me", "title", "icon")
+                    url = data["me"][1]
+                    icon = data["icon"][1]
+                    title = data["title"][2]
+                    kind = True
+                else:
+                    data = self.getInfo(projectId, editionId, sceneName, theItem, "me")
+                    url = data["me"][1]
+                    icon = f"/voyager/{projectId}/{editionId}/{theItem}.json"
+                    title = theItem
+                    kind = False
+                theList.append((kind, url, icon, title))
 
         except ProjectError:
             pass
@@ -222,13 +196,31 @@ class Projects:
         wrapped = self.wrapItemLinks(theList)
         return wrapped
 
-    def wrapItemLinks(self, linkItems):
+    def wrapItemLinks(self, linkItems, active=None):
         wrapped = []
 
-        for (url, icon, title) in linkItems:
-            wrapped.append(
-                f"""<a href="{url}"><img class="previewicon" src="{icon}">"""
-                f"""<br>{title}</a><br>\n"""
-            )
+        for (i, (kind, url, icon, title)) in enumerate(linkItems):
+            if kind:
+                wrapped.append(
+                    f"""<a href="{url}"><img class="previewicon" src="{icon}">"""
+                    f"""<br>{title}</a><br>\n"""
+                )
+            else:
+                wrapped.append(
+                    dedent(
+                        f"""
+                        <div class="model">
+                            <iframe
+                                class="previewer"
+                                src="{icon}"/>
+                            </iframe>
+                            <span class="active">{title}</span>
+                        </div>
+                        """
+                        if (active is None and i == 0)
+                        or (active is not None and title == active)
+                        else f"""<a href="{url}">{title}</a><br>\n"""
+                    )
+                )
 
         return "\n".join(wrapped)

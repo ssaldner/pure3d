@@ -66,7 +66,9 @@ DATA_DIR_DEFAULT="/var/data/pure3d"
 
 flaskdebug=""
 flasktest=""
-flaskport="5000"
+flaskhost="0.0.0.0"
+# flaskhost="127.0.0.1"
+flaskport="8000"
 browse="x"
 
 while [ ! -z "$1" ]; do
@@ -116,13 +118,13 @@ export flaskport
 export repodir
 
 if [[ "$browse" == "v" ]]; then
-    flask$flaskdebug run --port $flaskport &
+    flask$flaskdebug run --host $flaskhost --port $flaskport &
     pid=$!
     sleep 1
-    python3 "$repodir/scripts/browser.py" http://127.0.0.1:$flaskport
+    python3 "$repodir/scripts/browser.py" http://$flaskhost:$flaskport
     trap "kill $pid" SIGINT
     echo "flask runs as process $pid"
     wait "$pid"
 else
-    flask$flaskdebug run --port $flaskport
+    flask$flaskdebug run --host $flaskhost --port $flaskport
 fi

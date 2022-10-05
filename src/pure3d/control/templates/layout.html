@@ -25,7 +25,8 @@
       <nav id="nav">{% block navigation %} {% endblock %}</nav>
     </header>
     <main id="main">
-        <div class="content">{% block content %} {% endblock %}</div>
+        <div id="contentleft">{% block contentleft %} {% endblock %}</div>
+        <div id="contentright">{% block contentright %} {% endblock %}</div>
     </main>
     <footer id="footer">
       {% block footer %} {% endblock %}
