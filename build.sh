@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source .env
-docker build -t pure3dapp:${gittag} \
+docker build --no-cache -t pure3dapp:${gittag} \
   --build-arg gitlocation=${gitlocation} \
   --build-arg gitbranch=${gitbranch} \
   --build-arg SECRET_FILE=${SECRET_FILE} \

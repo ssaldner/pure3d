@@ -12,7 +12,7 @@ RUN apt update && apt install -y \
 
 RUN git clone -b ${gitbranch} ${gitlocation} app
 WORKDIR ./app
-RUN pip install -r ./src/pure3d/requirements.txt
+RUN pip install -r ./requirements.txt
 RUN echo "${mysecret}" > ${SECRET_FILE}
 
 WORKDIR ./src
