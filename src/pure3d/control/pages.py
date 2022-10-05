@@ -2,12 +2,12 @@ from textwrap import dedent
 from flask import abort, render_template
 
 TABS = (
-    ("home", "Home"),
-    ("about", "About"),
-    ("projects", "3D Projects"),
-    ("directory", "3D Directory"),
-    ("surpriseme", "Surprise Me"),
-    ("advancedsearch", "Advanced Search"),
+    ("home", "Home", True),
+    ("about", "About", True),
+    ("projects", "3D Projects", True),
+    ("directory", "3D Directory", False),
+    ("surpriseme", "Surprise Me", False),
+    ("advancedsearch", "Advanced Search", False),
 )
 
 
@@ -34,9 +34,25 @@ class Pages:
         ProjectError = self.ProjectError
         Auth = self.Auth
 
+        back = ""
+
         try:
+            if projectId is not None and editionId is not None:
+                (projectPath, projectUrl, exists) = Projects.getLocation(
+                    projectId, None, None, None, None, api=True
+                )
+                back = dedent(
+                    f"""
+                        <p>
+                            <a
+                                class="button"
+                                href="{projectUrl}"
+                            >back to project home</a>
+                        </p>
+                        """
+                )
             projectData = Projects.getInfo(
-                projectId, editionId, sceneName, *left, *right
+                projectId, editionId, sceneName, *left, *right, missingOk=True
             )
         except ProjectError as e:
             M.error(e)
@@ -51,7 +67,7 @@ class Pages:
                 sideMaterial.append(
                     dedent(
                         f"""
-                <div id="{comp}">
+                <div class="comp-{comp}">
                     {projectData[comp][2]}
                 </div>
                 """
@@ -66,7 +82,7 @@ class Pages:
         return render_template(
             "index.html",
             navigation=navigation,
-            materialLeft=title + material["left"],
+            materialLeft=back + title + material["left"],
             materialRight=material["right"] + content,
             messages=M.generateMessages(),
             testUsers=Auth.wrapTestUsers(),
@@ -80,23 +96,27 @@ class Pages:
                     type="search"
                     name="search"
                     placeholder="search item"
+                    class="button disabled"
                 >
-                <input type="submit" value="Search">
+                <input type="submit" value="Search" class="button disabled">
             </span>
             """
         )
         html = ["""<div class="tabs">"""]
 
-        for (tab, label) in TABS:
+        for (tab, label, enabled) in TABS:
             active = "active" if url == tab else ""
+            elem = "a" if enabled else "span"
+            href = f""" href="/{tab}" """ if enabled else ""
+            cls = active if enabled else "disabled"
             html.append(
                 dedent(
                     f"""
-                    <a
-                        href="/{tab}"
-                        class="button large {active}"
-                    >{label}</a>
-                """
+                    <{elem}
+                        {href}
+                        class="button large {cls}"
+                    >{label}</{elem}>
+                    """
                 )
             )
         html.append(search)

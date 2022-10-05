@@ -35,12 +35,11 @@ def listFiles(path, ext):
 
     files = []
 
-    theExt = f".{ext}"
-    nExt = len(theExt)
+    nExt = len(ext)
     with os.scandir(path) as dh:
         for entry in dh:
             name = entry.name
-            if name.endswith(theExt) and entry.is_file():
+            if name.endswith(ext) and entry.is_file():
                 files.append(name[0:-nExt])
 
     return files

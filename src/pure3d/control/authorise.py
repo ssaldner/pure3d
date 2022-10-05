@@ -149,6 +149,6 @@ class Auth:
         ).get(action, False)
         permission = condition if type(condition) is bool else projectRole in condition
         error(
-            f"A {userRole} {userId} {self.userNameById.get(userId, None)} project {projectId} {projectRole=} {condition=} ==> {permission}"
+            f"A {userRole} {userId} {self.userNameById.get(userId, None)} project {projectId} project role {projectRole} condition {condition} ==> {permission}"
         )
         return permission

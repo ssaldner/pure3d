@@ -8,16 +8,20 @@ from helpers.generic import AttrDict
 
 
 COMPONENT = dict(
-    me=(None, None, None),
-    home=("texts/intro", "md", True),
-    about=("texts/about", "md", True),
-    intro=("texts/intro", "md", True),
-    usage=("texts/usage", "md", True),
-    description=("texts/description", "md", True),
-    title=("meta/dc", "json", "dc.title"),
-    icon=("candy/icon", "png", None),
-    list=(None, None, None),
+    me=(None, None, None, None),
+    home=("texts/intro", "md", True, ""),
+    about=("texts/about", "md", True, "## About\n\n"),
+    intro=("texts/intro", "md", True, ""),
+    usage=("texts/usage", "md", True, "## Guide\n\n"),
+    description=("texts/description", "md", True, "## Description\n\n"),
+    sources=("texts/sources", "md", True, "## Sources\n\n"),
+    title=("meta/dc", "json", "dc.title", None),
+    icon=("candy/icon", "png", None, None),
+    list=(None, None, None, None),
 )
+
+PROJECTS = "projects"
+EDITIONS = "editions"
 
 
 class ProjectError(Exception):
@@ -30,7 +34,6 @@ class Projects:
     def __init__(self, Config, Messages):
         self.Config = Config
         self.Messages = Messages
-        self.comps = tuple(COMPONENT)
 
         yamlDir = Config.yamlDir
         self.projectStatus = readYaml(f"{yamlDir}/projectstatus.yaml")
@@ -46,6 +49,7 @@ class Projects:
         item,
         extension,
         api=False,
+        missingOk=False,
     ):
         """Look up the location of a resource.
 
@@ -65,7 +69,7 @@ class Projects:
         location = ""
         if projectId:
             sep = "/" if location else ""
-            location += f"{sep}projects/{projectId}"
+            location += f"{sep}{PROJECTS}/{projectId}"
         if editionId:
             sep = "/" if location else ""
             location += f"{sep}editions/{editionId}"
@@ -76,52 +80,66 @@ class Projects:
             sep = "/" if location else ""
             location += f"{sep}{item}"
         if extension:
-            location += f".{extension}"
+            location += f"{extension}"
 
         locationPath = location
         if sceneName:
-            locationPath = f"{locationPath}.{json}"
+            locationPath = f"{locationPath}.json"
 
         path = f"{dataDir}/{locationPath}"
-        url = location if api else f"/{dataUrl}/{location}"
-        print(f"{dataDir=} {dataUrl=} {sceneName=} {item=} {path=} {url=}")
+        url = (
+            (("" if location.startswith("/") else "/") + location)
+            if api
+            else f"/{dataUrl}/{location}"
+        )
 
-        if (not api or sceneName) and not os.path.exists(path):
-            raise ProjectError(f"location `{location}` not found")
+        exists = None
 
-        return (path, url)
+        if not api or sceneName:
+            if os.path.exists(path):
+                exists = True
+            else:
+                if missingOk:
+                    exists = False
+                else:
+                    raise ProjectError(f"location `{location}` not found")
 
-    def getInfo(self, projectId, editionId, sceneName, *components):
+        return (path, url, exists)
+
+    def getInfo(self, projectId, editionId, sceneName, *components, missingOk=False):
         componentData = AttrDict()
 
         try:
             for component in components:
-                print(f"{projectId=} {editionId=} {sceneName=} {component=}")
                 if component not in COMPONENT:
                     raise ProjectError(f"Unknown component {component}")
 
-                (item, extension, method) = COMPONENT[component]
-                print(f"{item=} {extension=} {method=}")
+                (item, extension, method, before) = COMPONENT[component]
+                if extension is not None:
+                    extension = f".{extension}"
 
-                (path, url) = self.getLocation(
+                (path, url, exists) = self.getLocation(
                     projectId,
                     editionId,
-                    sceneName,
+                    sceneName if item is None else None,
                     item,
                     extension,
                     api=item is None,
+                    missingOk=missingOk,
                 )
-                print(f"AAA {path=} {url=}")
-                if extension in {"json", "md"}:
+                if extension in {".json", ".md"}:
                     content = readPath(path)
-                    if extension == "json":
-                        content = json.loads(content)
+                    if extension == ".json":
+                        content = json.loads(content) if exists else {}
                         if method:
-                            content = content[method]
-                    elif extension == "md":
-                        content = readPath(path)
+                            content = content.get(method, None)
+                    elif extension == ".md":
+                        if exists:
+                            content = readPath(path)
+                        else:
+                            content = f"~~missing {component}~~\n\n"
                         if method:
-                            content = markdown(content)
+                            content = markdown(before + content)
                 elif component == "list":
                     content = self.getList(projectId, editionId, sceneName)
                 else:
@@ -145,12 +163,16 @@ class Projects:
         theList = []
 
         try:
-            (basePath, baseUrl) = self.getLocation(
+            (basePath, baseUrl, exists) = self.getLocation(
                 projectId,
                 editionId,
-                sceneName,
                 None,
-                "",
+                PROJECTS
+                if projectId is None
+                else EDITIONS
+                if editionId is None
+                else None,
+                None,
                 api=True,
             )
             if editionId is None:
@@ -174,18 +196,20 @@ class Projects:
 
             for theItem in sorted(theItems):
                 if editionId is None:
-                    args = (
+                    (projectSel, editionSel) = (
                         (theItem, None) if projectId is None else (projectId, theItem)
                     )
-                    data = self.getInfo(*args, sceneName, "me", "title", "icon")
+                    data = self.getInfo(
+                        projectSel, editionSel, None, "me", "title", "icon"
+                    )
                     url = data["me"][1]
                     icon = data["icon"][1]
                     title = data["title"][2]
                     kind = True
                 else:
-                    data = self.getInfo(projectId, editionId, sceneName, theItem, "me")
+                    data = self.getInfo(projectId, editionId, theItem, "me")
                     url = data["me"][1]
-                    icon = f"/voyager/{projectId}/{editionId}/{theItem}.json"
+                    icon = f"/voyager/{projectId}/{editionId}/{theItem}"
                     title = theItem
                     kind = False
                 theList.append((kind, url, icon, title))
@@ -193,19 +217,22 @@ class Projects:
         except ProjectError:
             pass
 
-        wrapped = self.wrapItemLinks(theList)
+        wrapped = self.wrapItemLinks(theList, sceneName)
         return wrapped
 
-    def wrapItemLinks(self, linkItems, active=None):
+    def wrapItemLinks(self, linkItems, sceneName):
         wrapped = []
 
         for (i, (kind, url, icon, title)) in enumerate(linkItems):
             if kind:
                 wrapped.append(
                     f"""<a href="{url}"><img class="previewicon" src="{icon}">"""
-                    f"""<br>{title}</a><br>\n"""
+                    f"""<br>{title}</a><hr><br>\n"""
                 )
             else:
+                isActive = (sceneName is None and i == 0) or (
+                    sceneName is not None and title == sceneName
+                )
                 wrapped.append(
                     dedent(
                         f"""
@@ -217,10 +244,27 @@ class Projects:
                             <span class="active">{title}</span>
                         </div>
                         """
-                        if (active is None and i == 0)
-                        or (active is not None and title == active)
-                        else f"""<a href="{url}">{title}</a><br>\n"""
+                        if isActive
+                        else f"""<p><a href="{url}">{title}</a></p>\n"""
                     )
                 )
+                if False:
+                    opened = "open" if isActive else ""
+                    active = "active" if isActive else ""
+                    wrapped.append(
+                        dedent(
+                            f"""
+                            <details {opened}>
+                                <summary>
+                                    <a class="button {active}" href="{url}">{title}</a>
+                                </summary>
+                                <iframe
+                                    class="previewer"
+                                    src="{icon}"/>
+                                </iframe>
+                            </details>
+                            """
+                        )
+                    )
 
         return "\n".join(wrapped)

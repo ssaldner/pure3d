@@ -30,12 +30,6 @@
   text-align: justify;
 }
 
-.model {
-  width: 70%;
-  height: 750px;
-  text-align: center;
-}
-
 .wrapper {
   display: flex;
   flex-direction: column;
