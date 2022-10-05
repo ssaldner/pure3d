@@ -8,6 +8,8 @@ services:
     environment:
       SECRET_FILE: ${SECRET_FILE}
       DATA_DIR: ${DATA_DIR}
+    entrypoint: ./start.sh test
     ports:
       - "5000:5000"
+      - "8000:8000"
 
