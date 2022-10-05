@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  pure3dapp:
+    image: pure3dapp:${gittag}
+    container_name: pure3dapp
+    hostname: pure3dapp
+    environment:
+      SECRET_FILE: ${SECRET_FILE}
+      DATA_DIR: ${DATA_DIR}
+    ports:
+      - "5000:5000"
+
