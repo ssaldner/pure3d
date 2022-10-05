@@ -78,15 +78,12 @@ def projectPage(projectId):
         "projects",
         projectId=projectId,
         left=(
-            "home",
-            "title",
-            "icon",
-            "intro",
-            "about",
             "list",
         ),
         right=(
-            "usage",
+            "title",
+            "home",
+            "about",
             "description",
         ),
     )
@@ -99,16 +96,11 @@ def editionPage(projectId, editionId):
         projectId=projectId,
         editionId=editionId,
         left=(
-            "home",
-            "title",
-            "icon",
-            "intro",
-            "about",
             "list",
         ),
         right=(
-            "usage",
-            "description",
+            "about",
+            "sources",
         ),
     )
 
@@ -121,33 +113,28 @@ def scenePage(projectId, editionId, sceneName):
         editionId=editionId,
         sceneName=sceneName,
         left=(
-            "home",
-            "title",
-            "icon",
-            "intro",
-            "about",
             "list",
         ),
         right=(
-            "usage",
-            "description",
+            "about",
+            "sources",
         ),
     )
 
 
-@app.route("/voyager/<int:projectId>/<int:EditionId>/<string:scene>")
+@app.route("/voyager/<int:projectId>/<int:editionId>/<string:sceneName>")
 def voyager(projectId, editionId, sceneName):
-    extDev = "min"
+    extDev = ".min"
 
     try:
-        (rootUrl, rootPath) = Projects.getLocation(
+        (rootPath, rootUrl, rootExists) = Projects.getLocation(
             projectId,
             editionId,
             None,
             None,
             None,
         )
-        Projects.getLocation(
+        (scenePath, sceneUrl, sceneExists) = Projects.getLocation(
             projectId,
             editionId,
             sceneName,
@@ -161,7 +148,7 @@ def voyager(projectId, editionId, sceneName):
     return render_template(
         "voyager.html",
         ext=extDev,
-        root=rootUrl,
+        root=rootUrl + "/",
         scene=f"{sceneName}.json",
         messages=M.generateMessages(),
         testUsers=Auth.wrapTestUsers(),

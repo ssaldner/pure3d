@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/vars.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/page.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/components.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
     {% block head %} {% endblock %}
   </head>
@@ -18,9 +19,7 @@
         {% block logo %} {% endblock %}
         <div id="login-buttons">{{ testUsers | safe }}</div>
         <span class="fill">&nbsp;</span>
-        <a class="loginout" href="/login">
-          <label class="button" id="login-tab" for="login">login</label>
-        </a>
+        <div><a class="loginout button disabled" href="/login">login</a></div>
       </div>
       <nav id="nav">{% block navigation %} {% endblock %}</nav>
     </header>
