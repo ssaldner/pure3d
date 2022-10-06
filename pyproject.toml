@@ -34,6 +34,7 @@ Source = "https://github.com/CLARIAH/pure3d/tree/master/src/pure3dtools"
 [project.scripts]
 jyconvert = "pure3dtools.jyconvert:main"
 mdhtml = "pure3dtools.mdHtml:main"
+checkrefs = "pure3dtools.checkrefs:main"
 
 [tool.hatch.version]
 path = "src/pure3dtools/VERSION"
