@@ -50,7 +50,7 @@ if [[ "$msg" == "" ]]; then
     exit 1
 fi
 
-# git add --all .
-# git commit -m "$msg"
-# git push origin main
-git log -n 1 --pretty=reference --abbrev-commit --date=iso > commit.txt
+git add --all .
+git commit -m "$msg"
+git push origin main
+git log -n 1 --pretty=reference --abbrev-commit --date=iso > version.txt

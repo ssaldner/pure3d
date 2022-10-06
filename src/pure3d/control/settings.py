@@ -1,9 +1,12 @@
 import os
 import sys
 
-from helpers.files import readYaml
+from helpers.files import readYaml, readPath
 from helpers.messages import error
 from helpers.generic import AttrDict
+
+
+VERSION_FILE = "version.txt"
 
 
 class Settings:
@@ -26,6 +29,14 @@ class Settings:
         config.repoDir = repoDir
         yamlDir = f"{repoDir}/src/pure3d/control/yaml"
         config.yamlDir = yamlDir
+
+        versionPath = f"{repoDir}/src/{VERSION_FILE}"
+        versionInfo = readPath(versionPath)
+        if not versionInfo:
+            error(f"Cannot find version info in {versionPath}")
+            return
+
+        config.versionInfo = versionInfo
 
         settings = readYaml(f"{yamlDir}/settings.yaml")
         if settings is None:

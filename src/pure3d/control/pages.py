@@ -12,7 +12,8 @@ TABS = (
 
 
 class Pages:
-    def __init__(self, Messages, Projects, ProjectError, Auth):
+    def __init__(self, Config, Messages, Projects, ProjectError, Auth):
+        self.Config = Config
         self.Messages = Messages
         self.Projects = Projects
         self.ProjectError = ProjectError
@@ -29,6 +30,7 @@ class Pages:
         title=None,
         content=None,
     ):
+        Config = self.Config
         M = self.Messages
         Projects = self.Projects
         ProjectError = self.ProjectError
@@ -81,6 +83,7 @@ class Pages:
 
         return render_template(
             "index.html",
+            versionInfo=Config.versionInfo,
             navigation=navigation,
             materialLeft=back + title + material["left"],
             materialRight=material["right"] + content,

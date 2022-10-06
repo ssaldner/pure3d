@@ -117,9 +117,14 @@ body {
 }
 
 #footer img {
-  width: 100%;
   height: var(--footbar-height);
 }
+
+#version {
+  font-size: x-small;
+  color: #888888;
+}
+
 /* MAIN PAGE DIVISION - vertical */
 
 /* REST DIVISION - horizontal */
