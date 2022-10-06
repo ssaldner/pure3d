@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   pure3dapp:
-    image: pure3dapp:${gittag}
+    image: pure3dapp:${dockertag}
     container_name: pure3dapp
     hostname: pure3dapp
     environment:
