@@ -22,7 +22,7 @@ Users = Users(Config)
 Projects = Projects(Config, M)
 Auth = Auth(M, Users, Projects)
 Projects.addAuth(Auth)
-Pages = Pages(M, Projects, ProjectError, Auth)
+Pages = Pages(Config, M, Projects, ProjectError, Auth)
 
 
 def redirectResult(url, good):
