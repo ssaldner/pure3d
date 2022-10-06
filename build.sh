@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+git checkout containerize
 git pull
 source .env
 docker build --no-cache -t pure3dapp:${dockertag} \
