@@ -29,6 +29,8 @@ class Settings:
         config.repoDir = repoDir
         yamlDir = f"{repoDir}/src/pure3d/control/yaml"
         config.yamlDir = yamlDir
+        staticDir = f"{repoDir}/src/pure3d/static"
+        config.staticDir = staticDir
 
         versionPath = f"{repoDir}/src/{VERSION_FILE}"
         versionInfo = readPath(versionPath)

@@ -31,8 +31,9 @@ class ProjectError(Exception):
 
 
 class Projects:
-    def __init__(self, Config, Messages):
+    def __init__(self, Config, Viewers, Messages):
         self.Config = Config
+        self.Viewers = Viewers
         self.Messages = Messages
 
         yamlDir = Config.yamlDir
@@ -106,7 +107,15 @@ class Projects:
 
         return (path, url, exists)
 
-    def getInfo(self, projectId, editionId, sceneName, *components, missingOk=False):
+    def getInfo(
+        self,
+        projectId,
+        editionId,
+        sceneName,
+        viewerVersion,
+        *components,
+        missingOk=False,
+    ):
         componentData = AttrDict()
 
         try:
@@ -141,7 +150,9 @@ class Projects:
                         if method:
                             content = markdown(before + content)
                 elif component == "list":
-                    content = self.getList(projectId, editionId, sceneName)
+                    content = self.getList(
+                        projectId, editionId, sceneName, viewerVersion
+                    )
                 else:
                     content = None
 
@@ -152,75 +163,181 @@ class Projects:
 
         return componentData
 
-    def getList(self, projectId, editionId, sceneName):
+    def getList(self, projectId, editionId, sceneName, viewerVersion):
         """Get a list of items.
 
         If projectId is None: projects
         Else, if editionId is None: editions,
         Else: scene names for that edition
         """
+        return (
+            self.getProjects()
+            if projectId is None
+            else self.getEditions(projectId)
+            if editionId is None
+            else self.getScenes(projectId, editionId, sceneName, viewerVersion)
+        )
+
+    def getProjects(self):
         AUTH = self.Auth
-        theList = []
+        wrapped = []
+
+        try:
+            (basePath, baseUrl, exists) = self.getLocation(
+                None,
+                None,
+                None,
+                PROJECTS,
+                None,
+                api=True,
+            )
+            theItems = []
+            with os.scandir(basePath) as ed:
+                for entry in ed:
+                    if entry.is_dir():
+                        name = entry.name
+                        if name.isdigit():
+                            theId = int(name)
+                            permitted = AUTH.authorise(theId, None, "read")
+                            if permitted:
+                                theItems.append(int(name))
+
+            for theItem in sorted(theItems):
+                projectSel = theItem
+                data = self.getInfo(projectSel, None, None, None, "me", "title", "icon")
+                url = data["me"][1]
+                icon = data["icon"][1]
+                title = data["title"][2]
+                wrapped.append(
+                    f"""<a href="{url}"><img class="previewicon" src="{icon}">"""
+                    f"""<br>{title}</a><hr><br>\n"""
+                )
+
+        except ProjectError:
+            pass
+
+        return "\n".join(wrapped)
+
+    def getEditions(self, projectId):
+        AUTH = self.Auth
+        wrapped = []
+
+        try:
+            (basePath, baseUrl, exists) = self.getLocation(
+                projectId,
+                None,
+                None,
+                EDITIONS,
+                None,
+                api=True,
+            )
+            theItems = []
+            with os.scandir(basePath) as ed:
+                for entry in ed:
+                    if entry.is_dir():
+                        name = entry.name
+                        if name.isdigit():
+                            theId = int(name)
+                            permitted = AUTH.authorise(projectId, theId, "read")
+                            if permitted:
+                                theItems.append(int(name))
+
+            for theItem in sorted(theItems):
+                data = self.getInfo(
+                    projectId, theItem, None, None, "me", "title", "icon"
+                )
+                url = data["me"][1]
+                icon = data["icon"][1]
+                title = data["title"][2]
+                wrapped.append(
+                    f"""<a href="{url}"><img class="previewicon" src="{icon}">"""
+                    f"""<br>{title}</a><hr><br>\n"""
+                )
+
+        except ProjectError:
+            pass
+
+        return "\n".join(wrapped)
+
+    def getScenes(self, projectId, editionId, sceneName, viewerVersion):
+        AUTH = self.Auth
+        Viewers = self.Viewers
+        wrapped = []
+
+        permitted = AUTH.authorise(projectId, editionId, "read")
+        if not permitted:
+            return []
+
+        if viewerVersion is None:
+            viewerVersion = Viewers.prefixes[-1]
+        (viewer, version) = viewerVersion.split("-", 1)
 
         try:
             (basePath, baseUrl, exists) = self.getLocation(
                 projectId,
                 editionId,
                 None,
-                PROJECTS
-                if projectId is None
-                else EDITIONS
-                if editionId is None
-                else None,
+                None,
                 None,
                 api=True,
             )
-            if editionId is None:
-                theItems = []
-                with os.scandir(basePath) as ed:
-                    for entry in ed:
-                        if entry.is_dir():
-                            name = entry.name
-                            if name.isdigit():
-                                theId = int(name)
-                                args = (
-                                    (theId, None)
-                                    if projectId is None
-                                    else (projectId, theId)
-                                )
-                                permitted = AUTH.authorise(*args, "read")
-                                if permitted:
-                                    theItems.append(int(name))
-            else:
-                theItems = listFiles(basePath, ".json")
+            theItems = listFiles(basePath, ".json")
 
-            for theItem in sorted(theItems):
-                if editionId is None:
-                    (projectSel, editionSel) = (
-                        (theItem, None) if projectId is None else (projectId, theItem)
+            for (i, theItem) in enumerate(sorted(theItems)):
+                data = self.getInfo(
+                    projectId, editionId, theItem, None, "me"
+                )
+                url = data["me"][1]
+                specifier = f"{projectId}/{editionId}/{theItem}"
+                title = theItem
+                isActive = (sceneName is None and i == 0) or (
+                    sceneName is not None and title == sceneName
+                )
+
+                buttonRow = []
+                frame = ""
+
+                for vv in Viewers.prefixes:
+                    vActive = "active" if isActive and vv == viewerVersion else ""
+                    elem = "a"
+                    attStr = ""
+
+                    if vActive:
+                        frame = dedent(
+                            f"""
+                            <div class="model">
+                                <iframe
+                                    class="previewer"
+                                    src="/viewer/{viewerVersion}/{specifier}"/>
+                                </iframe>
+                                <span class="active">{title}</span>
+                            </div>
+                            """
+                        )
+                        elem = "span"
+                    else:
+                        attStr = f""" href="{url}/{vv}" """
+
+                    buttonRow.append(
+                        f"""
+                        <{elem}
+                            class="button {vActive}"
+                            {attStr}
+                        >{vv}</{elem}>
+                        """
                     )
-                    data = self.getInfo(
-                        projectSel, editionSel, None, "me", "title", "icon"
-                    )
-                    url = data["me"][1]
-                    icon = data["icon"][1]
-                    title = data["title"][2]
-                    kind = True
-                else:
-                    data = self.getInfo(projectId, editionId, theItem, "me")
-                    url = data["me"][1]
-                    icon = f"/voyager/{projectId}/{editionId}/{theItem}"
-                    title = theItem
-                    kind = False
-                theList.append((kind, url, icon, title))
+
+                buttonRow = "\n".join(buttonRow)
+                caption = f"""<p>{title} {buttonRow}</p>\n"""
+                wrapped.append(f"""{frame} {caption}""")
 
         except ProjectError:
             pass
 
-        wrapped = self.wrapItemLinks(theList, sceneName)
-        return wrapped
+        return "\n".join(wrapped)
 
-    def wrapItemLinks(self, linkItems, sceneName):
+    def wrapItemLinks(self, linkItems, sceneName, viewerVersion):
+        Viewers = self.Viewers
         wrapped = []
 
         for (i, (kind, url, icon, title)) in enumerate(linkItems):
@@ -233,38 +350,38 @@ class Projects:
                 isActive = (sceneName is None and i == 0) or (
                     sceneName is not None and title == sceneName
                 )
-                wrapped.append(
-                    dedent(
-                        f"""
-                        <div class="model">
-                            <iframe
-                                class="previewer"
-                                src="{icon}"/>
-                            </iframe>
-                            <span class="active">{title}</span>
-                        </div>
-                        """
-                        if isActive
-                        else f"""<p><a href="{url}">{title}</a></p>\n"""
-                    )
-                )
-                if False:
-                    opened = "open" if isActive else ""
-                    active = "active" if isActive else ""
-                    wrapped.append(
-                        dedent(
+                if isActive:
+                    buttonRow = []
+
+                    for vv in Viewers.prefixes:
+                        vActive = ""
+                        if vv == viewerVersion:
+                            (viewer, version) = viewerVersion.split("-", 1)
+                            wrapped.append(
+                                dedent(
+                                    f"""
+                                    <div class="model">
+                                        <iframe
+                                            class="previewer"
+                                            src="/viewer/{viewerVersion}/{icon}"/>
+                                        </iframe>
+                                        <span class="active">{title}</span>
+                                    </div>
+                                    """
+                                )
+                            )
+                            vActive = "active"
+
+                        buttonRow.append(
                             f"""
-                            <details {opened}>
-                                <summary>
-                                    <a class="button {active}" href="{url}">{title}</a>
-                                </summary>
-                                <iframe
-                                    class="previewer"
-                                    src="{icon}"/>
-                                </iframe>
-                            </details>
+                            <a
+                                class="button {vActive}"
+                                href="{url}/{vv}"
+                            >{viewerVersion}</a>
                             """
                         )
-                    )
+                    wrapped.append("\n".join(buttonRow))
+                else:
+                    wrapped.append(f"""<p>{title}<a href="{url}"></a></p>\n""")
 
         return "\n".join(wrapped)

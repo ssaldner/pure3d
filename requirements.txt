@@ -1,4 +1,5 @@
 flask
+Flask-OIDC
 markdown
 pyyaml
 gunicorn
