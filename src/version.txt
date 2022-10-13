@@ -1,1 +1,1 @@
-8f62b8d (version updated, 2022-10-13 13:41:14 +0200)
+2c5e1af (Merge branch 'main' of https://github.com/CLARIAH/pure3d, 2022-10-13 16:49:30 +0200)
