@@ -25,6 +25,7 @@ class Pages:
         projectId=None,
         editionId=None,
         sceneName=None,
+        viewerVersion=None,
         left=(),
         right=(),
         title=None,
@@ -54,7 +55,13 @@ class Pages:
                         """
                 )
             projectData = Projects.getInfo(
-                projectId, editionId, sceneName, *left, *right, missingOk=True
+                projectId,
+                editionId,
+                sceneName,
+                viewerVersion,
+                *left,
+                *right,
+                missingOk=True,
             )
         except ProjectError as e:
             M.error(e)

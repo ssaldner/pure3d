@@ -4,6 +4,7 @@ from flask import Flask, render_template, abort, redirect, make_response
 
 from helpers.messages import error, Messages
 from settings import Settings
+from viewers import Viewers
 from projects import Projects, ProjectError
 from users import Users
 from pages import Pages
@@ -11,6 +12,7 @@ from pages import Pages
 from authorise import Auth
 
 Config = Settings().getConfig()
+Viewers = Viewers(Config)
 
 # create and configure app
 app = Flask(__name__, static_folder="../static")
@@ -19,7 +21,7 @@ app.secret_key = Config.secret_key
 
 M = Messages(app)
 Users = Users(Config)
-Projects = Projects(Config, M)
+Projects = Projects(Config, Viewers, M)
 Auth = Auth(M, Users, Projects)
 Projects.addAuth(Auth)
 Pages = Pages(Config, M, Projects, ProjectError, Auth)
@@ -77,9 +79,7 @@ def projectPage(projectId):
     return Pages.base(
         "projects",
         projectId=projectId,
-        left=(
-            "list",
-        ),
+        left=("list",),
         right=(
             "title",
             "home",
@@ -95,9 +95,7 @@ def editionPage(projectId, editionId):
         "projects",
         projectId=projectId,
         editionId=editionId,
-        left=(
-            "list",
-        ),
+        left=("list",),
         right=(
             "about",
             "sources",
@@ -112,9 +110,7 @@ def scenePage(projectId, editionId, sceneName):
         projectId=projectId,
         editionId=editionId,
         sceneName=sceneName,
-        left=(
-            "list",
-        ),
+        left=("list",),
         right=(
             "about",
             "sources",
@@ -122,8 +118,28 @@ def scenePage(projectId, editionId, sceneName):
     )
 
 
-@app.route("/voyager/<int:projectId>/<int:editionId>/<string:sceneName>")
-def voyager(projectId, editionId, sceneName):
+@app.route(
+    "/projects/<int:projectId>/editions/<int:editionId>/<string:sceneName>/<string:viewerVersion>"
+)
+def sceneViewer(projectId, editionId, sceneName, viewerVersion):
+    return Pages.base(
+        "projects",
+        projectId=projectId,
+        editionId=editionId,
+        sceneName=sceneName,
+        viewerVersion=viewerVersion,
+        left=("list",),
+        right=(
+            "about",
+            "sources",
+        ),
+    )
+
+
+@app.route(
+    "/viewer/<string:viewerVersion>/<int:projectId>/<int:editionId>/<string:sceneName>"
+)
+def voyager(viewerVersion, projectId, editionId, sceneName):
     extDev = ".min"
 
     try:
@@ -145,13 +161,16 @@ def voyager(projectId, editionId, sceneName):
         M.error(e)
         abort(404)
 
+    viewerCode = Viewers.genHtml(
+        viewerVersion, extDev, f"{rootUrl}/", f"{sceneName}.json"
+    )
+
     return render_template(
         "voyager.html",
+        viewerCode=viewerCode,
         ext=extDev,
         root=rootUrl + "/",
         scene=f"{sceneName}.json",
-        messages=M.generateMessages(),
-        testUsers=Auth.wrapTestUsers(),
     )
 
 

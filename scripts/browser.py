@@ -1,5 +1,5 @@
 import sys
-import webbrowser
+import mywebbrowser
 
 
 # browserType = "google-chrome"
@@ -8,9 +8,9 @@ import webbrowser
 
 
 def openWeb(url):
-    webbrowser.open(url, new=2, autoraise=True)
-    # browser = webbrowser.get(using=browserType)
-    # browser.open(url, new=2, autoraise=True)
+    # webbrowser.open(url, new=2, autoraise=True)
+    browser = mywebbrowser.get(using="chrome")
+    browser.open(url, new=2, autoraise=True)
 
 
 def main():
@@ -22,6 +22,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # print(webbrowser.get(using="chrome"))
     main()
 else:
     print(__name__)

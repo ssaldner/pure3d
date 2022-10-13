@@ -6,3 +6,7 @@ title: >-
   of 3D Scholarship
 
 heading: Pure 3D website
+
+viewers:
+  voyager: true
+  aton: false
