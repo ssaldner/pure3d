@@ -10,7 +10,7 @@ docker build --no-cache -t pure3dapp:${dockertag} \
   --build-arg mysecret=${mysecret} \
   .
 
-if [ "$?" eq "0"]; then
+if [ "$?" == "0" ]; then
   echo "docker images completed ...."
   docker images | grep pure3dapp:${dockertag}
 else
