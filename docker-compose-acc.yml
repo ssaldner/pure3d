@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   pure3dapp:
-    image: registry.diginfra.net/vicd/pure3dapp:0.1
+    image: registry.diginfra.net/vicd/pure3dapp:${dockertag}
     restart: unless-stopped
     container_name: pure3dapp
     hostname: pure3dapp

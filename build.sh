@@ -26,4 +26,4 @@ docker images | grep registry.diginfra.net/vicd/pure3dapp:${dockertag}
 docker push registry.diginfra.net/vicd/pure3dapp:${dockertag}
 docker push registry.diginfra.net/vicd/pure3dapp:latest
 
-ssh pure3d.dev 'sudo /data/pure3dapp/restart.sh'
+./restart.sh
