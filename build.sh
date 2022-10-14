@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source .env
+echo "building docker images ...."
 docker build --no-cache -t pure3dapp:${dockertag} \
   --build-arg gitlocation=${gitlocation} \
   --build-arg gitbranch=${gitbranch} \
@@ -8,10 +9,18 @@ docker build --no-cache -t pure3dapp:${dockertag} \
   --build-arg DATA_DIR=${DATA_DIR} \
   --build-arg mysecret=${mysecret} \
   .
-#docker images | grep pure3dapp
-#sleep 5
-#docker tag pure3dapp:${dockertag} registry.diginfra.net/vicd/pure3dapp:${dockertag}
-#docker images | grep pure3dapp
-#docker push registry.diginfra.net/vicd/pure3dapp:${dockertag}
-#
-#ssh pure3d.dev 'sudo /data/pure3dapp/restart.sh'
+
+if [ "$?" eq "0"]; then
+  echo "docker images completed ...."
+  docker images | grep pure3dapp:${dockertag}
+else:
+  echo "docker image building failed!"
+  exit(1)
+fi
+
+sleep 3
+docker tag pure3dapp:${dockertag} registry.diginfra.net/vicd/pure3dapp:${dockertag}
+docker images | grep registry.diginfra.net/vicd/pure3dapp:${dockertag}
+docker push registry.diginfra.net/vicd/pure3dapp:${dockertag}
+
+ssh pure3d.dev 'sudo /data/pure3dapp/restart.sh'
