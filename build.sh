@@ -15,7 +15,7 @@ if [ "$?" eq "0"]; then
   docker images | grep pure3dapp:${dockertag}
 else
   echo "docker image building failed!"
-  exit(1)
+  exit 1
 fi
 
 sleep 3
