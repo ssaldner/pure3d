@@ -13,7 +13,7 @@ docker build --no-cache -t pure3dapp:${dockertag} \
 if [ "$?" eq "0"]; then
   echo "docker images completed ...."
   docker images | grep pure3dapp:${dockertag}
-else:
+else
   echo "docker image building failed!"
   exit(1)
 fi
