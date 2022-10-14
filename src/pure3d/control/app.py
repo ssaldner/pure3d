@@ -97,6 +97,7 @@ def editionPage(projectId, editionId):
         editionId=editionId,
         left=("list",),
         right=(
+            "title",
             "about",
             "sources",
         ),
