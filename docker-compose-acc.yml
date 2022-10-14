@@ -14,7 +14,7 @@ services:
       - traefik-public
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pure3dapp.rule=Host(`pure3dapp.{$hostname}`)"
+      - "traefik.http.routers.pure3dapp.rule=Host(`pure3dapp.${hostname}`)"
       - "traefik.http.routers.pure3dapp.entrypoints=http"
       - "traefik.http.services.pure3dapp.loadbalancer.server.port=8000"
 
