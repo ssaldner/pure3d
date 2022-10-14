@@ -25,5 +25,3 @@ docker tag pure3dapp:${dockertag} registry.diginfra.net/vicd/pure3dapp:latest
 docker images | grep registry.diginfra.net/vicd/pure3dapp:${dockertag}
 docker push registry.diginfra.net/vicd/pure3dapp:${dockertag}
 docker push registry.diginfra.net/vicd/pure3dapp:latest
-
-./restart.sh
