@@ -1,22 +1,15 @@
 ![logo](images/pure3d.png)
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-
 # How to build and run the pure3d app
-By default, the app runs on port 8000
+The app now builds and deploys all on remote server
 
 ### to build:
+Push your changes to remote branch, for now, `containerize`. Then run locally the following command. 
 ```shell
-./build.sh
+./start.sh
 ```
-
-### to run
-```shell
-docker compose up -d
-```
+The app will be build and deployed on remote server. When ready you can check the URL to see the latest changes. 
 
 ### notes
- * .env should be copied manually to remote server
- * docker-compose-acc.yml should be copied manually to remote server
- * restart.sh should be copied manually to remote server
  * please add `pure3d.dev` as host alias to your ssh config, and make sure you can run sudo without password
