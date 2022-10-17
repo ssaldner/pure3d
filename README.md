@@ -36,9 +36,10 @@ At KNAW/HuC:
 * [Dirk Roorda](https://pure.knaw.nl/portal/en/persons/dirk-roorda) Lead developer, works at KNAW/HuC.
 
 At DANS, (see also [here](https://dans.knaw.nl/en/collaborations/pure3d/)):
-* [Hella Hollander](https://pure.knaw.nl/portal/en/persons/hella-hollander)
-* [Jerry de Vries](https://pure.knaw.nl/portal/en/persons/jerry-de-vries)
-* [Raul Tavares](https://dans.knaw.nl/en/about/team/)
+* [Hella Hollander](https://pure.knaw.nl/portal/en/persons/hella-hollander) Project Manager
+* [Jerry de Vries](https://pure.knaw.nl/portal/en/persons/jerry-de-vries) Project Leader
+* [Simon Saldner](https://pure.knaw.nl/portal/en/persons/simon-saldner) Project Member
+* [Eko Indarto](https://pure.knaw.nl/portal/en/persons/eko-indarto) Project Member, Developer
 
 # Authors
 * Sohini Mallick (code)
