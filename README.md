@@ -38,7 +38,10 @@ At KNAW/HuC:
 At DANS, (see also [here](https://dans.knaw.nl/en/collaborations/pure3d/)):
 * [Hella Hollander](https://pure.knaw.nl/portal/en/persons/hella-hollander)
 * [Jerry de Vries](https://pure.knaw.nl/portal/en/persons/jerry-de-vries)
-* [Raul Tavares](https://dans.knaw.nl/en/about/team/)
+* [Simon Saldner](https://pure.knaw.nl/portal/en/persons/simon-saldner)
+* [Daniel Turner](https://pure.knaw.nl/portal/en/persons/daniel-turner)
+* [Valentijn Gilissen](https://pure.knaw.nl/portal/en/persons/valentijn-gilissen) Developer
+* [Eko Indarto](https://pure.knaw.nl/portal/en/persons/eko-indarto) Developer
 
 # Authors
 * Sohini Mallick (code)
